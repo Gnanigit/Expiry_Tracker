@@ -1,0 +1,7 @@
+1. npx create-expo-app Expiry_Treacker --template blank
+2. add babel.config.js
+3. npm install nativewind tailwindcss
+4. npx tailwindcss init
+5. npx install expo-router expo-status-bar react-native-safe-area-context react-native-screens expo-linking expo-constants 
+6.  npm install nativewind@2.0.11
+7. npm install --save-dev tailwindcss@3.3.2
