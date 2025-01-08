@@ -5,10 +5,13 @@ client/node_modules/
 server/node_modules/
 client/.env
 server/.env
+client/Notes.txt
+Notes.txt
 
 # Expo
 client/.expo/
 dist/
+
 web-build/
 expo-env.d.ts
 

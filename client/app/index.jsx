@@ -11,8 +11,8 @@ const App = () => {
           <Text className="text-black-200">Welcome to Expiry tracker APP</Text>
           <CustomButton
             title="Continue with Email"
-            handlePress={() => router.push("/sign-in")}
-            containerStyles="w-full"
+            handlePress={() => router.push("/sign-up")}
+            containerStyles="w-full rounded-xl min-h-[62px]"
           />
         </View>
       </ScrollView>
