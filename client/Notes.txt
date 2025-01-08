@@ -5,3 +5,9 @@
 5. npx install expo-router expo-status-bar react-native-safe-area-context react-native-screens expo-linking expo-constants 
 6.  npm install nativewind@2.0.11
 7. npm install --save-dev tailwindcss@3.3.2
+
+
+
+
+Expo App opening
+1. setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.1.7
