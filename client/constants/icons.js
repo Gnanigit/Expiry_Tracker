@@ -11,8 +11,16 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
+import history from "../assets/icons/history.png";
+import fake from "../assets/icons/fake.png";
+import product from "../assets/icons/product.png";
+import price from "../assets/icons/price.png";
+import addProduct from "../assets/icons/addProduct.png";
+import cart from "../assets/icons/cart.png";
+import main from "../assets/icons/main.png";
 
 export default {
+  main,
   play,
   bookmark,
   home,
@@ -26,4 +34,10 @@ export default {
   logout,
   eyeHide,
   eye,
+  history,
+  fake,
+  product,
+  price,
+  addProduct,
+  cart,
 };

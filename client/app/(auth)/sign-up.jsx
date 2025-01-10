@@ -26,7 +26,7 @@ const SignUp = () => {
           </Text>
           <Image
             resizeMode="contain"
-            className="w-[320px] h-[320px] mt-1"
+            className="w-[280px] h-[280px] mt-1"
             source={images.signUp}
           ></Image>
           <Text className="text-shadow-md text-3xl font-extrabold text-secondary-100">
@@ -36,19 +36,19 @@ const SignUp = () => {
             title="Username"
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
-            otherStyles="mt-2 px-2"
+            otherStyles="mt-1.5 px-2"
           />
           <FormField
             title="Email"
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
-            otherStyles="mt-4  px-2"
+            otherStyles="mt-3  px-2"
           />
           <FormField
             title="Password"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
-            otherStyles="mt-4 px-2"
+            otherStyles="mt-3 px-2"
           />
           <CustomButton
             title="SIGN UP"

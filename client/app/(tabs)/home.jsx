@@ -1,82 +1,106 @@
-import React, { useState } from "react";
-import { View, Text, Alert, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Alert,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as ImagePicker from "expo-image-picker";
-import CustomButton from "../../components/CustomButton";
-import { getBarcodeNumber } from "../../routes/api";
-
+import { icons } from "../../constants";
+import { router } from "expo-router";
 const Home = () => {
-  const [imageUri, setImageUri] = useState(null);
-  const [code, setCode] = useState("");
-
-  const pickImage = async () => {
-    try {
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!permissionResult.granted) {
-        Alert.alert("Permission Denied", "We need access to your gallery.");
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImageUri(result.assets[0].uri);
-      }
-    } catch (error) {
-      Alert.alert("Error", "Failed to pick an image.");
-    }
-  };
-
-  const submit = async () => {
-    if (!imageUri) {
-      Alert.alert("No Image", "Please select an image first.");
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("file", {
-        uri: imageUri,
-        type: "image/jpeg",
-        name: "barcode.jpg",
-      });
-      const result = await getBarcodeNumber(formData);
-      setCode(result);
-      Alert.alert("Result", result);
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    }
-  };
-
   return (
-    <SafeAreaView className="bg-primary h-full pt-4">
-      <View className="w-full items-center">
-        <Text>This is Home</Text>
-        <CustomButton
-          title="Pick Image"
-          handlePress={pickImage}
-          containerStyles="w-[50%] rounded-[50px] min-h-[55px] mb-4"
-        />
-        {imageUri && (
+    <SafeAreaView className="bg-primary h-full">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="flex-row justify-between h-[7%] items-center w-full bg-secondary px-3">
           <Image
-            source={{ uri: imageUri }}
-            style={{ width: 200, height: 200, marginBottom: 20 }}
+            className="w-9 h-9"
+            source={icons.menu}
+            style={{ tintColor: "#FFFFFF" }}
           />
-        )}
+          <Image
+            className="w-6 h-6"
+            source={icons.search}
+            style={{ tintColor: "#FFFFFF" }}
+          ></Image>
+        </View>
+        <View className="w-full px-3 bg-primary items-center">
+          <View className="w-full px-1 items-start mt-1">
+            <Text className="text-shadow-sm text-3xl font-medium text-territory-200">
+              Welcome Back...
+            </Text>
+            <Text className=" text-shadow-sm text-3xl font-bold text-secondary-100">
+              Gnani
+            </Text>
+          </View>
 
-        <CustomButton
-          title="Get Code"
-          handlePress={submit}
-          containerStyles="w-[50%] rounded-[50px] min-h-[55px]"
-        />
+          <View className="w-full flex-row justify-center gap-x-2 mt-3 min-h-[80px]">
+            <TouchableOpacity
+              className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl"
+              onPress={() =>
+                router.push({
+                  pathname: "/main",
+                  params: { component: "ComponentA" },
+                })
+              }
+            >
+              <Image
+                className="w-12 h-12 object-contain ml-1"
+                source={icons.cart}
+              />
+              <Text className="text-shadow-sm text-[15px] font-bold text-white ml-1 max-w-[75%]">
+                Add product
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl">
+              <Image
+                className="w-12 h-12 object-contain ml-1 shadow-lg"
+                source={icons.fake}
+              />
+              <Text className="text-shadow-sm text-[15px] font-bold text-white ml-1 max-w-[75%]">
+                Fake Product Detection
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <Text>{code}</Text>
-      </View>
+          <View className="w-full flex-row justify-center mt-3 gap-x-2  min-h-[80px] mb-5">
+            <TouchableOpacity className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl">
+              <Image
+                className="w-12 h-12 object-contain shadow-lg"
+                source={icons.price}
+              />
+              <Text className="text-shadow-sm text-[15px] font-bold text-white ml-1 max-w-[75%]">
+                Price comparison
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl">
+              <Image
+                className="w-12 h-12 object-contain ml-1 shadow-lg"
+                source={icons.product}
+              />
+              <Text className="text-shadow-sm text-[15px] font-bold text-white max-w-[75%]">
+                Product Details
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          className="w-full h-full bg-primary-100 py-5 px-3 items-center"
+          style={{
+            borderTopLeftRadius: 35,
+            borderTopRightRadius: 35,
+            elevation: 2,
+          }}
+        >
+          <Text>Ready to Expire</Text>
+        </View>
+
+        <StatusBar backgroundColor="#5E35B1" style="light" />
+      </ScrollView>
     </SafeAreaView>
   );
 };

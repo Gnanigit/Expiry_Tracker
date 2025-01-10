@@ -120,26 +120,26 @@ def scan_barcode():
     image = Image.open(io.BytesIO(file.read()))
     image_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
-    # Try detecting and decoding barcode
+    # 1. Try detecting and decoding barcode
     cropped_barcode = detect_and_crop_barcode(image_cv)
     if cropped_barcode is not None:
         print("dealing with cropped image")
         barcodes = decode(Image.fromarray(cropped_barcode))
         if barcodes:
-            result_array.extend([{"data": barcode.data.decode("utf-8"), "type": barcode.type} for barcode in barcodes])
+            result_array.extend([{"data_1": barcode.data.decode("utf-8"), "type": barcode.type} for barcode in barcodes])
 
-    # Fallback to decoding without cropping
+    # 2. Fallback to decoding without cropping
     barcodes = decode(image)
     if barcodes:
-        print("hello")
-        result_array.extend([{"data": barcode.data.decode("utf-8"), "type": barcode.type} for barcode in barcodes])
+        print("Dealing with non cropped barcode images...")
+        result_array.extend([{"data_2": barcode.data.decode("utf-8"), "type": barcode.type} for barcode in barcodes])
 
-    # Try Handwritten Digit Extraction
+    # 3. Try Handwritten Digit Extraction
     print("Trying handwritten digit extraction...")
     digits = extract_handwritten_digits(image_cv)
     if digits:
         print(f"Handwritten digits detected: {digits}")
-        result_array.append({"barcode": digits})
+        result_array.append({"data_3": digits})
 
     # Return results if any were found
     if result_array:

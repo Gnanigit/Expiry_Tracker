@@ -30,10 +30,10 @@ const TabsLayout = () => {
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "#FFA001",
+          tabBarActiveTintColor: "#F49F1C",
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarStyle: {
-            backgroundColor: "#161622",
+            backgroundColor: "#5E35B1",
             borderTopWidth: 0.5,
             borderTopColor: "#232533",
             height: 60,
@@ -41,6 +41,21 @@ const TabsLayout = () => {
           },
         }}
       >
+        <Tabs.Screen
+          name="history"
+          options={{
+            title: "History",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.history}
+                color={color}
+                name="History"
+                focused={focused}
+              />
+            ),
+          }}
+        />
         <Tabs.Screen
           name="home"
           options={{
@@ -51,6 +66,37 @@ const TabsLayout = () => {
                 icon={icons.home}
                 color={color}
                 name="Home"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="main"
+          options={{
+            title: "Power",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.main}
+                color={color}
+                name="Power"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Profile",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.profile}
+                color={color}
+                name="Profile"
                 focused={focused}
               />
             ),
