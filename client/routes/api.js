@@ -4,15 +4,18 @@ const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 
 export const getBarcodeNumber = async (image) => {
   try {
-    const response = await axios.post(`${baseURL}/scan-barcode`, image, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axios.post(
+      `${baseURL}/product/scan-barcode`,
+      image,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
     if (response.data) {
-      console.log(response.data);
-      return response.data;
+      return response.data.result;
     } else {
       throw new Error("No response data from the server");
     }

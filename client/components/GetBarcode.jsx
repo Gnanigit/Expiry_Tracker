@@ -1,24 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Alert, Image, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Alert,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import CustomButton from "../components/CustomButton";
 import { getBarcodeNumber } from "../routes/api";
+import ProductCard from "./ProductCard";
+import { icons } from "../constants";
 
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState([]);
 
-  const pickImage = async () => {
+  // Function to take a picture using the camera
+  const takePicture = async () => {
     try {
       const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+        await ImagePicker.requestCameraPermissionsAsync();
       if (!permissionResult.granted) {
-        Alert.alert("Permission Denied", "We need access to your gallery.");
+        Alert.alert("Permission Denied", "We need access to your camera.");
         return;
       }
 
-      const result = await ImagePicker.launchImageLibraryAsync({
+      const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
@@ -28,13 +38,13 @@ const GetBarcode = () => {
         setImageUri(result.assets[0].uri);
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to pick an image.");
+      Alert.alert("Error", "Failed to take a picture.");
     }
   };
 
   const submit = async () => {
     if (!imageUri) {
-      Alert.alert("No Image", "Please select an image first.");
+      Alert.alert("No Image", "Please take a picture first.");
       return;
     }
 
@@ -46,7 +56,6 @@ const GetBarcode = () => {
         name: "barcode.jpg",
       });
       const result = await getBarcodeNumber(formData);
-      console.log(result);
       setCode(result);
 
       // Alert.alert("Result", result);
@@ -54,9 +63,6 @@ const GetBarcode = () => {
       Alert.alert("Error", error.message);
     }
   };
-  useEffect(() => {
-    console.log(code);
-  }, [code]);
 
   const renderItem = ({ item }) => {
     return (
@@ -71,38 +77,64 @@ const GetBarcode = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full w-full pt-4">
-      <View className="w-full items-center">
-        <Text>Barcode Reader</Text>
-        <CustomButton
-          title="Pick Image"
-          handlePress={pickImage}
-          containerStyles="w-[50%] rounded-[50px] min-h-[55px]"
-        />
-        {imageUri && (
+    <View className="w-full items-center px-3">
+      <Text className="text-shadow-sm text-2xl font-bold text-territory-100 mt-2">
+        Add Product
+      </Text>
+      <ProductCard
+        image={imageUri}
+        name={"Drink"}
+        expDate={"12-03-2025"}
+        status={"red"}
+        onDelete
+      />
+      <TouchableOpacity
+        onPress={takePicture}
+        className="w-full mt-2 items-center"
+      >
+        {imageUri ? (
           <Image
             source={{ uri: imageUri }}
-            style={{ width: 200, height: 200, marginBottom: 20 }}
+            resizeMode="cover"
+            className="w-56 h-56 rounded-2xl"
           />
+        ) : (
+          <View
+            className="bg-territory-100-40 border-territory-100 w-full h-20 rounded-2xl items-center justify-center flex-row m+-5"
+            style={{
+              borderWidth: 1.5,
+              borderColor: "#F49F1C",
+              borderStyle: "dashed",
+            }}
+          >
+            <Image
+              source={icons.upload}
+              resizeMode="contain"
+              className="w-7 h-7"
+            />
+            <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
+              Choose a file
+            </Text>
+          </View>
         )}
+      </TouchableOpacity>
 
-        <CustomButton
-          title="Get Code"
-          handlePress={submit}
-          containerStyles="w-[50%] rounded-[50px] min-h-[55px]"
+      <CustomButton
+        title="Get Code"
+        handlePress={submit}
+        containerStyles="w-[40%] rounded-[10px] min-h-[50px] mt-3"
+      />
+
+      <View className="mt-20">
+        <Text>Data Display</Text>
+
+        <FlatList
+          data={code}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
         />
-        <View className="mt-20">
-          <Text>Data Display</Text>
-          <FlatList
-            data={code}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-
-        {/* <Text>{code}</Text> */}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

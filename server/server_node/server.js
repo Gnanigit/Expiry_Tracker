@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import router from "./routes/auth.js";
+import ProductRouter from "./routes/product.js";
 
 // load environment variables
 dotenv.config();
@@ -20,11 +22,17 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 const PORT = process.env.PORT || 6001;
+const HOST = "0.0.0.0";
+
+app.use("/auth", router);
+app.use("/product", ProductRouter);
 
 // connect to MongoDB
 mongoose
   .connect(process.env.MONGOOSE_URL)
   .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+    app.listen(PORT, HOST, () =>
+      console.log(`Server running at http://${HOST}:${PORT}`)
+    );
   })
   .catch((error) => console.log(`${error} did not connect`));

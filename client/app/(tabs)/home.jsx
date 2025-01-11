@@ -12,22 +12,12 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { icons } from "../../constants";
 import { router } from "expo-router";
+import Navbar from "../../components/Navbar";
 const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="flex-row justify-between h-[7%] items-center w-full bg-secondary px-3">
-          <Image
-            className="w-9 h-9"
-            source={icons.menu}
-            style={{ tintColor: "#FFFFFF" }}
-          />
-          <Image
-            className="w-6 h-6"
-            source={icons.search}
-            style={{ tintColor: "#FFFFFF" }}
-          ></Image>
-        </View>
+        <Navbar />
         <View className="w-full px-3 bg-primary items-center">
           <View className="w-full px-1 items-start mt-1">
             <Text className="text-shadow-sm text-3xl font-medium text-territory-200">

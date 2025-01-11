@@ -66,7 +66,7 @@ const SignIn = () => {
           <CustomButton
             title="SIGN IN"
             handlePress={submit}
-            containerStyles="w-[50%] rounded-[50px] min-h-[55px]"
+            containerStyles="w-[50%] rounded-[50px] min-h-[55px] mt-4"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

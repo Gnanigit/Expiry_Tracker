@@ -53,7 +53,7 @@ const SignUp = () => {
           <CustomButton
             title="SIGN UP"
             handlePress={() => router.push("/sign-in")}
-            containerStyles="w-[42%] rounded-[50px] min-h-[55px]"
+            containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

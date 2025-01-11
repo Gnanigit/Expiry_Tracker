@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Alert, Image, FlatList } from "react-native";
+import { View, Text, Alert, Image, FlatList, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import GetBarcode from "../../components/GetBarcode";
 import FakeOrNot from "../../components/FakeOrNot";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import Navbar from "../../components/Navbar";
 const Main = () => {
   const { component } = useLocalSearchParams();
-
   const renderComponent = () => {
     switch (component) {
       case "ComponentA":
@@ -20,9 +20,10 @@ const Main = () => {
   };
 
   return (
-    <View className="flex-1 bg-white items-center justify-center">
+    <SafeAreaView className="bg-primary h-full ">
+      <Navbar />
       {renderComponent()}
-    </View>
+    </SafeAreaView>
   );
 };
 

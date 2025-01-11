@@ -56,7 +56,11 @@ module.exports = {
         imageShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)", // Specific for images
         viewShadow: "0px 5px 15px rgba(0, 0, 0, 0.25)", // Specific for views
       },
+      borderStyle: {
+        dashed: "dashed",
+      },
     },
   },
+
   plugins: [require("tailwindcss-textshadow")],
 };
