@@ -1,12 +1,12 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies
-client/node_modules/
-server/node_modules/
-client/.env
-server/.env
-client/Notes.txt
+
+node_modules/
+.env
+.env
 Notes.txt
+
 
 # Expo
 client/.expo/
