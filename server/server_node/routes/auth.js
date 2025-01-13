@@ -5,10 +5,5 @@ import express from "express";
 const router = express.Router();
 
 // router.post("/sign-in", signIn);
-// router.post("/sign-up", createUser);
-
-// router.get("/current-user", getCurrentUser);
-
-// router.delete("/logout", logout);
 
 export default router;

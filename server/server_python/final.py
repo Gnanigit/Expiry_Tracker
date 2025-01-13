@@ -7,6 +7,8 @@ import pytesseract
 import easyocr  # For handwritten OCR
 import sys
 import json  
+
+
 # Initialize EasyOCR Reader
 reader = easyocr.Reader(['en'])  # English language support
 
@@ -42,7 +44,7 @@ def detect_and_crop_barcode(image, margin_mm=2, dpi=300, min_width=100, min_heig
             return None
 
         return cropped_barcode
-
+    
     return None
 
 
@@ -80,13 +82,10 @@ def process_barcode_image(file_data):
     return result_array if result_array else {"message": "No barcode or digits detected"}
 
 if __name__ == '__main__':
-    # Reading the image data passed through stdin (from Node.js)
     file_data = sys.stdin.buffer.read()
-    
-    # Process the image
+
     result = process_barcode_image(file_data)
     
-    # Print the result (This is sent back to Node.js)
     print(json.dumps(result))
 
   

@@ -11,30 +11,30 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
   };
 
   return (
-    <View className="flex-row bg-secondary-300 items-center justify-around rounded-2xl min-h-[70px] w-full mt-2">
+    <View className="flex-row bg-secondary-300 items-center justify-around rounded-2xl min-h-[100px] w-full mt-2 p-0">
       <Image
         source={image ? { uri: image } : images.thumbnail}
-        className="w-12 h-12 rounded-xl"
+        className="w-12 h-12 rounded-xl m-0"
         resizeMode="cover"
       />
 
-      <View className="flex-row items-center justify-center h-full gap-x-5">
-        <Text className="text-shadow-sm text-lg font-bold text-secondary">
-          {name || "Unknown Product"}
+      <View className="flex-row items-center h-full justify-between m-0">
+        <Text className="text-shadow-sm text-sm max-w-[250px] text-secondary">
+          {name || "Product Name"}
         </Text>
-        <Text className="text-sm font-bold text-black-200">
-          Exp: {expDate || "N/A"}
+        <Text className="text-sm font-bold text-black-200 ml-2">
+          {expDate || "N/A"}
         </Text>
       </View>
 
-      <TouchableOpacity onPress={onDelete}>
+      {/* <TouchableOpacity onPress={onDelete}>
         <FontAwesome name="trash" size={20} color="gray" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View
-        className={`w-6 h-6 rounded-full ${
+        className={`w-6 h-6 m-0 rounded-full ${
           statusColors[status] || "bg-gray-500"
-        } mr-4`}
+        }`}
       ></View>
     </View>
   );
