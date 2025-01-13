@@ -5,7 +5,14 @@ import GetBarcode from "../../components/GetBarcode";
 import FakeOrNot from "../../components/FakeOrNot";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
+import { useSelector } from "react-redux";
+
 const Main = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
   const { component } = useLocalSearchParams();
   const renderComponent = () => {
     switch (component) {
@@ -21,7 +28,13 @@ const Main = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full ">
-      <Navbar />
+      <Sidebar
+        isVisible={isSidebarVisible}
+        onClose={() => setIsSidebarVisible(false)}
+      />
+
+      {/* Navbar */}
+      <Navbar toggleSidebar={toggleSidebar} />
       {renderComponent()}
     </SafeAreaView>
   );

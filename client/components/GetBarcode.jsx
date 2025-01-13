@@ -12,7 +12,7 @@ import {
 import { BlurView } from "expo-blur";
 import * as ImagePicker from "expo-image-picker";
 import CustomButton from "../components/CustomButton";
-import { getBarcodeNumber, getProductName } from "../routes/api";
+import { getBarcodeNumber, getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
 import { icons } from "../constants";
 
@@ -94,7 +94,7 @@ const GetBarcode = () => {
 
   return (
     <View className="flex-1 items-center px-2 py-3">
-      <Text className="text-shadow-sm text-2xl font-bold text-territory-100 ">
+      <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 ">
         Add Product
       </Text>
       <ProductCard
@@ -180,7 +180,7 @@ const GetBarcode = () => {
                 className="w-full bg-secondary-100 py-3 rounded-md items-center"
                 onPress={handleDone}
               >
-                <Text className="text-white font-semibold">Done</Text>
+                <Text className="text-white font-psemibold">Done</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -191,31 +191,33 @@ const GetBarcode = () => {
         onPress={() => takePicture("exp-date")}
         className="w-full mt-4 items-center"
       >
-        {priceImageUri ? (
-          <Image
-            source={{ uri: priceImageUri }}
-            resizeMode="contain"
-            className="w-48 h-48 rounded-2xl"
-          />
-        ) : (
-          <View
-            className="bg-territory-100-40 border-territory-100 w-full h-20 rounded-2xl items-center justify-center flex-row m+-5"
-            style={{
-              borderWidth: 1.5,
-              borderColor: "#F49F1C",
-              borderStyle: "dashed",
-            }}
-          >
+        {imageUri &&
+          (priceImageUri ? (
             <Image
-              source={icons.upload}
+              source={{ uri: priceImageUri }}
               resizeMode="contain"
-              className="w-6 h-6"
+              className="w-48 h-48 rounded-2xl"
             />
-            <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
-              Take a photo
-            </Text>
-          </View>
-        )}
+          ) : (
+            <View
+              className="bg-territory-100-40 border-territory-100 w-full h-20 rounded-2xl items-center justify-center flex-row"
+              style={{
+                borderWidth: 1.5,
+                borderColor: "#F49F1C",
+                borderStyle: "dashed",
+                marginTop: -5,
+              }}
+            >
+              <Image
+                source={icons.upload}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+              <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
+                Take a photo
+              </Text>
+            </View>
+          ))}
       </TouchableOpacity>
     </View>
   );

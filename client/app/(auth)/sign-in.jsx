@@ -6,18 +6,25 @@ import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setIsLogged, setUser } from "../../redux/slices/auth";
+import { useSelector } from "react-redux";
+import { signIn } from "../../routes/auth_api";
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLogged, user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   const submit = async () => {
-    // if (!form.email || !form.password) {
-    //   Alert.alert("Error", "Please fill in all fields");
-    // }
+    if (!form.email || !form.password) {
+      Alert.alert("Error", "Please fill in all fields");
+    }
     try {
-      // const result = await signIn(form.email, form.password);
-      // dispatch(setUser(result.user));
-      // dispatch(setIsLogged(true));
+      const result = await signIn(form.email, form.password);
+      dispatch(setUser(result.user));
+      dispatch(setIsLogged(true));
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

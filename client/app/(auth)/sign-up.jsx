@@ -6,9 +6,32 @@ import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import React, { useState } from "react";
+import { signUp } from "../../routes/auth_api";
+import { useDispatch } from "react-redux";
+
 const SignUp = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
+
+  const submit = async () => {
+    if (!form.email || !form.password || !form.username) {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await signUp(form.email, form.password, form.username);
+      dispatch(setUser(result.user));
+      dispatch(setIsLogged(true));
+      router.push("/sign-in");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
@@ -52,7 +75,7 @@ const SignUp = () => {
           />
           <CustomButton
             title="SIGN UP"
-            handlePress={() => router.push("/sign-in")}
+            handlePress={submit}
             containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4"
           />
           <View className="justify-center gap-2 pt-4 flex-row">

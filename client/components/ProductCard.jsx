@@ -18,11 +18,11 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
         resizeMode="cover"
       />
 
-      <View className="flex-row items-center h-full justify-between m-0">
-        <Text className="text-shadow-sm text-sm max-w-[250px] text-secondary">
+      <View className="flex-row items-center h-full justify-center">
+        <Text className="text-shadow-sm font-pregular max-w-[250px] text-secondary">
           {name || "Product Name"}
         </Text>
-        <Text className="text-sm font-bold text-black-200 ml-2">
+        <Text className="text-sm font-psemibold text-black-200 ml-2">
           {expDate || "N/A"}
         </Text>
       </View>

@@ -18,7 +18,7 @@ import price from "../assets/icons/price.png";
 import addProduct from "../assets/icons/addProduct.png";
 import cart from "../assets/icons/cart.png";
 import main from "../assets/icons/main.png";
-
+import close from "../assets/icons/close.png";
 export default {
   main,
   play,
@@ -40,4 +40,5 @@ export default {
   price,
   addProduct,
   cart,
+  close,
 };
