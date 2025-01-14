@@ -88,3 +88,17 @@ export const getCurrentUser = async (req, res) => {
     return res.status(403).json({ message: "Invalid token" });
   }
 };
+
+export const logout = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    return res.status(200).send({ message: "Logout successful" });
+  } catch (error) {
+    console.error("Error during logout:", error);
+    return res.status(500).send({ error: "Failed to logout" });
+  }
+};

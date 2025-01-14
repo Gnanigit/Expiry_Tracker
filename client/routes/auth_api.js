@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setIsLogged, setUser } from "../redux/slices/auth";
 import { REACT_NATIVE_APP_SERVER_DOMAIN } from "@env";
 const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 
@@ -27,6 +28,7 @@ export const getCurrentUser = async () => {
     throw error;
   }
 };
+
 export const signIn = async (email, password) => {
   try {
     console.log("Signing in...");
@@ -39,5 +41,16 @@ export const signIn = async (email, password) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const logout = async (dispatch) => {
+  try {
+    await axios.post(`${baseURL}/auth/logout`, {}, { withCredentials: true });
+    dispatch(setIsLogged(false));
+    dispatch(setUser(null));
+    console.log("Logged out successfully!");
+  } catch (error) {
+    console.error("Logout failed:", error);
   }
 };

@@ -2,21 +2,18 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, Animated } from "react-native";
 import { icons } from "../constants";
 import { useDispatch } from "react-redux";
-import { setIsLogged, setUser } from "../redux/slices/auth";
+import { logout } from "../routes/auth_api";
+import { Link, router } from "expo-router";
 
 const Sidebar = ({ isVisible, onClose }) => {
   const [animation] = useState(new Animated.Value(0));
   const dispatch = useDispatch();
+
   const handleLogout = async () => {
     try {
-      await fetch("/api/logout", { method: "POST", credentials: "include" });
-
-      dispatch(setIsLogged(false));
-      dispatch(setUser(null));
-
-      removeCookie("token");
-
+      await logout(dispatch);
       console.log("Logged out successfully!");
+      router.replace("/sign-in");
     } catch (error) {
       console.error("Error during logout:", error);
     }
