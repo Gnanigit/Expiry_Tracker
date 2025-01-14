@@ -38,14 +38,14 @@ const SignIn = () => {
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
         <View className="w-full h-full items-center justify-center px-4 my-2 min-h-[85vh]">
-          <Text className="text-5xl">
+          <View className="flex-row">
             <Text className="text-shadow-md text-5xl font-extrabold text-secondary-100">
               Track{" "}
             </Text>
             <Text className="text-shadow-md text-5xl font-extrabold text-territory-100">
               Expiry
             </Text>
-          </Text>
+          </View>
           <Text className="text-1xl font-regular">
             Track and Manage Expiry Dates Seamlessly
           </Text>
@@ -54,7 +54,7 @@ const SignIn = () => {
             className="w-[350px] h-[350px] mt-1"
             source={images.signUp}
           ></Image>
-          <Text className="text-shadow-md text-3xl font-extrabold text-secondary-100">
+          <Text className="text-shadow-md text-3xl font-pextrabold text-secondary-100">
             SIGN IN
           </Text>
 
@@ -81,7 +81,7 @@ const SignIn = () => {
             </Text>
             <Link
               href="/sign-up"
-              className="text-lg font-semibold text-territory-100"
+              className="text-lg font-psemibold text-territory-100"
             >
               Sign Up
             </Link>

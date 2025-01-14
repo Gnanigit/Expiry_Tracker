@@ -19,6 +19,11 @@ import addProduct from "../assets/icons/addProduct.png";
 import cart from "../assets/icons/cart.png";
 import main from "../assets/icons/main.png";
 import close from "../assets/icons/close.png";
+import morning from "../assets/icons/morning.png";
+import afternoon from "../assets/icons/afternoon.png";
+import evening from "../assets/icons/evening.png";
+import night from "../assets/icons/night.png";
+
 export default {
   main,
   play,
@@ -41,4 +46,8 @@ export default {
   addProduct,
   cart,
   close,
+  morning,
+  afternoon,
+  evening,
+  night,
 };

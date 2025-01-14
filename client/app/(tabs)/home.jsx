@@ -16,12 +16,35 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useSelector } from "react-redux";
 
+const getGreeting = () => {
+  const currentHour = new Date().getHours();
+  if (currentHour >= 6 && currentHour < 12) {
+    return { text: "Good Morning", image: icons.morning };
+  } else if (currentHour >= 12 && currentHour < 17) {
+    return { text: "Good Afternoon", image: icons.afternoon };
+  } else if (currentHour >= 17 && currentHour < 20) {
+    return { text: "Good Evening", image: icons.evening };
+  } else {
+    return { text: "Good Night", image: icons.night };
+  }
+};
+
 const Home = () => {
   const { isLogged, user } = useSelector((state) => state.auth);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [greeting, setGreeting] = useState(getGreeting());
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGreeting(getGreeting());
+    }, 600000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <SafeAreaView className="bg-primary flex-1 h-full">
       <Sidebar
@@ -29,18 +52,20 @@ const Home = () => {
         onClose={() => setIsSidebarVisible(false)}
       />
 
-      {/* Navbar */}
       <Navbar toggleSidebar={toggleSidebar} />
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="w-full px-3 bg-primary items-center">
-          <View className="w-full px-1 items-start mt-1">
-            <Text className="text-shadow-sm text-3xl font-pmedium text-territory-200">
-              Welcome Back...
-            </Text>
-            <Text className=" text-shadow-sm text-3xl font-psemibold text-secondary-100">
-              {user?.username}
-            </Text>
+          <View className="w-full px-2 flex-row justify-between items-center mt-1">
+            <View>
+              <Text className="text-shadow-sm text-lg text-2xl font-pbold text-territory-200">
+                {greeting.text + "..."}
+              </Text>
+              <Text className="text-shadow-sm text-lg text-2xl font-psemibold text-secondary-100">
+                {user?.username}
+              </Text>
+            </View>
+            <Image className="w-14 h-14" source={greeting.image} />
           </View>
 
           <View className="w-full flex-row justify-center gap-x-2 mt-3 min-h-[80px]">

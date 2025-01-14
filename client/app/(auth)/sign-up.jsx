@@ -44,7 +44,7 @@ const SignUp = () => {
               Expiry
             </Text>
           </Text>
-          <Text className="text-shadow-sm text-1xl font-regular">
+          <Text className="text-shadow-sm text-1xl font-pregular">
             Track and Manage Expiry Dates Seamlessly
           </Text>
           <Image
@@ -52,7 +52,7 @@ const SignUp = () => {
             className="w-[280px] h-[280px] mt-1"
             source={images.signUp}
           ></Image>
-          <Text className="text-shadow-md text-3xl font-extrabold text-secondary-100">
+          <Text className="text-shadow-md text-3xl font-pextrabold text-secondary-100">
             SIGN UP
           </Text>
           <FormField

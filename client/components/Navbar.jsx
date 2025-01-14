@@ -9,15 +9,15 @@ const Navbar = ({ toggleSidebar }) => {
     <View className="flex-row justify-between h-[7%] items-center w-full bg-secondary px-3">
       <TouchableOpacity onPress={toggleSidebar}>
         <Image
-          className="w-9 h-9"
+          className="w-9 h-9 "
           source={icons.menu}
-          style={{ tintColor: "#FFFFFF" }}
+          style={{ tintColor: "#CDCDE0" }}
         />
       </TouchableOpacity>
       <Image
         className="w-6 h-6"
         source={icons.search}
-        style={{ tintColor: "#FFFFFF" }}
+        style={{ tintColor: "#CDCDE0" }}
       ></Image>
     </View>
   );
