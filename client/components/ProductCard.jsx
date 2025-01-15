@@ -11,7 +11,14 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
   };
 
   return (
-    <View className="flex-row bg-secondary-300 items-center justify-around rounded-2xl min-h-[100px] w-full mt-2 p-0">
+    <View
+      className="flex-row bg-secondary-300 items-center justify-around rounded-2xl min-h-[100px] w-full mt-2 p-0"
+      style={{
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: "rgb(204, 169, 254)",
+      }}
+    >
       <Image
         source={image ? { uri: image } : images.thumbnail}
         className="w-12 h-12 rounded-xl m-0"

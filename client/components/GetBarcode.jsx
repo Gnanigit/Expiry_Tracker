@@ -16,6 +16,8 @@ import { getBarcodeNumber, getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
 import { icons } from "../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DateDisplay from "./DateDisplay";
+import { createProduct } from "../routes/product_api";
 
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -29,6 +31,7 @@ const GetBarcode = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [status, setStatus] = useState("");
 
   const takePicture = async (flag) => {
     try {
@@ -97,10 +100,26 @@ const GetBarcode = () => {
     setShowPicker(false);
     if (date) {
       setSelectedDate(date);
-      // Update expDate immediately as the date is selected
-      setExpDate(
-        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-      );
+
+      // Format the selected date as DD/MM/YYYY
+      const formattedDate = `${date.getDate()}/${
+        date.getMonth() + 1
+      }/${date.getFullYear()}`;
+      setExpDate(formattedDate);
+
+      // Calculate the difference in days between the current date and the selected date
+      const currentDate = new Date();
+      const diffInTime = date.getTime() - currentDate.getTime(); // Difference in milliseconds
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)); // Convert to days
+      console.log(diffInDays);
+
+      if (diffInDays <= 7) {
+        setStatus("red");
+      } else if (diffInDays <= 40) {
+        setStatus("yellow");
+      } else {
+        setStatus("green");
+      }
     }
   };
 
@@ -110,7 +129,26 @@ const GetBarcode = () => {
     year: selectedDate.getFullYear(),
   };
 
-  const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
+  const handleSubmit = async () => {
+    if (!productName || !imageUri || !expDate || !status) {
+      Alert.alert("Error", "Please fill all fields");
+      return;
+    }
+
+    const productData = {
+      productName,
+      imageUri,
+      expDate,
+      status,
+    };
+    try {
+      const result = await createProduct(productData);
+      console.log(result);
+    } catch (err) {
+      Alert.alert("Error", "Failed to submit product.");
+    }
+  };
+  // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
     <View className="flex-1 items-center px-2 py-3">
@@ -121,7 +159,7 @@ const GetBarcode = () => {
         image={imageUri}
         name={productName}
         expDate={expDate}
-        status={"green"}
+        status={status}
         onDelete
       />
       <TouchableOpacity
@@ -243,7 +281,7 @@ const GetBarcode = () => {
           </View>
           <CustomButton
             title="Select Expiry Date Manually"
-            containerStyles="w-[70%] rounded-[10px] min-h-[50px] mt-3"
+            containerStyles="w-[70%] rounded-[10px] min-h-[50px] "
             handlePress={() => setIsPopupVisible(true)}
           />
 
@@ -275,31 +313,12 @@ const GetBarcode = () => {
                   </TouchableOpacity>
 
                   {/* Display Selected Date */}
-                  <View className="w-full mb-4">
-                    <TextInput
-                      className="border border-secondary-100 rounded-md p-2 mb-2"
-                      value={String(formattedDate.day)}
-                      editable={false}
-                      placeholder="Day"
-                    />
-                    <TextInput
-                      className="border border-secondary-100 rounded-md p-2 mb-2"
-                      value={String(formattedDate.month)}
-                      editable={false}
-                      placeholder="Month"
-                    />
-                    <TextInput
-                      className="border border-secondary-100 rounded-md p-2 mb-2"
-                      value={String(formattedDate.year)}
-                      editable={false}
-                      placeholder="Year"
-                    />
-                  </View>
+                  <DateDisplay formattedDate={formattedDate} />
 
                   <CustomButton
                     title="Done"
                     handlePress={() => setIsPopupVisible(false)}
-                    containerStyles="w-full py-3 rounded-md bg-secondary-100"
+                    containerStyles="w-full py-3 rounded-md bg-secondary-100 mt-5"
                   />
                 </View>
               </View>
@@ -320,6 +339,7 @@ const GetBarcode = () => {
       {showExpPhotoPicker && (
         <CustomButton
           title="Add Product"
+          handlePress={handleSubmit}
           containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5"
         />
       )}

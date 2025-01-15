@@ -48,3 +48,29 @@ export const getProductName = async (code) => {
     );
   }
 };
+
+export const createProduct = async (productData) => {
+  try {
+    const response = await axios.post(
+      `${baseURL}/product/create-product`,
+      productData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error("No response data from the server");
+    }
+  } catch (error) {
+    console.error("Error in getProductName:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch product name"
+    );
+  }
+};

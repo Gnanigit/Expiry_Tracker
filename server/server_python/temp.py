@@ -144,7 +144,7 @@ def scan_barcode():
     # Return results if any were found
     if result_array:
         return jsonify(result_array)
-    print("hellooo...")
+ 
     return jsonify({"message": "No barcode or digits detected"}), 404
 
 

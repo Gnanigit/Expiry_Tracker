@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import fs from "fs";
 import express from "express";
 import getProdDetails from "../utils/getProdDetails.js";
+import Product from "../models/Product.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -95,5 +96,54 @@ export const getProductName = async (req, res) => {
   } catch (error) {
     console.error("Error in getProductName:", error);
     return res.status(500).json({ message: "Failed to fetch product details" });
+  }
+};
+
+export const createProduct = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { productName, imageUri, expDate, status } = req.body;
+
+    const [day, month, year] = expDate.split("/").map(Number);
+
+    const formattedDate = new Date(year, month - 1, day);
+
+    const name = productName;
+    const expiryDate = formattedDate;
+    const prodImage = imageUri;
+
+    const userId = req.user.userId;
+
+    if (!name || !prodImage || !expiryDate || !status) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be provided." });
+    }
+
+    console.log(name, prodImage, expiryDate, userId, status);
+    // Create a new product instance
+    const newProduct = new Product({
+      name,
+      prodImage,
+      expiryDate,
+      status,
+      userId, // Associate product with the user
+    });
+
+    console.log(newProduct);
+
+    // Save the product to the database
+    const savedProduct = await newProduct.save();
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product: savedProduct,
+    });
+  } catch (error) {
+    console.error("Error creating product:", error);
+    res.status(500).json({
+      message: "An error occurred while creating the product",
+      error: error.message,
+    });
   }
 };

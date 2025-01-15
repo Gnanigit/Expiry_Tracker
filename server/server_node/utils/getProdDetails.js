@@ -4,7 +4,6 @@ import puppeteer from "puppeteer";
 const getProdDetails = async ({ barcode }) => {
   const filePath = "data.json";
 
-  console.log("he;;o", barcode);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -104,9 +103,10 @@ const getProdDetails = async ({ barcode }) => {
   } catch (err) {
     console.error("Error interacting with the page:", err);
     throw new Error("Failed to scrape product details.");
-  } finally {
-    await browser.close();
   }
+  // finally {
+  //   await browser.close();
+  // }
 };
 
 export default getProdDetails;

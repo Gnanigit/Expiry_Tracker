@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const ProductSchema = new mongoose.Schema(
   {
     name: {
@@ -8,21 +10,17 @@ const ProductSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    mfgDate: {
-      type: Date,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
+
     prodImage: {
       type: String,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    status: {
+      type: String,
+      default: "green",
     },
   },
   { timestamps: true }
