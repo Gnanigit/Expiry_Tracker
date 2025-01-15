@@ -33,9 +33,8 @@ const Main = () => {
         onClose={() => setIsSidebarVisible(false)}
       />
 
-      {/* Navbar */}
       <Navbar toggleSidebar={toggleSidebar} />
-      {renderComponent()}
+      <ScrollView>{renderComponent()}</ScrollView>
     </SafeAreaView>
   );
 };

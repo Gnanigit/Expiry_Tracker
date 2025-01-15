@@ -15,16 +15,21 @@ import CustomButton from "../components/CustomButton";
 import { getBarcodeNumber, getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
 import { icons } from "../constants";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [showExpPhotoPicker, setExpPhotoPicker] = useState(false);
   const [editedCode, setEditedCode] = useState("");
   const [productName, setProductName] = useState("");
   const [expDate, setExpDate] = useState("");
   const [priceImageUri, setPriceImageUri] = useState("");
-  // Function to take a picture using the camera
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
   const takePicture = async (flag) => {
     try {
       const permissionResult =
@@ -39,11 +44,6 @@ const GetBarcode = () => {
         allowsEditing: true,
         quality: 1,
       });
-      // const result = await ImagePicker.launchCameraAsync({
-      //   mediaTypes: [ImagePicker.MediaType.IMAGE], // Updated to use MediaType array
-      //   allowsEditing: true,
-      //   quality: 1,
-      // });
 
       if (!result.canceled) {
         if (flag === "barcode") {
@@ -87,10 +87,30 @@ const GetBarcode = () => {
       const result = await getProductName(editedCode);
       setImageUri(result.image);
       setProductName(result.description);
+      setExpPhotoPicker(true);
     } catch (error) {
       Alert.alert("Error", error.message);
     }
   };
+
+  const handleDateChange = (event, date) => {
+    setShowPicker(false);
+    if (date) {
+      setSelectedDate(date);
+      // Update expDate immediately as the date is selected
+      setExpDate(
+        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+      );
+    }
+  };
+
+  const formattedDate = {
+    day: selectedDate.getDate(),
+    month: selectedDate.getMonth() + 1,
+    year: selectedDate.getFullYear(),
+  };
+
+  const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
     <View className="flex-1 items-center px-2 py-3">
@@ -134,24 +154,20 @@ const GetBarcode = () => {
           </View>
         )}
       </TouchableOpacity>
-
       <CustomButton
-        title="Get Code"
+        title="Get Product Details"
         handlePress={submit}
-        containerStyles="w-[40%] rounded-[10px] min-h-[40px] mt-3"
+        containerStyles="w-[50%] rounded-[10px] min-h-[40px] mt-3"
       />
-
       {/* <View>
         <Text className="mt-4 text-lg text-gray-700">Barcode: {code}</Text>
       </View> */}
-
       {/* <TouchableOpacity
         className="w-full bg-secondary-100 py-3 rounded-md items-center"
         onPress={handleDone}
       >
         <Text className="text-white font-semibold">Done</Text>
       </TouchableOpacity> */}
-
       <Modal visible={isPopupVisible} transparent={true} animationType="fade">
         {/* Blur Overlay */}
         <View className="flex-1 relative">
@@ -186,12 +202,11 @@ const GetBarcode = () => {
           </View>
         </View>
       </Modal>
-
       <TouchableOpacity
         onPress={() => takePicture("exp-date")}
         className="w-full mt-4 items-center"
       >
-        {imageUri &&
+        {showExpPhotoPicker &&
           (priceImageUri ? (
             <Image
               source={{ uri: priceImageUri }}
@@ -219,6 +234,95 @@ const GetBarcode = () => {
             </View>
           ))}
       </TouchableOpacity>
+      {showExpPhotoPicker && (
+        <>
+          <View className="flex-row items-center my-2">
+            <View className="flex-1 h-[1px] bg-territory-100 mx-2" />
+            <Text className="text-territory-100 font-pbold text-base">OR</Text>
+            <View className="flex-1 h-[1px] bg-territory-100 mx-2" />
+          </View>
+          <CustomButton
+            title="Select Expiry Date Manually"
+            containerStyles="w-[70%] rounded-[10px] min-h-[50px] mt-3"
+            handlePress={() => setIsPopupVisible(true)}
+          />
+
+          <Modal
+            visible={isPopupVisible}
+            transparent={true}
+            animationType="fade"
+          >
+            <View className="flex-1 relative">
+              <BlurView
+                intensity={90}
+                className="h-full w-full absolute inset-0"
+                tint="dark"
+              />
+              <View className="flex-1 justify-center items-center px-4">
+                <View className="w-full bg-white p-6 rounded-lg items-center">
+                  <Text className="text-lg text-shadow-sm font-pbold text-territory-100 mb-4">
+                    Select Expiry Date
+                  </Text>
+
+                  {/* Calendar Trigger */}
+                  <TouchableOpacity
+                    onPress={() => setShowPicker(true)}
+                    className="w-full bg-secondary-100 py-3 rounded-md items-center mb-4"
+                  >
+                    <Text className="text-white font-psemibold">
+                      Open Calendar
+                    </Text>
+                  </TouchableOpacity>
+
+                  {/* Display Selected Date */}
+                  <View className="w-full mb-4">
+                    <TextInput
+                      className="border border-secondary-100 rounded-md p-2 mb-2"
+                      value={String(formattedDate.day)}
+                      editable={false}
+                      placeholder="Day"
+                    />
+                    <TextInput
+                      className="border border-secondary-100 rounded-md p-2 mb-2"
+                      value={String(formattedDate.month)}
+                      editable={false}
+                      placeholder="Month"
+                    />
+                    <TextInput
+                      className="border border-secondary-100 rounded-md p-2 mb-2"
+                      value={String(formattedDate.year)}
+                      editable={false}
+                      placeholder="Year"
+                    />
+                  </View>
+
+                  <CustomButton
+                    title="Done"
+                    handlePress={() => setIsPopupVisible(false)}
+                    containerStyles="w-full py-3 rounded-md bg-secondary-100"
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          {showPicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
+        </>
+      )}
+
+      {showExpPhotoPicker && (
+        <CustomButton
+          title="Add Product"
+          containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5"
+        />
+      )}
     </View>
   );
 };

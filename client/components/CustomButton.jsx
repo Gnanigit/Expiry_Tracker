@@ -4,9 +4,12 @@ import React from "react";
 const CustomButton = ({ title, handlePress, containerStyles, isLoading }) => {
   return (
     <TouchableOpacity
+      style={{
+        elevation: 2,
+      }}
       onPress={handlePress}
       activeOpacity={0.7}
-      className={`shadow-lg bg-secondary-200 items-center justify-center ${containerStyles} ${
+      className={`bg-secondary-200 items-center justify-center ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       }`}
       disabled={isLoading}
