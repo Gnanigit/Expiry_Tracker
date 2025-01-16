@@ -23,8 +23,10 @@ import morning from "../assets/icons/morning.png";
 import afternoon from "../assets/icons/afternoon.png";
 import evening from "../assets/icons/evening.png";
 import night from "../assets/icons/night.png";
+import notify from "../assets/icons/notify.png";
 
 export default {
+  notify,
   main,
   play,
   bookmark,

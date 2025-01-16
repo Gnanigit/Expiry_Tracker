@@ -26,10 +26,10 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
       />
 
       <View className="flex-row items-center h-full justify-center">
-        <Text className="text-shadow-sm font-pregular max-w-[250px] text-secondary">
+        <Text className="text-shadow-sm font-pregular max-w-[200px] text-secondary">
           {name || "Product Name"}
         </Text>
-        <Text className="text-sm font-psemibold text-black-200 ml-2">
+        <Text className="text-sm font-pmdeium text-black-200 ml-2">
           {expDate || "N/A"}
         </Text>
       </View>
@@ -39,7 +39,7 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
       </TouchableOpacity> */}
 
       <View
-        className={`w-6 h-6 m-0 rounded-full ${
+        className={`w-5 h-5 m-0 rounded-full ${
           statusColors[status] || "bg-gray-500"
         }`}
       ></View>

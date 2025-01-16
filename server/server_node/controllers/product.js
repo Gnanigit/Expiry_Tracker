@@ -87,8 +87,15 @@ export const getProductName = async (req, res) => {
 
   try {
     const productDetails = await getProdDetails({ barcode: code });
+    let description = productDetails["Product description"].slice(8).trim();
+
+    const cutIndex = description.search(/[0-9(\[{]/);
+
+    if (cutIndex !== -1) {
+      description = description.slice(0, cutIndex).trim();
+    }
     const result = {
-      description: productDetails["Product description"],
+      description: description,
       image: productDetails.img,
     };
 
@@ -101,7 +108,6 @@ export const getProductName = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    console.log(req.body);
     const { productName, imageUri, expDate, status } = req.body;
 
     const [day, month, year] = expDate.split("/").map(Number);
@@ -120,19 +126,14 @@ export const createProduct = async (req, res) => {
         .json({ message: "All required fields must be provided." });
     }
 
-    console.log(name, prodImage, expiryDate, userId, status);
-    // Create a new product instance
     const newProduct = new Product({
       name,
       prodImage,
       expiryDate,
       status,
-      userId, // Associate product with the user
+      userId,
     });
 
-    console.log(newProduct);
-
-    // Save the product to the database
     const savedProduct = await newProduct.save();
 
     res.status(201).json({
@@ -145,5 +146,31 @@ export const createProduct = async (req, res) => {
       message: "An error occurred while creating the product",
       error: error.message,
     });
+  }
+};
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    const allProducts = await Product.find({ userId: userId });
+    const formattedProducts = allProducts.map((product) => {
+      const expiryDate = new Date(product.expiryDate);
+      const formattedDate = `${expiryDate.getDate()}/${
+        expiryDate.getMonth() + 1
+      }/${expiryDate.getFullYear()}`;
+
+      return {
+        ...product._doc,
+        expiryDate: formattedDate,
+      };
+    });
+
+    return res.status(200).json(formattedProducts);
+  } catch (error) {
+    console.error("Error in getProductName:", error);
+    return res.status(500).json({ message: "Failed to fetch product details" });
   }
 };

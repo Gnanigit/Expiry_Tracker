@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#FFFFFF",
+        primary: { DEFAULT: "#FFFFFF", 100: "#FFFFFF", 200: "#CDCDE0" },
         secondary: {
           DEFAULT: "#5E35B1",
           100: "#5E35B1",
@@ -29,6 +29,7 @@ module.exports = {
           100: "#CDCDE0",
           200: "#A8A8BA",
           300: "#83839A",
+          400: "#CDCDE0",
         },
       },
       fontFamily: {
@@ -53,8 +54,8 @@ module.exports = {
         lg: "0px 10px 15px rgba(0, 0, 0, 0.2)",
         xl: "0px 20px 25px rgba(0, 0, 0, 0.3)",
         custom: "0px 4px 6px rgba(0, 0, 0, 0.5)",
-        imageShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)", // Specific for images
-        viewShadow: "0px 5px 15px rgba(0, 0, 0, 0.25)", // Specific for views
+        imageShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)",
+        viewShadow: "0px 5px 15px rgba(0, 0, 0, 0.25)",
       },
       borderStyle: {
         dashed: "dashed",

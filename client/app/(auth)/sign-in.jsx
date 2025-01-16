@@ -25,7 +25,11 @@ const SignIn = () => {
       const result = await signIn(form.email, form.password);
       dispatch(setUser(result.user));
       dispatch(setIsLogged(true));
-      router.push("/home");
+
+      router.push({
+        pathname: "/home",
+        params: { username: result.user.username },
+      });
     } catch (error) {
       Alert.alert("Error", error.message);
       setIsSubmitting(false);

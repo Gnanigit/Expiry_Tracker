@@ -18,7 +18,7 @@ import { icons } from "../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DateDisplay from "./DateDisplay";
 import { createProduct } from "../routes/product_api";
-
+import { router } from "expo-router";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -101,16 +101,14 @@ const GetBarcode = () => {
     if (date) {
       setSelectedDate(date);
 
-      // Format the selected date as DD/MM/YYYY
       const formattedDate = `${date.getDate()}/${
         date.getMonth() + 1
       }/${date.getFullYear()}`;
       setExpDate(formattedDate);
 
-      // Calculate the difference in days between the current date and the selected date
       const currentDate = new Date();
-      const diffInTime = date.getTime() - currentDate.getTime(); // Difference in milliseconds
-      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)); // Convert to days
+      const diffInTime = date.getTime() - currentDate.getTime();
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
       console.log(diffInDays);
 
       if (diffInDays <= 7) {
@@ -143,7 +141,7 @@ const GetBarcode = () => {
     };
     try {
       const result = await createProduct(productData);
-      console.log(result);
+      router.push("/home");
     } catch (err) {
       Alert.alert("Error", "Failed to submit product.");
     }
