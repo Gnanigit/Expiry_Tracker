@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getBarcodeNumber,
+  // getBarcodeNumber,
   getProductName,
   createProduct,
   getAllProducts,
@@ -11,7 +11,7 @@ const ProductRouter = express.Router();
 ProductRouter.get("/prod-name", getProductName);
 ProductRouter.get("/getAllProducts", authenticateUser, getAllProducts);
 
-ProductRouter.post("/scan-barcode", getBarcodeNumber);
+// ProductRouter.post("/scan-barcode", getBarcodeNumber);
 ProductRouter.post("/create-product", authenticateUser, createProduct);
 
 export default ProductRouter;
