@@ -7,6 +7,7 @@ import path from "../assets/images/path.png";
 import logo from "../assets/images/logo.png";
 import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
+import start from "../assets/images/start.png";
 
 export default {
   profile,
@@ -18,4 +19,5 @@ export default {
   empty,
   signUp,
   signIn,
+  start,
 };

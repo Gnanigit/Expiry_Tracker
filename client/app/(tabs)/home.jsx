@@ -153,7 +153,7 @@ const Home = () => {
 
         {!loading && products.length > 0 ? (
           <FlatList
-            data={products}
+            data={products.filter((item) => item.status === "red")}
             keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) => (
               <ProductCard
@@ -163,7 +163,7 @@ const Home = () => {
                 status={item.status}
               />
             )}
-            contentContainerStyle={{ paddingBottom: 20 }} // Extra space at the bottom
+            contentContainerStyle={{ paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
           />
         ) : (

@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useSelector } from "react-redux";
-
+import MainComponents from "../../components/MainComponents";
 const Main = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const toggleSidebar = () => {
@@ -22,19 +22,27 @@ const Main = () => {
         return <FakeOrNot />;
 
       default:
-        return <Text>No component selected</Text>;
+        return (
+          <View className="items-center h-full w-full mt-5">
+            <Text className="text-shadow-sm text-center text-2xl font-pbold text-territory-100 w-[250px] mb-60">
+              Select Any of Our{" "}
+              <Text className="text-secondary-100">Power</Text> Feature
+            </Text>
+            <MainComponents />
+          </View>
+        );
     }
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full ">
+    <SafeAreaView className="bg-primary h-full">
       <Sidebar
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
       />
 
       <Navbar toggleSidebar={toggleSidebar} />
-      <ScrollView>{renderComponent()}</ScrollView>
+      <View>{renderComponent()}</View>
     </SafeAreaView>
   );
 };

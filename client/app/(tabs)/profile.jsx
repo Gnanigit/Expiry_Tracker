@@ -18,7 +18,11 @@ const Profile = () => {
 
       <Navbar toggleSidebar={toggleSidebar} />
 
-      <Text>Profile</Text>
+      <View className="w-full items-center">
+        <Text className="text-lg text-shadow-sm font-pbold text-territory-100 mt-3">
+          Profile
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };

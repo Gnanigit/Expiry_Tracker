@@ -24,8 +24,12 @@ import afternoon from "../assets/icons/afternoon.png";
 import evening from "../assets/icons/evening.png";
 import night from "../assets/icons/night.png";
 import notify from "../assets/icons/notify.png";
+import google from "../assets/icons/google.png";
+import email from "../assets/icons/email.png";
 
 export default {
+  email,
+  google,
   notify,
   main,
   play,

@@ -45,7 +45,7 @@ const getProdDetails = async ({ barcode }) => {
     // Wait for the main product details section
     await page.waitForSelector(".row.mb-spacer-2", {
       visible: true,
-      timeout: 5000,
+      timeout: 10000,
     });
 
     // Extract product details

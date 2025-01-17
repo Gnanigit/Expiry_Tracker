@@ -25,14 +25,13 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
         resizeMode="cover"
       />
 
-      <View className="flex-row items-center h-full justify-center">
-        <Text className="text-shadow-sm font-pregular max-w-[200px] text-secondary">
-          {name || "Product Name"}
-        </Text>
-        <Text className="text-sm font-pmdeium text-black-200 ml-2">
-          {expDate || "N/A"}
-        </Text>
-      </View>
+      <Text className="text-shadow-sm font-pregular  w-[180px] text-secondary">
+        {name || "Product Name"}
+      </Text>
+
+      <Text className="text-sm font-pmdeium text-black-200 ">
+        {expDate || "N/A"}
+      </Text>
 
       {/* <TouchableOpacity onPress={onDelete}>
         <FontAwesome name="trash" size={20} color="gray" />
