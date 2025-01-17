@@ -24,7 +24,7 @@ export const getBarcodeNumber = (req, res) => {
     }
 
     const pythonProcess = spawn("python", [
-      "C:\\Users\\Gnaneswar Yalla\\Desktop\\Expiry_Tracker\\server\\server_python\\final.py",
+      "C:\\Users\\Gnaneswar Yalla\\Desktop\\Expiry_Tracker\\server\\utils\\final.py",
     ]);
 
     // Write the file buffer to Python's stdin

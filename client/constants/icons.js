@@ -26,6 +26,7 @@ import night from "../assets/icons/night.png";
 import notify from "../assets/icons/notify.png";
 import google from "../assets/icons/google.png";
 import email from "../assets/icons/email.png";
+import camera from "../assets/icons/camera.png";
 
 export default {
   email,
@@ -56,4 +57,5 @@ export default {
   afternoon,
   evening,
   night,
+  camera,
 };

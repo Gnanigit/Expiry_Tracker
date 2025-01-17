@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,22 +7,23 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { BlurView } from "expo-blur";
-
+import * as ImagePicker from "expo-image-picker";
 import CustomButton from "../components/CustomButton";
-import { getProductName } from "../routes/product_api";
+import { getBarcodeNumber, getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
 import { icons } from "../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DateDisplay from "./DateDisplay";
 import { createProduct } from "../routes/product_api";
 import { router } from "expo-router";
-import { CameraView, Camera } from "expo-camera";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
   const [showExpPhotoPicker, setExpPhotoPicker] = useState(false);
+  const [editedCode, setEditedCode] = useState("");
   const [productName, setProductName] = useState("");
   const [expDate, setExpDate] = useState("");
   const [priceImageUri, setPriceImageUri] = useState("");
@@ -31,37 +32,62 @@ const GetBarcode = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [status, setStatus] = useState("");
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
 
-  useEffect(() => {
-    const getCameraPermissions = async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
+  const takePicture = async (flag) => {
+    try {
+      const permissionResult =
+        await ImagePicker.requestCameraPermissionsAsync();
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Denied", "We need access to your camera.");
+        return;
+      }
 
-    getCameraPermissions();
-  }, []);
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ["images", "videos"],
+        allowsEditing: true,
+        quality: 1,
+      });
 
-  const handleBarcodeScanned = ({ type, data }) => {
-    console.log(data);
-    setScanned(true);
-    setCode(data);
-    handleDone(data);
+      if (!result.canceled) {
+        if (flag === "barcode") {
+          setImageUri(result.assets[0].uri);
+        } else {
+          setPriceImageUri(result.assets[0].uri);
+        }
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to take a picture.");
+    }
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // Get Barcode Number
+  const submit = async () => {
+    if (!imageUri) {
+      Alert.alert("No Image", "Please take a picture first.");
+      return;
+    }
 
-  const handleDone = async (code) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: imageUri,
+        type: "image/jpeg",
+        name: "barcode.jpg",
+      });
+      const result = await getBarcodeNumber(formData);
+      setEditedCode(result.data);
+      setIsPopupVisible(true);
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  const handleDone = async () => {
+    setCode(editedCode);
     setIsPopupVisible(false);
 
     try {
-      const result = await getProductName(code);
+      const result = await getProductName(editedCode);
       setImageUri(result.image);
       setProductName(result.description);
       setExpPhotoPicker(true);
@@ -123,7 +149,7 @@ const GetBarcode = () => {
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
-    <View className="items-center  h-full px-2 py-3">
+    <View className="items-center px-2 py-3">
       <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 ">
         Add Product
       </Text>
@@ -134,24 +160,87 @@ const GetBarcode = () => {
         status={status}
         onDelete
       />
-
-      <CameraView
-        onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["ean13", "ean8"],
-        }}
-        className="w-[300px] h-[150px] mt-5 rounded-2xl"
-      />
-
+      <TouchableOpacity
+        onPress={() => takePicture("barcode")}
+        className="w-full mt-4 items-center"
+      >
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            resizeMode="cover"
+            className="w-48 h-48 rounded-xl"
+          />
+        ) : (
+          <View
+            className="bg-territory-100-40 border-territory-100 w-full h-20 rounded-2xl items-center justify-center flex-row m+-5"
+            style={{
+              borderWidth: 1.5,
+              borderColor: "#F49F1C",
+              borderStyle: "dashed",
+            }}
+          >
+            <Image
+              source={icons.camera}
+              resizeMode="contain"
+              className="w-6 h-6"
+            />
+            <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
+              Take a photo
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
       <CustomButton
-        title="Scan Bar Code Again"
-        handlePress={() => setScanned(false)}
-        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3"
+        title="Get Product Details"
+        handlePress={submit}
+        containerStyles="w-[50%] rounded-[10px] min-h-[40px] mt-3"
       />
+      {/* <View>
+        <Text className="mt-4 text-lg text-gray-700">Barcode: {code}</Text>
+      </View> */}
+      {/* <TouchableOpacity
+        className="w-full bg-secondary-100 py-3 rounded-md items-center"
+        onPress={handleDone}
+      >
+        <Text className="text-white font-semibold">Done</Text>
+      </TouchableOpacity> */}
+      <Modal visible={isPopupVisible} transparent={true} animationType="fade">
+        {/* Blur Overlay */}
+        <View className="flex-1 relative">
+          <BlurView
+            intensity={90}
+            className="h-full w-full absolute inset-0"
+            tint="dark"
+          />
 
+          <View className="flex-1 justify-center items-center px-4">
+            <View className="w-full bg-white p-6 rounded-lg items-center">
+              <Image
+                source={icons.addProduct}
+                className="w-48 h-24 mb-4"
+                resizeMode="contain"
+              />
+              <Text className="text-lg text-shadow-sm font-bold text-territory-100 mb-2">
+                Enter or confirm your barcode:
+              </Text>
+              <TextInput
+                className="w-full border border-secondary-100 rounded-md p-2 mb-4"
+                value={editedCode}
+                onChangeText={setEditedCode}
+              />
+              <TouchableOpacity
+                className="w-full bg-secondary-100 py-3 rounded-md items-center"
+                onPress={handleDone}
+              >
+                <Text className="text-white font-psemibold">Done</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <TouchableOpacity
         onPress={() => takePicture("exp-date")}
-        className="w-full mt-12 items-center"
+        className="w-full mt-4 items-center"
       >
         {showExpPhotoPicker &&
           (priceImageUri ? (

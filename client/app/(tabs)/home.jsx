@@ -136,7 +136,7 @@ const Home = () => {
       </View>
 
       <View
-        className="w-full h-full bg-primary-100 py-5 px-1 items-center"
+        className="w-full h-full bg-secondary-100 py-5 px-1 items-center"
         style={{
           borderTopLeftRadius: 35,
           borderTopRightRadius: 35,
@@ -153,6 +153,7 @@ const Home = () => {
 
         {!loading && products.length > 0 ? (
           <FlatList
+            className=" flex-1"
             data={products.filter((item) => item.status === "red")}
             keyExtractor={(item) => item._id.toString()}
             renderItem={({ item }) => (
@@ -163,7 +164,7 @@ const Home = () => {
                 status={item.status}
               />
             )}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ paddingBottom: 0 }}
             showsVerticalScrollIndicator={false}
           />
         ) : (
