@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { BlurView } from "expo-blur";
 import { fetchProducts } from "../redux/slices/products";
@@ -20,6 +21,10 @@ import DateDisplay from "./DateDisplay";
 import { createProduct } from "../routes/product_api";
 import { router } from "expo-router";
 import { CameraView, Camera } from "expo-camera";
+import { Audio } from "expo-av";
+import beep from "../constants/audio";
+import gifs from "../constants/gifs";
+import LottieView from "lottie-react-native";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -33,18 +38,63 @@ const GetBarcode = () => {
   const [status, setStatus] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [linePosition] = useState(new Animated.Value(30)); // Initialize the animated value
+  const [sound, setSound] = useState(null);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
+    // Request Camera Permissions
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     };
 
     getCameraPermissions();
-  }, []);
 
-  const handleBarcodeScanned = ({ type, data }) => {
+    // Load the beep sound
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(beep);
+      setSound(sound);
+    };
+    loadSound();
+
+    // Cleanup on component unmount
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
+  useEffect(() => {
+    if (!scanned) {
+      startLineAnimation();
+    }
+  }, [scanned]);
+
+  const startLineAnimation = () => {
+    linePosition.setValue(30); // Reset the line position
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(linePosition, {
+          toValue: 157, // Move the line down
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(linePosition, {
+          toValue: 30, // Move the line back up
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  const handleBarcodeScanned = async ({ type, data }) => {
     setScanned(true);
+    if (sound) {
+      await sound.replayAsync();
+    }
     setCode(data);
     handleDone(data);
   };
@@ -69,7 +119,6 @@ const GetBarcode = () => {
     }
   };
 
-  // Handle Date Change
   const handleDateChange = (event, date) => {
     setShowPicker(false);
     if (date) {
@@ -101,7 +150,6 @@ const GetBarcode = () => {
     year: selectedDate.getFullYear(),
   };
 
-  // Add Product
   const handleSubmit = async () => {
     if (!productName || !imageUri || !expDate || !status) {
       Alert.alert("Error", "Please fill all fields");
@@ -126,7 +174,7 @@ const GetBarcode = () => {
 
   return (
     <View className="items-center  h-full px-2 py-3">
-      <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 ">
+      <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 mb-3">
         Add Product
       </Text>
       <ProductCard
@@ -136,19 +184,44 @@ const GetBarcode = () => {
         status={status}
         onDelete
       />
-
-      <CameraView
-        onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["ean13", "ean8"],
-        }}
-        className="w-[300px] h-[150px] mt-5 rounded-2xl"
-      />
+      <View className="relative">
+        {!scanned ? (
+          <CameraView
+            onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+            barcodeScannerSettings={{
+              barcodeTypes: ["ean13", "ean8"],
+            }}
+            className="w-[300px] h-[170px] mt-3 rounded-2xl relative"
+          />
+        ) : (
+          <LottieView
+            className="w-[180px] h-[170px] mt-3"
+            source={require("../assets/gifs/success.json")}
+            autoPlay
+            loop
+          ></LottieView>
+        )}
+        {/* Moving Line */}
+        {!scanned && (
+          <Animated.View
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "79.8%",
+              height: 2,
+              backgroundColor: "red",
+              transform: [{ translateY: linePosition }],
+            }}
+          />
+        )}
+      </View>
 
       <CustomButton
         title="Scan Bar Code Again"
         handlePress={() => setScanned(false)}
         containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3"
+        disabled={!scanned}
       />
 
       <TouchableOpacity
@@ -178,7 +251,7 @@ const GetBarcode = () => {
                 className="w-6 h-6"
               />
               <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
-                Take a photo
+                Take a photo of Expiry Date
               </Text>
             </View>
           ))}
@@ -192,7 +265,7 @@ const GetBarcode = () => {
           </View>
           <CustomButton
             title="Select Expiry Date Manually"
-            containerStyles="w-[70%] rounded-[10px] min-h-[50px] "
+            containerStyles="w-[75%] rounded-[10px] min-h-[50px] "
             handlePress={() => setIsPopupVisible(true)}
           />
 
