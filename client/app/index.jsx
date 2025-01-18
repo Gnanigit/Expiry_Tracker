@@ -30,7 +30,7 @@ const App = () => {
           <CustomButton
             title="Continue with Email"
             type="email"
-            handlePress={() => router.push("/sign-up")}
+            handlePress={() => router.push("/sign-in")}
             containerStyles="w-full rounded-xl min-h-[55px]"
           />
           <View className="flex-row items-center my-2">

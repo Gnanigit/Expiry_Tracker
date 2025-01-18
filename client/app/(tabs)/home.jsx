@@ -6,7 +6,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,10 +33,19 @@ const getGreeting = () => {
 };
 
 const Home = () => {
-  const { username } = useLocalSearchParams();
-  const { isLogged, user } = useSelector((state) => state.auth);
+  const { params } = useLocalSearchParams();
+
+  const { isLogged, user, authLoading } = useSelector((state) => state.auth);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [greeting, setGreeting] = useState(getGreeting());
+  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    dispatch(fetchProducts());
+    setRefreshing(false);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -48,7 +57,7 @@ const Home = () => {
     }, 600000);
     return () => clearInterval(interval);
   }, []);
-  const dispatch = useDispatch();
+
   const {
     items: products = [],
     loading,
@@ -61,6 +70,7 @@ const Home = () => {
     }
   }, [dispatch, products.length]);
 
+  // Component return
   return (
     <SafeAreaView className="bg-primary flex-1 h-full">
       <Sidebar
@@ -78,7 +88,7 @@ const Home = () => {
               {greeting.text + "..."}
             </Text>
             <Text className="text-shadow-sm text-lg text-2xl font-psemibold text-secondary-100">
-              {user.username ? user.username : username}
+              {user?.username}
             </Text>
           </View>
           <Image className="w-14 h-14" source={greeting.image} />
@@ -135,16 +145,18 @@ const Home = () => {
         </View>
       </View>
 
+      {/* Ready to Expire items */}
       <View
-        className="w-full h-full bg-secondary-100 py-5 px-1 items-center"
+        className="w-full h-full bg-primary-100 px-2 items-center"
         style={{
           borderTopLeftRadius: 35,
           borderTopRightRadius: 35,
-          elevation: 7,
+
+          elevation: 10,
           flex: 1,
         }}
       >
-        <Text className="text-lg text-shadow-sm font-pbold text-territory-100 ">
+        <Text className="text-lg text-shadow-sm font-pbold text-territory-100 my-2">
           Ready to Expire
         </Text>
 
@@ -162,6 +174,12 @@ const Home = () => {
                 name={item.name}
                 expDate={item.expiryDate}
                 status={item.status}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
             )}
             contentContainerStyle={{ paddingBottom: 0 }}

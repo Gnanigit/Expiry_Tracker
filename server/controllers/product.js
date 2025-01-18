@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import fs from "fs";
 import express from "express";
 import getProdDetails from "../utils/getProdDetails.js";
+import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 
 const upload = multer({
@@ -78,7 +79,37 @@ const upload = multer({
 //   });
 // };
 
-export const getProductName = async (req, res) => {
+// ------------ Product Details code - 1 -----------------
+
+// export const getProductName = async (req, res) => {
+//   const { code } = req.query;
+
+//   if (!code) {
+//     return res.status(400).json({ message: "Barcode is required" });
+//   }
+
+//   try {
+//     const productDetails = await getProdDetails({ barcode: code });
+//     let description = productDetails["Product description"].slice(8).trim();
+
+//     const cutIndex = description.search(/[0-9(\[{]/);
+
+//     if (cutIndex !== -1) {
+//       description = description.slice(0, cutIndex).trim();
+//     }
+//     const result = {
+//       description: description,
+//       image: productDetails.img,
+//     };
+
+//     return res.status(200).json(result);
+//   } catch (error) {
+//     console.error("Error in getProductName:", error);
+//     return res.status(500).json({ message: "Failed to fetch product details" });
+//   }
+// };
+
+export const getProductDetails = async (req, res) => {
   const { code } = req.query;
 
   if (!code) {
@@ -86,19 +117,18 @@ export const getProductName = async (req, res) => {
   }
 
   try {
-    const productDetails = await getProdDetails({ barcode: code });
-    let description = productDetails["Product description"].slice(8).trim();
-
-    const cutIndex = description.search(/[0-9(\[{]/);
-
-    if (cutIndex !== -1) {
-      description = description.slice(0, cutIndex).trim();
-    }
+    const productDetails = await getProdInfo({ barcode: code });
     const result = {
-      description: description,
-      image: productDetails.img,
+      name: productDetails["productName"],
+      image: productDetails["productImage"]["src"],
+      alt: productDetails["productImage"]["alt"],
+      brand: productDetails["tableData"][1][1],
+      ean: productDetails["tableData"][0][1],
+      category: productDetails["tableData"][2][1],
+      description: productDetails["div4"]["span"],
+      additional_content: productDetails["div5"]["span"],
     };
-
+    console.log(result);
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error in getProductName:", error);

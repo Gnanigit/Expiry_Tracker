@@ -11,3 +11,7 @@
 
 Expo App opening
 setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.108
+
+
+RFID API key : n9puh5KB51whXFqK
+RFID URL :  https://gs1-eu1-pd-rfidcoder-app.azurewebsites.net/api/tag/epc/30F4257BF46DB64000000190?apikey=n9puh5KB51whXFqK

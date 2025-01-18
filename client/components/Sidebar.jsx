@@ -12,8 +12,10 @@ const Sidebar = ({ isVisible, onClose }) => {
   const handleLogout = async () => {
     try {
       await logout(dispatch);
-      console.log("Logged out successfully!");
-      router.replace("/sign-in");
+
+      setTimeout(() => {
+        router.replace("/sign-in");
+      }, 100);
     } catch (error) {
       console.error("Error during logout:", error);
     }

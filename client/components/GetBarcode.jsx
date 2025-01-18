@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { BlurView } from "expo-blur";
-
+import { fetchProducts } from "../redux/slices/products";
+import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../components/CustomButton";
 import { getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
@@ -26,14 +27,13 @@ const GetBarcode = () => {
   const [productName, setProductName] = useState("");
   const [expDate, setExpDate] = useState("");
   const [priceImageUri, setPriceImageUri] = useState("");
-
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [status, setStatus] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -44,7 +44,6 @@ const GetBarcode = () => {
   }, []);
 
   const handleBarcodeScanned = ({ type, data }) => {
-    console.log(data);
     setScanned(true);
     setCode(data);
     handleDone(data);
@@ -63,13 +62,14 @@ const GetBarcode = () => {
     try {
       const result = await getProductName(code);
       setImageUri(result.image);
-      setProductName(result.description);
+      setProductName(result.name);
       setExpPhotoPicker(true);
     } catch (error) {
       Alert.alert("Error", error.message);
     }
   };
 
+  // Handle Date Change
   const handleDateChange = (event, date) => {
     setShowPicker(false);
     if (date) {
@@ -101,6 +101,7 @@ const GetBarcode = () => {
     year: selectedDate.getFullYear(),
   };
 
+  // Add Product
   const handleSubmit = async () => {
     if (!productName || !imageUri || !expDate || !status) {
       Alert.alert("Error", "Please fill all fields");
@@ -115,6 +116,7 @@ const GetBarcode = () => {
     };
     try {
       const result = await createProduct(productData);
+      dispatch(fetchProducts());
       router.push("/home");
     } catch (err) {
       Alert.alert("Error", "Failed to submit product.");

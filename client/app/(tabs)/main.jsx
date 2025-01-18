@@ -25,8 +25,8 @@ const Main = () => {
         return (
           <View className="items-center h-full w-full mt-5">
             <Text className="text-shadow-sm text-center text-2xl font-pbold text-territory-100 w-[250px] mb-60">
-              Select Any of Our{" "}
-              <Text className="text-secondary-100">Power</Text> Feature
+              Tap & Select Any of Our{" "}
+              <Text className="text-secondary-100">Power</Text> Features
             </Text>
             <MainComponents />
           </View>
