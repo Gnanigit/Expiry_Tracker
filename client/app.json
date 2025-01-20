@@ -5,11 +5,11 @@
     "scheme": "Expiry_Tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Expiry_Tracker_Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/Expiry_Tracker_Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,12 +18,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Expiry_Tracker_Logo.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/Expiry_Tracker_Logo.png"
     },
     "plugins": [
       "expo-router",

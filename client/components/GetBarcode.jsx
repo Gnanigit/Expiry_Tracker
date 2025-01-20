@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { BlurView } from "expo-blur";
 import { fetchProducts } from "../redux/slices/products";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import CustomButton from "../components/CustomButton";
 import { getProductName } from "../routes/product_api";
 import ProductCard from "./ProductCard";
@@ -66,6 +66,7 @@ const GetBarcode = () => {
       }
     };
   }, []);
+
   useEffect(() => {
     if (!scanned) {
       startLineAnimation();
@@ -132,7 +133,6 @@ const GetBarcode = () => {
       const currentDate = new Date();
       const diffInTime = date.getTime() - currentDate.getTime();
       const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
-      console.log(diffInDays);
 
       if (diffInDays <= 7) {
         setStatus("red");
@@ -173,7 +173,7 @@ const GetBarcode = () => {
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
-    <View className="items-center  h-full px-2 py-3">
+    <View className="items-center h-full px-2 py-3">
       <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 mb-3">
         Add Product
       </Text>

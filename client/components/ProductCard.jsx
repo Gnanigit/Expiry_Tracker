@@ -3,7 +3,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons"; // For delete icon
 import { images } from "../constants";
 
-const ProductCard = ({ image, name, expDate, status, onDelete }) => {
+const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {
   const statusColors = {
     green: "bg-green-500",
     yellow: "bg-yellow-500",
@@ -32,11 +32,11 @@ const ProductCard = ({ image, name, expDate, status, onDelete }) => {
       <Text className="text-sm font-pmdeium text-black-200 ">
         {expDate || "N/A"}
       </Text>
-
-      {/* <TouchableOpacity onPress={onDelete}>
-        <FontAwesome name="trash" size={20} color="gray" />
-      </TouchableOpacity> */}
-
+      {type === "history" && (
+        <TouchableOpacity onPress={onDelete}>
+          <FontAwesome name="trash" size={20} color="gray" />
+        </TouchableOpacity>
+      )}
       <View
         className={`w-5 h-5 m-0 rounded-full ${
           statusColors[status] || "bg-gray-500"

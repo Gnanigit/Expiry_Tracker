@@ -32,7 +32,7 @@ const getProdInfo = async ({ barcode }) => {
       )
     );
 
-    // Extract details from the fourth div
+    // Extract details from the second div
     const div4Data = await page.$eval(
       ".left-column > div:nth-of-type(2)",
       (div) => ({
@@ -41,13 +41,33 @@ const getProdInfo = async ({ barcode }) => {
       })
     );
 
-    // Extract details from the fifth div
+    // Extract details from the third div
     const div5Data = await page.$eval(
       ".left-column > div:nth-of-type(3)",
-      (div) => ({
-        heading: div.querySelector("h2")?.textContent.trim(),
-        span: div.querySelector("span")?.textContent.trim(),
-      })
+      (div) => {
+        const heading = div.querySelector("h2")?.textContent.trim();
+
+        // Check if a <ul> exists immediately after <h2>
+        const ul = div.querySelector("h2 + ul");
+
+        if (ul) {
+          // Extract data from all <li> elements in the <ul>
+          const listItems = Array.from(ul.querySelectorAll("li")).map((li) => {
+            const key = li.querySelector("span")?.textContent.trim() || null; // Text inside <span>, if it exists
+            const value = Array.from(li.childNodes)
+              .filter((node) => node.nodeType === Node.TEXT_NODE) // Get direct text nodes (excluding child elements)
+              .map((node) => node.textContent.trim()) // Trim the text content
+              .join(" "); // Combine if multiple text nodes exist
+            return { key, value };
+          });
+
+          return { heading, type: "list", items: listItems };
+        } else {
+          // Fallback: Get <span> immediately after <h2>
+          const span = div.querySelector("h2 + span")?.textContent.trim();
+          return { heading, type: "span", span };
+        }
+      }
     );
 
     // Structure data
@@ -68,9 +88,10 @@ const getProdInfo = async ({ barcode }) => {
   } catch (e) {
     console.error("Failed to extract product details:", e);
     return null;
-  } finally {
-    await browser.close();
   }
+  // finally {
+  //   await browser.close();
+  // }
 };
 
 export default getProdInfo;

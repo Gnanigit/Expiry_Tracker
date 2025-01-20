@@ -33,8 +33,6 @@ const getGreeting = () => {
 };
 
 const Home = () => {
-  const { params } = useLocalSearchParams();
-
   const { isLogged, user, authLoading } = useSelector((state) => state.auth);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [greeting, setGreeting] = useState(getGreeting());
@@ -100,7 +98,7 @@ const Home = () => {
             onPress={() =>
               router.push({
                 pathname: "/main",
-                params: { component: "ComponentA" },
+                params: { component: "ComponentA", unique: Date.now() },
               })
             }
           >
@@ -112,7 +110,15 @@ const Home = () => {
               Add product
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl">
+          <TouchableOpacity
+            className="flex-1 bg-secondary-300 flex-row items-center rounded-2xl"
+            onPress={() =>
+              router.push({
+                pathname: "/main",
+                params: { component: "ComponentB", unique: Date.now() },
+              })
+            }
+          >
             <Image
               className="w-12 h-12 object-contain ml-1 shadow-lg"
               source={icons.fake}

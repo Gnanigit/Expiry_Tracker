@@ -95,3 +95,21 @@ export const getAllProducts = async () => {
     );
   }
 };
+
+export const deleteProductById = async (productId) => {
+  try {
+    const response = await axios.delete(`${baseURL}/product/delete-product`, {
+      params: { productId },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in deleteProductById:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to delete product"
+    );
+  }
+};

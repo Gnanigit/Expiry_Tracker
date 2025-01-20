@@ -73,7 +73,7 @@ export default function MainComponents() {
           onPress={() =>
             router.push({
               pathname: "/main",
-              params: { component: "ComponentA" },
+              params: { component: "ComponentA", unique: Date.now() },
             })
           }
           style={{
@@ -97,6 +97,12 @@ export default function MainComponents() {
           style={{
             elevation: isFullyVisible ? 7 : 0,
           }}
+          onPress={() =>
+            router.push({
+              pathname: "/main",
+              params: { component: "ComponentB", unique: Date.now() },
+            })
+          }
         >
           <Image
             className="w-12 h-12 object-contain ml-1 shadow-lg"

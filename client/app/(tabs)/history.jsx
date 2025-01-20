@@ -5,8 +5,10 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
+import { deleteProduct } from "../../redux/slices/products";
 
 const History = () => {
+  const dispatch = useDispatch();
   const {
     items: products = [],
     loading,
@@ -17,6 +19,31 @@ const History = () => {
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
+
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Delete Confirmation",
+      "Are you sure you want to delete this item?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: async () => {
+            try {
+              await dispatch(deleteProduct(id));
+              Alert.alert("Success", "Product deleted successfully");
+            } catch (error) {
+              Alert.alert(
+                "Error",
+                error.message || "Failed to delete the product"
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView className="bg-primary h-full ">
       <Sidebar
@@ -42,6 +69,8 @@ const History = () => {
               name={item.name}
               expDate={item.expiryDate}
               status={item.status}
+              onDelete={() => handleDelete(item._id)}
+              type="history"
             />
           )}
           contentContainerStyle={{ paddingBottom: 20 }}

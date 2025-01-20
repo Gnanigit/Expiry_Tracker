@@ -118,6 +118,7 @@ export const getProductDetails = async (req, res) => {
 
   try {
     const productDetails = await getProdInfo({ barcode: code });
+
     const result = {
       name: productDetails["productName"],
       image: productDetails["productImage"]["src"],
@@ -126,9 +127,26 @@ export const getProductDetails = async (req, res) => {
       ean: productDetails["tableData"][0][1],
       category: productDetails["tableData"][2][1],
       description: productDetails["div4"]["span"],
-      additional_content: productDetails["div5"]["span"],
+      // additional_content: productDetails["div5"]["span"],
+      additional_content: (() => {
+        const div5 = productDetails["div5"];
+
+        if (div5?.type === "list" && Array.isArray(div5.items)) {
+          // Extract key-value pairs from the items array
+          return div5.items.map((item) => {
+            const key = item?.key?.trim() || null;
+            const value = item?.value?.trim() || null;
+            return { key, value };
+          });
+        } else if (div5?.span) {
+          // Fallback for `span` case
+          return div5.span?.trim() || null;
+        } else {
+          return null;
+        }
+      })(),
     };
-    console.log(result);
+
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error in getProductName:", error);
@@ -202,5 +220,25 @@ export const getAllProducts = async (req, res) => {
   } catch (error) {
     console.error("Error in getProductName:", error);
     return res.status(500).json({ message: "Failed to fetch product details" });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  const { productId } = req.query;
+
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Product deleted successfully", deletedProduct });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error deleting product", error: error.message });
   }
 };
