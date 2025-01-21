@@ -88,10 +88,9 @@ const getProdInfo = async ({ barcode }) => {
   } catch (e) {
     console.error("Failed to extract product details:", e);
     return null;
+  } finally {
+    await browser.close();
   }
-  // finally {
-  //   await browser.close();
-  // }
 };
 
 export default getProdInfo;

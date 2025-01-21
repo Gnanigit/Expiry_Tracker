@@ -17,7 +17,7 @@
     "expo-av": "^15.0.2",
     "expo-barcode-scanner": "^13.0.1",
     "expo-blur": "^14.0.2",
-    "expo-camera": "~16.0.12",
+    "expo-camera": "^16.0.13",
     "expo-constants": "~17.0.4",
     "expo-font": "~13.0.3",
     "expo-image-picker": "~16.0.4",

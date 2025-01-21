@@ -42,7 +42,6 @@ export const getProductName = async (code) => {
       throw new Error("No response data from the server");
     }
   } catch (error) {
-    console.error("Error in getProductName:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch product name"
     );

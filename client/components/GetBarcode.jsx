@@ -23,8 +23,8 @@ import { router } from "expo-router";
 import { CameraView, Camera } from "expo-camera";
 import { Audio } from "expo-av";
 import beep from "../constants/audio";
-import gifs from "../constants/gifs";
 import LottieView from "lottie-react-native";
+import { gifs } from "../constants";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -40,6 +40,9 @@ const GetBarcode = () => {
   const [scanned, setScanned] = useState(false);
   const [linePosition] = useState(new Animated.Value(30)); // Initialize the animated value
   const [sound, setSound] = useState(null);
+  const [processing, setProcessing] = useState(false);
+  const [isFakeProductScannedOnce, setIsFakeProductScannedOnce] =
+    useState(false);
 
   const dispatch = useDispatch();
 
@@ -97,6 +100,7 @@ const GetBarcode = () => {
       await sound.replayAsync();
     }
     setCode(data);
+    setProcessing(true);
     handleDone(data);
   };
 
@@ -115,8 +119,21 @@ const GetBarcode = () => {
       setImageUri(result.image);
       setProductName(result.name);
       setExpPhotoPicker(true);
+      setProcessing(false);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      if (!isFakeProductScannedOnce) {
+        setIsFakeProductScannedOnce(true);
+        Alert.alert(
+          "Alert",
+          "The product you selected was not found in our database. For confirmation, please try scanning again one time."
+        );
+      } else {
+        Alert.alert(
+          "Alert",
+          "The product you selected was not found in our database, Try to add Item Manually."
+        );
+      }
+      setProcessing(false);
     }
   };
 
@@ -191,7 +208,21 @@ const GetBarcode = () => {
             barcodeScannerSettings={{
               barcodeTypes: ["ean13", "ean8"],
             }}
-            className="w-[300px] h-[170px] mt-3 rounded-2xl relative"
+            className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
+          />
+        ) : processing ? (
+          <LottieView
+            className="w-[180px] h-[170px] mt-3"
+            source={require("../assets/gifs/processing.json")}
+            autoPlay
+            loop
+          />
+        ) : productName === "" ? (
+          <LottieView
+            className="w-[180px] h-[170px] mt-3"
+            source={require("../assets/gifs/fake_product.json")}
+            autoPlay
+            loop
           />
         ) : (
           <LottieView
@@ -199,7 +230,7 @@ const GetBarcode = () => {
             source={require("../assets/gifs/success.json")}
             autoPlay
             loop
-          ></LottieView>
+          />
         )}
         {/* Moving Line */}
         {!scanned && (

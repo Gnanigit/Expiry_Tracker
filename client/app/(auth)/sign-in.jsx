@@ -13,7 +13,6 @@ import { signIn } from "../../routes/auth_api";
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { isLogged, user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -26,10 +25,9 @@ const SignIn = () => {
       dispatch(setUser(result.user));
       dispatch(setIsLogged(true));
 
-      router.push({
-        pathname: "/home",
-        params: { username: result.user.username },
-      });
+      setTimeout(() => {
+        router.push("/home");
+      }, 10000);
     } catch (error) {
       Alert.alert("Error", error.message);
       setIsSubmitting(false);
