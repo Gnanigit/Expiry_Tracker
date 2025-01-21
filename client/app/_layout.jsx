@@ -6,19 +6,25 @@ import { useSelector } from "react-redux";
 import { Redirect } from "expo-router";
 import React, { useEffect } from "react";
 import store from "../redux/store";
+import { useDispatch } from "react-redux";
+import { router } from "expo-router";
+
+import { setIsLogged, setAuthLoading, setUser } from "../redux/slices/auth";
 
 SplashScreen.preventAutoHideAsync();
 
 const AppContent = () => {
-  const { isLogged, loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { isLogged, authLoading, user } = useSelector((state) => state.auth);
 
-  if (loading) {
+  if (authLoading) {
     return null;
   }
   if (isLogged) {
     return <Redirect href="/home" />;
   }
 };
+
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),

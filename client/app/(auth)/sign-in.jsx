@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setIsLogged, setUser } from "../../redux/slices/auth";
-import { useSelector } from "react-redux";
+
 import { signIn } from "../../routes/auth_api";
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -22,12 +22,9 @@ const SignIn = () => {
     }
     try {
       const result = await signIn(form.email, form.password);
-      dispatch(setUser(result.user));
+      dispatch(setUser(result));
       dispatch(setIsLogged(true));
-
-      setTimeout(() => {
-        router.push("/home");
-      }, 10000);
+      router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
       setIsSubmitting(false);
