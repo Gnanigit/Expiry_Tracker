@@ -7,15 +7,25 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
+  titleStyle,
+  textStyles,
+  inputViewStyle,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <View className={`${otherStyles} space-y-0.5`}>
-      <Text className="text-base text-black-100 font-pmedium">{title}</Text>
-      <View className="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center">
+    <View className={`${otherStyles}`}>
+      <Text className={`${titleStyle}`}>{title}</Text>
+      <View
+        className={`${inputViewStyle}`}
+        // style={{
+        //   borderWidth: 1.1,
+        //   borderColor: "#6b7280",
+        //   borderRadius: 12,
+        // }}
+      >
         <TextInput
-          className="flex-1 text-black-100 text-base font-pmedium"
+          className={`flex-1 ${textStyles}`}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7b7b8b"

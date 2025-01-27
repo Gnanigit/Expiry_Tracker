@@ -45,7 +45,7 @@ const History = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full ">
+    <SafeAreaView className="bg-primary h-full">
       <Sidebar
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
@@ -61,6 +61,7 @@ const History = () => {
 
       {!loading && products.length > 0 ? (
         <FlatList
+          className="px-2"
           data={products}
           keyExtractor={(item) => item._id.toString()}
           renderItem={({ item }) => (
@@ -77,7 +78,11 @@ const History = () => {
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        !loading && <Text>No products available.</Text>
+        !loading && (
+          <Text className="text-center text-red-500 text-shadow-sm font-pregular w-full">
+            No products available.
+          </Text>
+        )
       )}
     </SafeAreaView>
   );

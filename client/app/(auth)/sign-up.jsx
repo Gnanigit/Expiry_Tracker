@@ -21,8 +21,7 @@ const SignUp = () => {
     setIsSubmitting(true);
     try {
       const result = await signUp(form.email, form.password, form.username);
-      dispatch(setUser(result.user));
-      dispatch(setIsLogged(true));
+
       router.push("/sign-in");
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -57,26 +56,38 @@ const SignUp = () => {
           </Text>
           <FormField
             title="Username"
+            placeholder="Enter Username..."
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
-            otherStyles="mt-1.5 px-2"
+            otherStyles="mt-1.5 px-2  space-y-0.5"
+            textStyles="text-black-100 text-base font-pmedium"
+            titleStyle="text-base text-black-100 font-pmedium"
+            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
           />
           <FormField
             title="Email"
+            placeholder="Enter Email..."
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
-            otherStyles="mt-3  px-2"
+            otherStyles="mt-3  px-2  space-y-0.5"
+            textStyles="text-black-100 text-base font-pmedium"
+            titleStyle="text-base text-black-100 font-pmedium"
+            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
           />
           <FormField
             title="Password"
+            placeholder="Enter Password..."
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
-            otherStyles="mt-3 px-2"
+            otherStyles="mt-3 px-2  space-y-0.5"
+            textStyles="text-black-100 text-base font-pmedium"
+            titleStyle="text-base text-black-100 font-pmedium"
+            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
           />
           <CustomButton
             title="SIGN UP"
             handlePress={submit}
-            containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4"
+            containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4 bg-secondary-200"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

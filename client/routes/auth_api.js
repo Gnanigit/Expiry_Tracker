@@ -53,3 +53,15 @@ export const logout = async (dispatch) => {
     console.error("Logout failed:", error);
   }
 };
+
+export const updateUserDetails = async (formData) => {
+  try {
+    const response = await axios.put(`${baseURL}/auth/update-user-details`, {
+      formData,
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

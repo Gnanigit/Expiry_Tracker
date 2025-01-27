@@ -17,7 +17,7 @@ const CustomButton = ({
       }}
       onPress={handlePress}
       activeOpacity={0.7}
-      className={`bg-secondary-200 items-center justify-center flex-row ${containerStyles} ${
+      className={` items-center justify-center flex-row ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } ${disabled ? "opacity-50" : ""}`}
       disabled={disabled}

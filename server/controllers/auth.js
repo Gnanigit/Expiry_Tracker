@@ -102,3 +102,24 @@ export const logout = (req, res) => {
     return res.status(500).send({ error: "Failed to logout" });
   }
 };
+
+export const updateUserDetails = async (req, res) => {
+  try {
+    const {
+      username,
+      email,
+      password,
+      products,
+      firstName,
+      lastName,
+      address,
+      pincode,
+    } = req.body;
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      throw new Error("User does not exist. ");
+    }
+  } catch (error) {
+    console.error("Error during updateUserDetails:", error);
+  }
+};

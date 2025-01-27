@@ -15,7 +15,6 @@ import { router } from "expo-router";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocalSearchParams } from "expo-router";
 import { fetchProducts } from "../../redux/slices/products";
 import ProductCard from "../../components/ProductCard";
 
@@ -192,7 +191,11 @@ const Home = () => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          !loading && <Text>No products available.</Text>
+          !loading && (
+            <Text className="text-center text-red-500 text-shadow-sm font-pregular w-full">
+              No products available.
+            </Text>
+          )
         )}
       </View>
 
