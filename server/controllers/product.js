@@ -127,19 +127,17 @@ export const getProductDetails = async (req, res) => {
       ean: productDetails["tableData"][0][1],
       category: productDetails["tableData"][2][1],
       description: productDetails["div4"]["span"],
-      // additional_content: productDetails["div5"]["span"],
+
       additional_content: (() => {
         const div5 = productDetails["div5"];
 
         if (div5?.type === "list" && Array.isArray(div5.items)) {
-          // Extract key-value pairs from the items array
           return div5.items.map((item) => {
             const key = item?.key?.trim() || null;
             const value = item?.value?.trim() || null;
             return { key, value };
           });
         } else if (div5?.span) {
-          // Fallback for `span` case
           return div5.span?.trim() || null;
         } else {
           return null;
