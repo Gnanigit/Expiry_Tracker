@@ -31,7 +31,7 @@ const App = () => {
             title="Continue with Email"
             type="email"
             handlePress={() => router.push("/sign-in")}
-            containerStyles="w-full rounded-xl min-h-[55px]"
+            containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
           />
           <View className="flex-row items-center my-2">
             <View className="flex-1 h-[2px] bg-territory-100 mx-2" />
@@ -42,7 +42,7 @@ const App = () => {
             type="google"
             title="Continue with Google"
             handlePress={() => router.push("/sign-up")}
-            containerStyles="w-full rounded-xl min-h-[55px]"
+            containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
           />
         </View>
       </ScrollView>

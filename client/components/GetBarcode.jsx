@@ -77,16 +77,16 @@ const GetBarcode = () => {
   }, [scanned]);
 
   const startLineAnimation = () => {
-    linePosition.setValue(30); // Reset the line position
+    linePosition.setValue(30);
     Animated.loop(
       Animated.sequence([
         Animated.timing(linePosition, {
-          toValue: 157, // Move the line down
+          toValue: 157,
           duration: 1000,
           useNativeDriver: true,
         }),
         Animated.timing(linePosition, {
-          toValue: 30, // Move the line back up
+          toValue: 30,
           duration: 1000,
           useNativeDriver: true,
         }),
@@ -251,7 +251,7 @@ const GetBarcode = () => {
       <CustomButton
         title="Scan Bar Code Again"
         handlePress={() => setScanned(false)}
-        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3"
+        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
         disabled={!scanned}
       />
 
@@ -296,7 +296,7 @@ const GetBarcode = () => {
           </View>
           <CustomButton
             title="Select Expiry Date Manually"
-            containerStyles="w-[75%] rounded-[10px] min-h-[50px] "
+            containerStyles="w-[75%] rounded-[10px] min-h-[50px] bg-secondary-200"
             handlePress={() => setIsPopupVisible(true)}
           />
 
@@ -355,7 +355,7 @@ const GetBarcode = () => {
         <CustomButton
           title="Add Product"
           handlePress={handleSubmit}
-          containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5"
+          containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
         />
       )}
     </View>

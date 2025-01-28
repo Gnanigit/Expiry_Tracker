@@ -106,20 +106,40 @@ export const logout = (req, res) => {
 export const updateUserDetails = async (req, res) => {
   try {
     const {
+      avatar,
       username,
       email,
-      password,
-      products,
       firstName,
       lastName,
       address,
       pincode,
+      profilePicUpdated,
     } = req.body;
+
     const user = await User.findOne({ username: username });
     if (!user) {
-      throw new Error("User does not exist. ");
+      return res.status(404).json({ error: "User does not exist." });
     }
+
+    if (profilePicUpdated && avatar) {
+      user.avatar = avatar;
+    }
+
+    user.email = email || user.email;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.address = address || user.address;
+    user.pincode = pincode || user.pincode;
+
+    const updatedUser = await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "User details updated successfully.",
+      user: updatedUser,
+    });
   } catch (error) {
     console.error("Error during updateUserDetails:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 };

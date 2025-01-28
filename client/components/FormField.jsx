@@ -1,6 +1,7 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import icons from "../constants/icons";
+
 const FormField = ({
   title,
   value,
@@ -10,9 +11,12 @@ const FormField = ({
   titleStyle,
   textStyles,
   inputViewStyle,
+  editable = true, // Default is editable
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const isPincodeField = title.toLowerCase() === "pincode";
+
   return (
     <View className={`${otherStyles}`}>
       <Text className={`${titleStyle}`}>{title}</Text>
@@ -30,7 +34,10 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor="#7b7b8b"
           onChangeText={handleChangeText}
+          keyboardType={isPincodeField ? "numeric" : "default"}
+          maxLength={isPincodeField ? 6 : undefined}
           secureTextEntry={title === "Password" && showPassword}
+          editable={editable}
         />
         {title === "Password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

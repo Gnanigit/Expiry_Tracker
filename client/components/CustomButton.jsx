@@ -8,7 +8,7 @@ const CustomButton = ({
   containerStyles,
   isLoading,
   type,
-  disabled, // Add the disabled prop to handle disabling
+  disabled,
 }) => {
   return (
     <TouchableOpacity
@@ -17,7 +17,7 @@ const CustomButton = ({
       }}
       onPress={handlePress}
       activeOpacity={0.7}
-      className={` items-center justify-center flex-row ${containerStyles} ${
+      className={`${containerStyles} items-center justify-center flex-row${
         isLoading ? "opacity-50" : ""
       } ${disabled ? "opacity-50" : ""}`}
       disabled={disabled}

@@ -1,12 +1,9 @@
 import { spawn } from "child_process";
 import multer from "multer";
-import path from "path";
-import bodyParser from "body-parser";
-import fs from "fs";
-import express from "express";
 import getProdDetails from "../utils/getProdDetails.js";
 import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -172,6 +169,15 @@ export const createProduct = async (req, res) => {
         .json({ message: "All required fields must be provided." });
     }
 
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.numberOfProducts = user.numberOfProducts + 1;
+
+    await user.save();
     const newProduct = new Product({
       name,
       prodImage,

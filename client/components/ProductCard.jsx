@@ -38,12 +38,9 @@ const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {
         </TouchableOpacity>
       )}
       <View
-        className={`w-5 h-5 m-0 rounded-full
-        } ${statusColors[status] || "bg-gray-500"}`}
-        style={{
-          borderWidth: 1,
-          borderColor: statusColors[status],
-        }}
+        className={`w-5 h-5 m-0 rounded-full ${
+          statusColors[status] || "bg-gray-500"
+        }`}
       ></View>
     </View>
   );

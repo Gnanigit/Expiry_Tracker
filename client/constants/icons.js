@@ -1,6 +1,4 @@
-import bookmark from "../assets/icons/bookmark.png";
 import home from "../assets/icons/home.png";
-import plus from "../assets/icons/plus.png";
 import profile from "../assets/icons/profile.png";
 import leftArrow from "../assets/icons/left-arrow.png";
 import menu from "../assets/icons/menu.png";
@@ -10,7 +8,6 @@ import rightArrow from "../assets/icons/right-arrow.png";
 import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
-import play from "../assets/icons/play.png";
 import history from "../assets/icons/history.png";
 import fake from "../assets/icons/fake.png";
 import product from "../assets/icons/product.png";
@@ -27,16 +24,20 @@ import notify from "../assets/icons/notify.png";
 import google from "../assets/icons/google.png";
 import email from "../assets/icons/email.png";
 import camera from "../assets/icons/camera.png";
+import products from "../assets/icons/products.png";
+import username from "../assets/icons/username.png";
+import edit from "../assets/icons/edit.png";
 
 export default {
+  edit,
+  username,
+  products,
   email,
   google,
   notify,
   main,
-  play,
-  bookmark,
   home,
-  plus,
+
   profile,
   leftArrow,
   menu,
