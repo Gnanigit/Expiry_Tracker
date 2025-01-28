@@ -6,6 +6,7 @@ import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
 import beep from "../constants/audio";
 import { getProductName } from "../routes/product_api";
+import { gifs } from "../constants";
 
 const FakeOrNot = () => {
   const [sound, setSound] = useState(null);
@@ -127,21 +128,21 @@ const FakeOrNot = () => {
         ) : processing ? (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/processing.json")}
+            source={gifs.processing}
             autoPlay
             loop
           />
         ) : product === null ? (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/fake_product.json")}
+            source={gifs.fake_product}
             autoPlay
             loop
           />
         ) : (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/success.json")}
+            source={gifs.success}
             autoPlay
             loop
           />
@@ -164,7 +165,7 @@ const FakeOrNot = () => {
       <CustomButton
         title="Scan Bar Code Again"
         handlePress={() => setScanned(false)}
-        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3"
+        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
         disabled={!scanned}
       />
       {product !== null && (

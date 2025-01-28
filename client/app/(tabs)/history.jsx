@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Alert, Image, FlatList } from "react-native";
+import React, { useState } from "react";
+import { Text, Alert, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
-import { deleteProduct } from "../../redux/slices/products";
+import { deleteProductById } from "../../routes/product_api";
+import { removeProduct } from "../../redux/slices/products";
+import { getCurrentUser } from "../../routes/auth_api";
+import { setUser } from "../../redux/slices/auth";
 
 const History = () => {
   const dispatch = useDispatch();
@@ -30,7 +33,10 @@ const History = () => {
           text: "Delete",
           onPress: async () => {
             try {
-              await dispatch(deleteProduct(id));
+              const result = await deleteProductById(id);
+              dispatch(removeProduct(id));
+
+              dispatch(setUser(result.user));
               Alert.alert("Success", "Product deleted successfully");
             } catch (error) {
               Alert.alert(

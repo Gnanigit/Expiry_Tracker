@@ -7,9 +7,6 @@ import { Redirect } from "expo-router";
 import React, { useEffect } from "react";
 import store from "../redux/store";
 import { useDispatch } from "react-redux";
-import { router } from "expo-router";
-
-import { setIsLogged, setAuthLoading, setUser } from "../redux/slices/auth";
 
 SplashScreen.preventAutoHideAsync();
 

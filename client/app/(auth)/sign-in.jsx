@@ -8,6 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setIsLogged, setUser } from "../../redux/slices/auth";
+import { setProducts } from "../../redux/slices/products";
 
 import { signIn } from "../../routes/auth_api";
 const SignIn = () => {
@@ -22,8 +23,9 @@ const SignIn = () => {
     }
     try {
       const result = await signIn(form.email, form.password);
-      dispatch(setUser(result));
+      dispatch(setUser(result.user));
       dispatch(setIsLogged(true));
+      dispatch(setProducts(result.formattedProducts));
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import { createAvatar } from "@dicebear/avatars";
 import * as sprites from "@dicebear/avatars-identicon-sprites";
+import Product from "../models/Product.js";
 
 export const signUp = async (req, res) => {
   const { email, password, username } = req.body;
@@ -61,7 +62,23 @@ export async function signIn(req, res) {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).send(user);
+    const allProducts = await Product.find({ userId: user._id });
+    const formattedProducts = allProducts.map((product) => {
+      const expiryDate = new Date(product.expiryDate);
+      const formattedDate = `${expiryDate.getDate()}/${
+        expiryDate.getMonth() + 1
+      }/${expiryDate.getFullYear()}`;
+
+      return {
+        ...product._doc,
+        expiryDate: formattedDate,
+      };
+    });
+    return res.status(200).json({
+      message: "Product deleted successfully",
+      formattedProducts,
+      user,
+    });
   } catch (err) {
     throw new Error(err);
   }

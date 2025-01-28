@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { FontAwesome } from "@expo/vector-icons"; // For delete icon
+import { FontAwesome } from "@expo/vector-icons";
 import { images } from "../constants";
 
 const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {

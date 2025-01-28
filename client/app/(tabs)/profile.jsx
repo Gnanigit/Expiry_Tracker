@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -31,13 +31,27 @@ const Profile = () => {
     avatar: user?.avatar || "",
     username: user?.username || "",
     email: user?.email || "",
-    products: user?.products?.length || 0,
+    products: user?.numberOfProducts || 0,
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     address: user?.address || "",
     pincode: user?.pincode || "",
     profilePicUpdated: false,
   });
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      avatar: user?.avatar || "",
+      username: user?.username || "",
+      email: user?.email || "",
+      products: user?.numberOfProducts || 0,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      address: user?.address || "",
+      pincode: user?.pincode || "",
+    }));
+  }, [user]);
 
   const [loading, setLoading] = useState(false);
 
@@ -147,15 +161,32 @@ const Profile = () => {
 
             <View className="w-full flex-row gap-x-12 mt-1">
               <View className="flex-row justify-center items-center space-x-1">
-                <Image source={icons.username} className="w-5 h-5" />
-                <Text className="text-sm text-secondary font-pmedium text-center">
+                <Image
+                  source={icons.username}
+                  className="w-5 h-5"
+                  tintColor="rgba(244, 159, 28, 1)"
+                  resizeMode="contain"
+                />
+                <Text className="text-sm text-secondary font-pmedium ">
                   {formData?.username}
                 </Text>
               </View>
               <View className="flex-row justify-center items-center space-x-1">
                 <Image source={icons.products} className="w-5 h-5" />
-                <Text className="text-sm text-territory font-pmedium text-center">
-                  {formData?.products} products
+                <Text>
+                  <Text className="text-md text-secondary font-pbold ">
+                    {formData?.products}{" "}
+                  </Text>
+
+                  {formData?.products <= 1 ? (
+                    <Text className="text-sm text-territory font-pmedium ">
+                      Product
+                    </Text>
+                  ) : (
+                    <Text className="text-sm text-territory font-pmedium ">
+                      Products
+                    </Text>
+                  )}
                 </Text>
               </View>
             </View>

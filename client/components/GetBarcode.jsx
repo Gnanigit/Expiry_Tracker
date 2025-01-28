@@ -5,10 +5,10 @@ import {
   Alert,
   Image,
   Modal,
-  TextInput,
   TouchableOpacity,
   Animated,
 } from "react-native";
+import { setUser, setIsLogged } from "../redux/slices/auth";
 import { BlurView } from "expo-blur";
 import { fetchProducts } from "../redux/slices/products";
 import { useDispatch } from "react-redux";
@@ -25,6 +25,8 @@ import { Audio } from "expo-av";
 import beep from "../constants/audio";
 import LottieView from "lottie-react-native";
 import { gifs } from "../constants";
+import { getCurrentUser } from "../routes/auth_api";
+import { addProduct } from "../redux/slices/products";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -38,7 +40,7 @@ const GetBarcode = () => {
   const [status, setStatus] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [linePosition] = useState(new Animated.Value(30)); // Initialize the animated value
+  const [linePosition] = useState(new Animated.Value(30));
   const [sound, setSound] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [isFakeProductScannedOnce, setIsFakeProductScannedOnce] =
@@ -47,7 +49,6 @@ const GetBarcode = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Request Camera Permissions
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
@@ -55,14 +56,12 @@ const GetBarcode = () => {
 
     getCameraPermissions();
 
-    // Load the beep sound
     const loadSound = async () => {
       const { sound } = await Audio.Sound.createAsync(beep);
       setSound(sound);
     };
     loadSound();
 
-    // Cleanup on component unmount
     return () => {
       if (sound) {
         sound.unloadAsync();
@@ -179,14 +178,19 @@ const GetBarcode = () => {
       expDate,
       status,
     };
+
     try {
       const result = await createProduct(productData);
-      dispatch(fetchProducts());
+
+      dispatch(setUser(result.user));
+      dispatch(addProduct(result.product));
       router.push("/home");
     } catch (err) {
+      console.error("Error submitting product:", err);
       Alert.alert("Error", "Failed to submit product.");
     }
   };
+
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
@@ -206,28 +210,28 @@ const GetBarcode = () => {
           <CameraView
             onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
             barcodeScannerSettings={{
-              barcodeTypes: ["ean13", "ean8"],
+              barcodeTypes: ["ean13", "ean8", "ean12"],
             }}
             className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
           />
         ) : processing ? (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/processing.json")}
+            source={gifs.processing}
             autoPlay
             loop
           />
         ) : productName === "" ? (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/fake_product.json")}
+            source={gifs.fake_product}
             autoPlay
             loop
           />
         ) : (
           <LottieView
             className="w-[180px] h-[170px] mt-3"
-            source={require("../assets/gifs/success.json")}
+            source={gifs.success}
             autoPlay
             loop
           />

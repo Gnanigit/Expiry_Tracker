@@ -15,8 +15,9 @@ import { router } from "expo-router";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/slices/products";
+import { addProduct } from "../../redux/slices/products";
 import ProductCard from "../../components/ProductCard";
+import { getAllProducts } from "../../routes/product_api";
 
 const getGreeting = () => {
   const currentHour = new Date().getHours();
@@ -61,13 +62,6 @@ const Home = () => {
     error,
   } = useSelector((state) => state.products);
 
-  useEffect(() => {
-    if (products.length === 0) {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, products.length]);
-
-  // Component return
   return (
     <SafeAreaView className="bg-primary flex-1 h-full">
       <Sidebar
@@ -85,7 +79,7 @@ const Home = () => {
               {greeting.text + "..."}
             </Text>
             <Text className="text-shadow-sm text-lg text-2xl font-psemibold text-secondary-100">
-              {user?.username}
+              {user?.lastName ? user?.lastName : user?.username}
             </Text>
           </View>
           <Image className="w-14 h-14" source={greeting.image} />

@@ -1,9 +1,10 @@
-import { spawn } from "child_process";
+// import { spawn } from "child_process";
 import multer from "multer";
-import getProdDetails from "../utils/getProdDetails.js";
+// import getProdDetails from "../utils/getProdDetails.js";
 import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import { console } from "inspector";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -153,8 +154,8 @@ export const createProduct = async (req, res) => {
   try {
     const { productName, imageUri, expDate, status } = req.body;
 
+    // Parse the expDate into a formatted Date object
     const [day, month, year] = expDate.split("/").map(Number);
-
     const formattedDate = new Date(year, month - 1, day);
 
     const name = productName;
@@ -163,21 +164,24 @@ export const createProduct = async (req, res) => {
 
     const userId = req.user.userId;
 
+    // Check for required fields
     if (!name || !prodImage || !expiryDate || !status) {
       return res
         .status(400)
         .json({ message: "All required fields must be provided." });
     }
 
+    // Find the user in the database
     const user = await User.findById(userId);
-
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Increment user's product count
     user.numberOfProducts = user.numberOfProducts + 1;
-
     await user.save();
+
+    // Create a new product
     const newProduct = new Product({
       name,
       prodImage,
@@ -188,9 +192,20 @@ export const createProduct = async (req, res) => {
 
     const savedProduct = await newProduct.save();
 
+    // Convert expiryDate to ViewableDate format
+    const ViewableDate = `${expiryDate.getDate()}/${
+      expiryDate.getMonth() + 1
+    }/${expiryDate.getFullYear()}`;
+
+    const productWithViewableDate = {
+      ...savedProduct.toObject(),
+      expiryDate: ViewableDate,
+    };
+
     res.status(201).json({
       message: "Product created successfully",
-      product: savedProduct,
+      product: productWithViewableDate,
+      user,
     });
   } catch (error) {
     console.error("Error creating product:", error);
@@ -229,17 +244,26 @@ export const getAllProducts = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   const { productId } = req.query;
-
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+    const userId = req.user.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.numberOfProducts = user.numberOfProducts - 1;
+    console.log(user);
+    await user.save();
 
     return res
       .status(200)
-      .json({ message: "Product deleted successfully", deletedProduct });
+      .json({ message: "Product deleted successfully", deletedProduct, user });
   } catch (error) {
     return res
       .status(500)

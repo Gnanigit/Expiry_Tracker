@@ -1,5 +1,6 @@
 import axios from "axios";
 import { setIsLogged, setUser } from "../redux/slices/auth";
+import { clearProducts } from "../redux/slices/products";
 import { REACT_NATIVE_APP_SERVER_DOMAIN } from "@env";
 const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 
@@ -48,6 +49,7 @@ export const logout = async (dispatch) => {
     await axios.post(`${baseURL}/auth/logout`, {}, { withCredentials: true });
     dispatch(setIsLogged(false));
     dispatch(setUser(null));
+    dispatch(clearProducts());
     console.log("Logged out successfully!");
   } catch (error) {
     console.error("Logout failed:", error);

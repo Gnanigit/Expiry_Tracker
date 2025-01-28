@@ -13,7 +13,7 @@ ProductRouter.get("/getAllProducts", authenticateUser, getAllProducts);
 
 ProductRouter.post("/create-product", authenticateUser, createProduct);
 
-ProductRouter.delete("/delete-product", deleteProduct);
+ProductRouter.delete("/delete-product", authenticateUser, deleteProduct);
 
 export default ProductRouter;
 
