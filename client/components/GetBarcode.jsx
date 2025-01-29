@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { setUser, setIsLogged } from "../redux/slices/auth";
 import { BlurView } from "expo-blur";
-import { fetchProducts } from "../redux/slices/products";
 import { useDispatch } from "react-redux";
 import CustomButton from "../components/CustomButton";
 import { getProductName } from "../routes/product_api";
@@ -22,10 +21,8 @@ import { createProduct } from "../routes/product_api";
 import { router } from "expo-router";
 import { CameraView, Camera } from "expo-camera";
 import { Audio } from "expo-av";
-import beep from "../constants/audio";
 import LottieView from "lottie-react-native";
-import { gifs } from "../constants";
-import { getCurrentUser } from "../routes/auth_api";
+import { gifs, audio } from "../constants";
 import { addProduct } from "../redux/slices/products";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -57,7 +54,7 @@ const GetBarcode = () => {
     getCameraPermissions();
 
     const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(beep);
+      const { sound } = await Audio.Sound.createAsync(audio.beep);
       setSound(sound);
     };
     loadSound();

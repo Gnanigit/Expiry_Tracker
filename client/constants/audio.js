@@ -1,5 +1,9 @@
-import beep from "../assets/audio/beep.mp3";
+// import beep from "../assets/audio/beep.mp3";
+
+// export default {
+//   beep,
+// };
 
 export default {
-  beep,
+  beep: require("../assets/audio/beep.mp3"),
 };

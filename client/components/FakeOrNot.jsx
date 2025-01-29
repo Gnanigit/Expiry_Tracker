@@ -4,7 +4,7 @@ import CustomButton from "./CustomButton";
 import { Camera, CameraView } from "expo-camera";
 import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
-import beep from "../constants/audio";
+import { audio } from "../constants";
 import { getProductName } from "../routes/product_api";
 import { gifs } from "../constants";
 
@@ -60,7 +60,7 @@ const FakeOrNot = () => {
     getCameraPermissions();
 
     const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(beep);
+      const { sound } = await Audio.Sound.createAsync(audio.beep);
       setSound(sound);
     };
     loadSound();
