@@ -4,7 +4,7 @@ import { ScrollView, View, Text, Image, Link } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 import images from "../constants/images";
-import icons from "../constants/icons";
+
 const App = () => {
   return (
     <SafeAreaView className="bg-primary h-full">

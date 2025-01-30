@@ -14,7 +14,7 @@ const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {
     <View
       className="flex-row bg-secondary-300 items-center justify-around rounded-2xl min-h-[100px] w-full  mb-2 p-0"
       style={{
-        elevation: 3,
+        elevation: 1,
         borderWidth: 1,
         borderColor: "rgb(204, 169, 254)",
       }}

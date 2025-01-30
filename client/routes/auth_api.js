@@ -50,7 +50,6 @@ export const logout = async (dispatch) => {
     dispatch(setIsLogged(false));
     dispatch(setUser(null));
     dispatch(clearProducts());
-    console.log("Logged out successfully!");
   } catch (error) {
     console.error("Logout failed:", error);
   }

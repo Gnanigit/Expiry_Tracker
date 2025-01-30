@@ -4,8 +4,10 @@ import { setIsLogged, setUser, setLoading } from "./slices/auth";
 import { addProduct } from "./slices/products";
 import { getCurrentUser } from "../routes/auth_api";
 import { getAllProducts } from "../routes/product_api";
+import { useSelector } from "react-redux";
 
 const GlobalProvider = ({ children }) => {
+  const { isLogged, user, authLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,24 +17,26 @@ const GlobalProvider = ({ children }) => {
           dispatch(setIsLogged(true));
           dispatch(setUser(res));
 
-          getAllProducts()
-            .then((products) => {
-              if (products && Array.isArray(products)) {
-                products.forEach((product) => {
-                  dispatch(addProduct(product));
-                });
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching products:", error);
-            });
+          return getAllProducts();
         } else {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
         }
       })
+      .then((products) => {
+        if (products && Array.isArray(products)) {
+          products.forEach((product) => {
+            dispatch(addProduct(product));
+          });
+        }
+      })
       .catch((error) => {
-        console.error("Error fetching user:", error);
+        if (!isLogged) {
+          dispatch(setIsLogged(false));
+          dispatch(setUser(null));
+        } else {
+          console.error("Error fetching user:", error);
+        }
       })
       .finally(() => {
         dispatch(setLoading(false));
