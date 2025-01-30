@@ -113,3 +113,5 @@ export const deleteProductById = async (productId) => {
     );
   }
 };
+
+export const searchPosts = async (products) => {};
