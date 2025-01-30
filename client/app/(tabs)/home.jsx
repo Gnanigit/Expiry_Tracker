@@ -41,7 +41,7 @@ const Home = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    dispatch(fetchProducts());
+    dispatch(getAllProducts());
     setRefreshing(false);
   };
 

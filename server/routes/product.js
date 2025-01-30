@@ -4,12 +4,15 @@ import {
   createProduct,
   getAllProducts,
   deleteProduct,
+  searchProducts,
+  // getBarcodeNumber,
 } from "../controllers/product.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
 const ProductRouter = express.Router();
 
 ProductRouter.get("/prod-name", getProductDetails);
 ProductRouter.get("/getAllProducts", authenticateUser, getAllProducts);
+ProductRouter.get("/search-products", authenticateUser, searchProducts);
 
 ProductRouter.post("/create-product", authenticateUser, createProduct);
 

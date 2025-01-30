@@ -1,58 +1,67 @@
 import {
   View,
-  Text,
-  Image,
   SafeAreaView,
-  FlatList,
-  RefreshControl,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../../components/SearchInput";
 import EmptyState from "../../components/EmptyState";
-// import { searchPosts } from "../../routes/product_api";
-import { useLocalSearchParams } from "expo-router";
-//   import useFetch from "../../hooks/useFetch";
+import { searchProducts } from "../../routes/product_api";
+import useFetch from "../../hooks/useFetch";
 import ProductCard from "../../components/ProductCard";
 import Navbar from "../../components/Navbar";
 
 const Search = () => {
-  const params = useLocalSearchParams();
-  const query = params?.query || ""; // Ensure query exists
+  const [query, setQuery] = useState("");
 
-  // const { data: posts, refetch } = useFetch(() => searchPosts(query));
+  const { data: products, refetch } = useFetch(
+    () => searchProducts(query),
+    false
+  );
 
-  // useEffect(() => {
-  //   if (query) {
-  //     refetch();
-  //   }
-  // }, [query]);
+  useEffect(() => {
+    if (query.trim().length > 0) {
+      refetch();
+    }
+  }, [query]);
 
   return (
-    <SafeAreaView className="bg-primary h-full pt-7">
-      <Navbar type={"search"} />
-      <FlatList
-        data={[]}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <VideoCard video={item} />}
-        ListHeaderComponent={() => (
-          <View className="my-2 px-4 ">
-            {/* <Text className="font-pmedium text-gray-100 text-sm">
-              Search Results
-            </Text> */}
-            {/* <Text className="text-2xl font-psemibold text-white">{query}</Text> */}
-            <View className="m-0 p-0">
-              <SearchInput title="Search" initialQuery={query} />
-            </View>
-          </View>
-        )}
-        ListEmptyComponent={() => (
+    <SafeAreaView className="bg-primary h-full mt-8">
+      <Navbar type="search" />
+
+      <ScrollView className="px-3" keyboardShouldPersistTaps="handled">
+        <View className="my-2">
+          <SearchInput query={query} setQuery={setQuery} />
+        </View>
+
+        {query.trim().length > 0 ? (
+          products?.length > 0 ? (
+            products.map((item) => (
+              <ProductCard
+                key={item._id}
+                image={item.prodImage}
+                name={item.name}
+                expDate={item.expiryDate}
+                status={item.status}
+              />
+            ))
+          ) : (
+            <EmptyState
+              title="No Products found"
+              subtitle="No product found for this search query."
+            />
+          )
+        ) : (
           <EmptyState
             title="No Products found"
             subtitle="No product found for this search query."
           />
         )}
-      />
+      </ScrollView>
     </SafeAreaView>
   );
 };

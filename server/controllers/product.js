@@ -154,7 +154,6 @@ export const createProduct = async (req, res) => {
   try {
     const { productName, imageUri, expDate, status } = req.body;
 
-    // Parse the expDate into a formatted Date object
     const [day, month, year] = expDate.split("/").map(Number);
     const formattedDate = new Date(year, month - 1, day);
 
@@ -164,24 +163,20 @@ export const createProduct = async (req, res) => {
 
     const userId = req.user.userId;
 
-    // Check for required fields
     if (!name || !prodImage || !expiryDate || !status) {
       return res
         .status(400)
         .json({ message: "All required fields must be provided." });
     }
 
-    // Find the user in the database
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Increment user's product count
     user.numberOfProducts = user.numberOfProducts + 1;
     await user.save();
 
-    // Create a new product
     const newProduct = new Product({
       name,
       prodImage,
@@ -268,5 +263,40 @@ export const deleteProduct = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error deleting product", error: error.message });
+  }
+};
+
+export const searchProducts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    console.log(userId);
+    const { query } = req.query;
+
+    const exactMatches = await Product.find({
+      name: { $regex: `^${query}$`, $options: "i" },
+      userId: userId,
+    });
+
+    const partialMatches = await Product.find({
+      userId: userId,
+      name: { $regex: query, $options: "i" },
+    });
+
+    let merged = exactMatches.concat(partialMatches);
+    const formattedProducts = merged.map((product) => {
+      const expiryDate = new Date(product.expiryDate);
+      const formattedDate = `${expiryDate.getDate()}/${
+        expiryDate.getMonth() + 1
+      }/${expiryDate.getFullYear()}`;
+
+      return {
+        ...product._doc,
+        expiryDate: formattedDate,
+      };
+    });
+    return res.status(200).json(formattedProducts);
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };

@@ -8,10 +8,7 @@ const Navbar = ({ toggleSidebar, type }) => {
     router.push("/notify");
   };
   const navigateToSearch = () => {
-    router.push({
-      pathname: "/search",
-      params: { query: "" },
-    });
+    router.push("/search");
   };
   const goBack = () => {
     router.back();
@@ -54,8 +51,8 @@ const Navbar = ({ toggleSidebar, type }) => {
           </Text>
           <TouchableOpacity onPress={navigateToNotifications}>
             <Image
-              className="w-5 h-5"
-              source={icons.search}
+              className="w-7 h-7"
+              source={icons.notify}
               style={{ tintColor: "#F49F1C" }}
             />
           </TouchableOpacity>

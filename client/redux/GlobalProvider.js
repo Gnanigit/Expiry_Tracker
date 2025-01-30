@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setIsLogged, setUser, setLoading } from "./slices/auth";
-import { addProduct } from "./slices/products";
+import { setProducts } from "./slices/products";
 import { getCurrentUser } from "../routes/auth_api";
 import { getAllProducts } from "../routes/product_api";
 import { useSelector } from "react-redux";
@@ -24,11 +24,7 @@ const GlobalProvider = ({ children }) => {
         }
       })
       .then((products) => {
-        if (products && Array.isArray(products)) {
-          products.forEach((product) => {
-            dispatch(addProduct(product));
-          });
-        }
+        dispatch(setProducts(products));
       })
       .catch((error) => {
         if (!isLogged) {

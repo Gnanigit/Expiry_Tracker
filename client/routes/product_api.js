@@ -114,4 +114,15 @@ export const deleteProductById = async (productId) => {
   }
 };
 
-export const searchPosts = async (products) => {};
+export const searchProducts = async (query) => {
+  try {
+    const response = await axios.get(`${baseURL}/product/search-products`, {
+      params: { query },
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
