@@ -8,10 +8,13 @@
 
 
 
-
 Expo App opening
+ipconfig
 setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.107
 
+start expo app with command -> {first it get's the current connected ipv4 address and sets it to environment variables and the updates the .env file}
+
+./start-expo.ps1   
 
 RFID API key : n9puh5KB51whXFqK
 RFID URL :  https://gs1-eu1-pd-rfidcoder-app.azurewebsites.net/api/tag/epc/30F4257BF46DB64000000190?apikey=n9puh5KB51whXFqK
