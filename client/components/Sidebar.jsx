@@ -21,6 +21,12 @@ const Sidebar = ({ isVisible, onClose }) => {
       console.error("Error during logout:", error);
     }
   };
+  const navigateToSettings = async () => {
+    router.push("/settings");
+  };
+  const navigateToProfile = async () => {
+    router.push("/profile");
+  };
 
   useEffect(() => {
     if (isVisible) {
@@ -56,7 +62,7 @@ const Sidebar = ({ isVisible, onClose }) => {
       className="absolute top-10 left-0 h-full w-[60%] bg-secondary-200 z-10 px-4 pt-5"
     >
       <View className="flex-row justify-between items-center">
-        <View className="flex-row space-x-2 items.center">
+        <View className="flex-row space-x-2 items.center ml-2">
           <Image
             className="w-7 h-7"
             source={icons.username}
@@ -74,8 +80,36 @@ const Sidebar = ({ isVisible, onClose }) => {
           />
         </TouchableOpacity>
       </View>
+      <View className="mt-7 items-center w-full space-y-6">
+        <TouchableOpacity
+          onPress={navigateToSettings}
+          className="border-b-2 border-gray-100  items-center flex-row  rounded-xl w-full space-x-1"
+        >
+          <Image
+            source={icons.settings}
+            className="w-4 h-4 ml-2"
+            style={{ tintColor: "#CDCDE0" }}
+          />
+          <Text className="text-gray-100 text-lg  font-psemimedium text-shadow-sm">
+            Settings
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={navigateToProfile}
+          className="border-b-2 border-gray-100  items-center flex-row  rounded-xl w-full space-x-1"
+        >
+          <Image
+            source={icons.profile}
+            className="w-4 h-4 ml-2"
+            style={{ tintColor: "#CDCDE0" }}
+          />
+          <Text className="text-gray-100 text-lg  font-psemimedium text-shadow-sm">
+            Profile
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <View className=" absolute bottom-7 left-5 w-full ">
+      <View className="absolute bottom-7 left-4 w-full ">
         <TouchableOpacity
           onPress={handleLogout}
           className="border-2 border-red-500 py-3 items-center flex-row  justify-center rounded-xl"

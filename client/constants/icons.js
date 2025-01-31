@@ -27,8 +27,18 @@ import camera from "../assets/icons/camera.png";
 import products from "../assets/icons/products.png";
 import username from "../assets/icons/username.png";
 import edit from "../assets/icons/edit.png";
+import expiry from "../assets/icons/expiry.png";
+import settings from "../assets/icons/settings.png";
+import light_mode from "../assets/icons/light-mode.png";
+import dark_mode from "../assets/icons/dark-mode.png";
+import system from "../assets/icons/system.png";
 
 export default {
+  light_mode,
+  dark_mode,
+  system,
+  settings,
+  expiry,
   edit,
   username,
   products,

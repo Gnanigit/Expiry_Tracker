@@ -16,13 +16,13 @@ if ($ipAddress) {
         # Read the .env file line by line
         $envLines = Get-Content $envFilePath
         
-        $val=":5000"
-        $updatedLines = $envLines -replace "(?i)^REACT_NATIVE_APP_SERVER_DOMAIN\s*=\s*'http://.*'", "REACT_NATIVE_APP_SERVER_DOMAIN='http://$ipAddress$val'"
+        $port=":5000"
+        $updatedLines = $envLines -replace "(?i)^REACT_NATIVE_APP_SERVER_DOMAIN\s*=\s*'http://.*'", "REACT_NATIVE_APP_SERVER_DOMAIN='http://$ipAddress$port'"
 
         # Write back to the .env file
         $updatedLines | Set-Content $envFilePath
        
-        Write-Host "Updated .env file with new IP: 'http://$ipAddress$val'"
+        Write-Host "Updated .env file with new IP: 'http://$ipAddress$port'"
     } else {
         Write-Host "No .env file found! Skipping update."
     }

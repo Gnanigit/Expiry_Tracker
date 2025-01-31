@@ -7,7 +7,6 @@
 7. npm install --save-dev tailwindcss@3.3.2
 
 
-
 Expo App opening
 ipconfig
 setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.107

@@ -7,7 +7,7 @@ module.exports = {
         primary: {
           DEFAULT: "rgba(255, 255, 255, 1)",
           100: "rgba(255, 255, 255, 1)",
-          200: "rgba(205, 205, 224, 1)",
+          200: "rgb(232, 232, 232)",
         },
         secondary: {
           DEFAULT: "rgba(94, 53, 177, 1)",

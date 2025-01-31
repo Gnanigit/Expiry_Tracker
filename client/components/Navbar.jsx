@@ -57,6 +57,28 @@ const Navbar = ({ toggleSidebar, type }) => {
             />
           </TouchableOpacity>
         </>
+      ) : type === "settings" ? (
+        <>
+          <TouchableOpacity onPress={goBack}>
+            <Image
+              className="w-9 h-9"
+              source={icons.leftArrow}
+              resizeMode="contain"
+              style={{ tintColor: "#CDCDE0" }}
+            />
+          </TouchableOpacity>
+
+          <Text className="text-lg text-shadow-sm font-pbold text-xl text-gray-100">
+            Settings
+          </Text>
+          <TouchableOpacity onPress={navigateToNotifications}>
+            <Image
+              className="w-7 h-7"
+              source={icons.notify}
+              style={{ tintColor: "#F49F1C" }}
+            />
+          </TouchableOpacity>
+        </>
       ) : (
         <>
           <TouchableOpacity onPress={toggleSidebar}>

@@ -54,7 +54,7 @@ export default function MainComponents() {
     "h-[80px] w-[180px] bg-secondary-300 flex-row items-center rounded-2xl px-3";
 
   return (
-    <View className="items-center">
+    <View className="items-center ">
       {/* Central Circle */}
       <TouchableOpacity
         className="h-24 w-24 rounded-full bg-territory-100 items-center justify-center z-10 "
@@ -63,7 +63,7 @@ export default function MainComponents() {
         }}
         onPress={toggleBoxes}
       >
-        <Text className="text-white font-bold text-lg">TAP</Text>
+        <Text className="text-white font-psemibold text-lg">TAP</Text>
       </TouchableOpacity>
 
       {/* ------------ONE----------- */}

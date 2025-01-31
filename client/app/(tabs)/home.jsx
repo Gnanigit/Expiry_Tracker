@@ -155,9 +155,12 @@ const Home = () => {
           flex: 1,
         }}
       >
-        <Text className="text-lg text-shadow-sm font-pbold text-territory-100 my-2">
-          Ready to Expire
-        </Text>
+        <View className="flex-row my-2">
+          <Text className="text-lg text-shadow-sm font-pbold text-territory-100 ">
+            Ready to Expire
+          </Text>
+          <Image className="w-6 h-6 ml-2" source={icons.expiry} />
+        </View>
 
         {loading && <Text>Loading...</Text>}
         {error && <Text>Error: {error}</Text>}
