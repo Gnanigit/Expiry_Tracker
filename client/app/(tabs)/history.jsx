@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
 import { deleteProductById } from "../../routes/product_api";
 import { removeProduct } from "../../redux/slices/products";
-import { getCurrentUser } from "../../routes/auth_api";
 import { setUser } from "../../redux/slices/auth";
 
 const History = () => {
@@ -19,6 +18,7 @@ const History = () => {
   } = useSelector((state) => state.products);
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const { theme } = useSelector((state) => state.theme);
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -51,7 +51,9 @@ const History = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView
+      className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+    >
       <Sidebar
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}

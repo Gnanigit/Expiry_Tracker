@@ -8,9 +8,11 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import MainComponents from "../../components/MainComponents";
 import { icons } from "../../constants";
+import { useSelector } from "react-redux";
 
 const Main = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const { theme } = useSelector((state) => state.theme);
   const { component: paramComponent, unique } = useLocalSearchParams();
   const [component, setComponent] = useState(paramComponent || null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -36,6 +38,7 @@ const Main = () => {
       case "ComponentA":
         return (
           <ScrollView
+            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -47,6 +50,7 @@ const Main = () => {
       case "ComponentB":
         return (
           <ScrollView
+            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -57,7 +61,9 @@ const Main = () => {
         );
       default:
         return (
-          <SafeAreaView className="bg-primary h-full">
+          <SafeAreaView
+            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+          >
             <ScrollView
               contentContainerStyle={{
                 alignItems: "center",

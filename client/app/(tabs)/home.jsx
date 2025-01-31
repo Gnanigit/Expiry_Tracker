@@ -34,6 +34,7 @@ const getGreeting = () => {
 
 const Home = () => {
   const { isLogged, user, authLoading } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.theme);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [greeting, setGreeting] = useState(getGreeting());
   const [refreshing, setRefreshing] = useState(false);
@@ -63,7 +64,11 @@ const Home = () => {
   } = useSelector((state) => state.products);
 
   return (
-    <SafeAreaView className="bg-primary flex-1 h-full">
+    <SafeAreaView
+      className={`flex-1 h-full ${
+        theme === "dark" ? "bg-black" : "bg-primary"
+      }`}
+    >
       <Sidebar
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
@@ -72,7 +77,11 @@ const Home = () => {
       <Navbar toggleSidebar={toggleSidebar} type={"home"} />
 
       {/* Static Header */}
-      <View className="w-full px-3 bg-primary items-center">
+      <View
+        className={`w-full px-3 ${
+          theme === "dark" ? "bg-black" : "bg-primary"
+        } items-center`}
+      >
         <View className="w-full px-2 flex-row justify-between items-center mt-1">
           <View>
             <Text className="text-shadow-sm text-lg text-2xl font-pbold text-territory-200">
@@ -146,11 +155,12 @@ const Home = () => {
 
       {/* Ready to Expire items */}
       <View
-        className="w-full h-full bg-primary-100 px-2 items-center"
+        className={`w-full h-full ${
+          theme === "dark" ? "bg-black" : "bg-primary"
+        } px-2 items-center`}
         style={{
           borderTopLeftRadius: 35,
           borderTopRightRadius: 35,
-
           elevation: 10,
           flex: 1,
         }}

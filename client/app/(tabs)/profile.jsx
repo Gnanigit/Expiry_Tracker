@@ -23,6 +23,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -125,7 +126,9 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView
+      className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+    >
       <Sidebar
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
@@ -213,7 +216,9 @@ const Profile = () => {
               value={formData.email}
               handleChangeText={(value) => handleInputChange("email", value)}
               otherStyles="mb-3"
-              titleStyle="text-sm text-black-100 font-psmedium"
+              titleStyle={`text-sm  ${
+                theme === "dark" ? "text-gray-100" : "text-black-100"
+              } font-psmedium`}
               inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
               editable={isEditMode}
             />
@@ -226,7 +231,9 @@ const Profile = () => {
                 handleInputChange("firstName", value)
               }
               otherStyles="mb-3"
-              titleStyle="text-sm text-black-100 font-psmedium"
+              titleStyle={`text-sm  ${
+                theme === "dark" ? "text-gray-100" : "text-black-100"
+              } font-psmedium`}
               inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
               editable={isEditMode}
             />
@@ -236,7 +243,9 @@ const Profile = () => {
               value={formData.lastName}
               handleChangeText={(value) => handleInputChange("lastName", value)}
               otherStyles="mb-3"
-              titleStyle="text-sm text-black-100 font-psmedium"
+              titleStyle={`text-sm  ${
+                theme === "dark" ? "text-gray-100" : "text-black-100"
+              } font-psmedium`}
               inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
               editable={isEditMode}
             />
@@ -246,7 +255,9 @@ const Profile = () => {
               value={formData.address}
               handleChangeText={(value) => handleInputChange("address", value)}
               otherStyles="mb-3"
-              titleStyle="text-sm text-black-100 font-psmedium"
+              titleStyle={`text-sm  ${
+                theme === "dark" ? "text-gray-100" : "text-black-100"
+              } font-psmedium`}
               inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
               editable={isEditMode}
             />
@@ -256,7 +267,9 @@ const Profile = () => {
               value={formData.pincode}
               handleChangeText={(value) => handleInputChange("pincode", value)}
               otherStyles="mb-3"
-              titleStyle="text-sm text-black-100 font-psmedium"
+              titleStyle={`text-sm  ${
+                theme === "dark" ? "text-gray-100" : "text-black-100"
+              } font-psmedium`}
               inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
               editable={isEditMode}
               keyboardType="numeric"

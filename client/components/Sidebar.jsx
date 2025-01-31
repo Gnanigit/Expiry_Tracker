@@ -109,7 +109,7 @@ const Sidebar = ({ isVisible, onClose }) => {
         </TouchableOpacity>
       </View>
 
-      <View className="absolute bottom-7 left-4 w-full ">
+      <View className="absolute bottom-7 left-4 w-full">
         <TouchableOpacity
           onPress={handleLogout}
           className="border-2 border-red-500 py-3 items-center flex-row  justify-center rounded-xl"

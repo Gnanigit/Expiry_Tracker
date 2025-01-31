@@ -5,12 +5,19 @@ import { setProducts } from "./slices/products";
 import { getCurrentUser } from "../routes/auth_api";
 import { getAllProducts } from "../routes/product_api";
 import { useSelector } from "react-redux";
+import { Appearance } from "react-native";
+import { setTheme } from "./slices/theme";
+import { useColorScheme } from "nativewind";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const GlobalProvider = ({ children }) => {
   const { isLogged, user, authLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
+  const { setColorScheme } = useColorScheme();
 
   useEffect(() => {
+    dispatch(setTheme(Appearance.getColorScheme() || "light"));
     getCurrentUser()
       .then((res) => {
         if (res) {
@@ -38,6 +45,32 @@ const GlobalProvider = ({ children }) => {
         dispatch(setLoading(false));
       });
   }, [dispatch]);
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const storedTheme = await AsyncStorage.getItem("theme");
+        if (storedTheme) {
+          dispatch(setTheme(storedTheme));
+        } else {
+          const systemTheme = Appearance.getColorScheme() || "light";
+          dispatch(setTheme(systemTheme));
+          await AsyncStorage.setItem("theme", systemTheme);
+        }
+      } catch (error) {
+        console.error("Failed to load theme:", error);
+      }
+    };
+
+    loadTheme();
+  }, [dispatch]);
+
+  useEffect(() => {
+    setColorScheme(theme);
+    AsyncStorage.setItem("theme", theme).catch((error) =>
+      console.error("Failed to save theme:", error)
+    );
+  }, [theme]);
 
   return <>{children}</>;
 };

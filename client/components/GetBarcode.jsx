@@ -191,7 +191,7 @@ const GetBarcode = () => {
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
   return (
-    <View className="items-center h-full px-2 py-3">
+    <View className="items-center h-full px-2 py-3 ">
       <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 mb-3">
         Add Product
       </Text>
