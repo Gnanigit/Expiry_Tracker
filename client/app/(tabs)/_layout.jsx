@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { View, Text, Image } from "react-native";
 import { icons } from "../../constants";
-
+import { useSelector } from "react-redux";
 const TabIcon = ({ icon, name, color, focused }) => (
   <View className="items-center justify-center w-20">
     <Image
@@ -21,6 +21,9 @@ const TabIcon = ({ icon, name, color, focused }) => (
 );
 
 const TabsLayout = () => {
+  const { theme } = useSelector((state) => state.theme);
+  const backgroundColors =
+    theme === "dark" ? "rgba(31, 23, 49, 1)" : "rgba(94, 53, 177, 1)";
   return (
     <Tabs
       screenOptions={{
@@ -28,7 +31,7 @@ const TabsLayout = () => {
         tabBarActiveTintColor: "#F49F1C",
         tabBarInactiveTintColor: "#CDCDE0",
         tabBarStyle: {
-          backgroundColor: "#5E35B1",
+          backgroundColor: backgroundColors,
           borderTopWidth: 0.5,
           borderTopColor: "#232533",
           height: 60,

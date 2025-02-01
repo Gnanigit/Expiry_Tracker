@@ -52,7 +52,9 @@ const History = () => {
 
   return (
     <SafeAreaView
-      className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full`}
     >
       <Sidebar
         isVisible={isSidebarVisible}

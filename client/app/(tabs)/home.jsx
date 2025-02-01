@@ -63,10 +63,13 @@ const Home = () => {
     error,
   } = useSelector((state) => state.products);
 
+  const backgroundColor =
+    theme === "dark" ? "rgba(31, 23, 49, 1)" : "rgba(94, 53, 177, 1)";
+
   return (
     <SafeAreaView
       className={`flex-1 h-full ${
-        theme === "dark" ? "bg-black" : "bg-primary"
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
       }`}
     >
       <Sidebar
@@ -79,7 +82,7 @@ const Home = () => {
       {/* Static Header */}
       <View
         className={`w-full px-3 ${
-          theme === "dark" ? "bg-black" : "bg-primary"
+          theme === "dark" ? "bg-primary-dark" : "bg-primary"
         } items-center`}
       >
         <View className="w-full px-2 flex-row justify-between items-center mt-1">
@@ -87,7 +90,11 @@ const Home = () => {
             <Text className="text-shadow-sm text-lg text-2xl font-pbold text-territory-200">
               {greeting.text + "..."}
             </Text>
-            <Text className="text-shadow-sm text-lg text-2xl font-psemibold text-secondary-100">
+            <Text
+              className={`text-shadow-sm text-lg text-2xl font-psemibold ${
+                theme === "dark" ? "text-secondary-darkText" : "text-secondary"
+              }`}
+            >
               {user?.lastName ? user?.lastName : user?.username}
             </Text>
           </View>
@@ -156,7 +163,7 @@ const Home = () => {
       {/* Ready to Expire items */}
       <View
         className={`w-full h-full ${
-          theme === "dark" ? "bg-black" : "bg-primary"
+          theme === "dark" ? "bg-primary-dark" : "bg-primary"
         } px-2 items-center`}
         style={{
           borderTopLeftRadius: 35,
@@ -205,8 +212,7 @@ const Home = () => {
           )
         )}
       </View>
-
-      <StatusBar backgroundColor="#5E35B1" style="light" />
+      <StatusBar backgroundColor={backgroundColor} style="light" />
     </SafeAreaView>
   );
 };

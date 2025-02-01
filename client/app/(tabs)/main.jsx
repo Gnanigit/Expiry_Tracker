@@ -38,7 +38,9 @@ const Main = () => {
       case "ComponentA":
         return (
           <ScrollView
-            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+            className={`${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } h-full`}
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -50,7 +52,9 @@ const Main = () => {
       case "ComponentB":
         return (
           <ScrollView
-            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+            className={`${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } h-full`}
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -62,7 +66,9 @@ const Main = () => {
       default:
         return (
           <SafeAreaView
-            className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+            className={`${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } h-full`}
           >
             <ScrollView
               contentContainerStyle={{
@@ -81,7 +87,16 @@ const Main = () => {
               <View className="mb-60 relative w-[250px]">
                 <Text className="text-shadow-sm text-center text-xl font-psemibold text-territory-100">
                   Tap & Select Any of Our{" "}
-                  <Text className="text-secondary-100">Power</Text> Features
+                  <Text
+                    className={`${
+                      theme === "dark"
+                        ? "text-secondary-darkText"
+                        : "text-secondary"
+                    }`}
+                  >
+                    Power
+                  </Text>{" "}
+                  Features
                 </Text>
                 <Image
                   source={icons.main}

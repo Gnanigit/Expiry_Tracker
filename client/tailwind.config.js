@@ -7,18 +7,18 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: "rgba(255, 255, 255, 1)",
-          dark: "rgba(30, 30, 30, 1)",
+          dark: "rgba(42, 35, 58,1)",
           100: "rgba(255, 255, 255, 1)",
           200: "rgb(232, 232, 232)",
         },
         secondary: {
           DEFAULT: "rgba(94, 53, 177, 1)",
-          dark: "rgba(200, 200, 255, 1)",
+          dark: "rgba(31, 23, 49, 1)",
+          darkText: "rgb(171, 118, 246)",
           100: "rgba(94, 53, 177, 1)",
           200: "rgba(94, 53, 177, 1)",
           300: "rgba(205, 173, 251, 1)",
-          "100-40": "rgba(113, 43, 252, 0.4)",
-          "200-40": "rgba(108, 36, 255, 0.4)",
+          darkBorder: "rgb(83, 68, 119)",
         },
         territory: {
           DEFAULT: "rgba(244, 159, 28, 1)",

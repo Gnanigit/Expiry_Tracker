@@ -25,13 +25,28 @@ const Search = () => {
 
   return (
     <SafeAreaView
-      className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full mt-8`}
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full mt-8`}
     >
       <Navbar type="search" />
 
       <ScrollView className="px-3" keyboardShouldPersistTaps="handled">
         <View className="my-2">
-          <SearchInput query={query} setQuery={setQuery} />
+          <SearchInput
+            query={query}
+            setQuery={setQuery}
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pregular`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-16 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
+          />
         </View>
 
         {query.trim().length > 0 ? (

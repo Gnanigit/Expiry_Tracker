@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 const Sidebar = ({ isVisible, onClose }) => {
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.theme);
   const [animation] = useState(new Animated.Value(0));
   const dispatch = useDispatch();
 
@@ -59,7 +60,9 @@ const Sidebar = ({ isVisible, onClose }) => {
           },
         ],
       }}
-      className="absolute top-10 left-0 h-full w-[60%] bg-secondary-200 z-10 px-4 pt-5"
+      className={`absolute top-10 left-0 h-full w-[60%] ${
+        theme === "dark" ? "bg-secondary-dark" : "bg-secondary"
+      } z-10 px-4 pt-5`}
     >
       <View className="flex-row justify-between items-center">
         <View className="flex-row space-x-2 items.center ml-2">

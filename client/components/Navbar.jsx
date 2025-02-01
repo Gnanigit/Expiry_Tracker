@@ -2,8 +2,10 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { icons } from "../constants";
 import { router } from "expo-router";
+import { useSelector } from "react-redux";
 
 const Navbar = ({ toggleSidebar, type }) => {
+  const { theme } = useSelector((state) => state.theme);
   const navigateToNotifications = () => {
     router.push("/notify");
   };
@@ -14,7 +16,11 @@ const Navbar = ({ toggleSidebar, type }) => {
     router.back();
   };
   return (
-    <View className="flex-row justify-between h-[7%] items-center w-full bg-secondary px-4">
+    <View
+      className={`flex-row justify-between h-[7%] items-center w-full ${
+        theme === "dark" ? "bg-secondary-dark" : "bg-secondary"
+      } px-4`}
+    >
       {type === "notify" ? (
         <>
           <TouchableOpacity onPress={goBack}>

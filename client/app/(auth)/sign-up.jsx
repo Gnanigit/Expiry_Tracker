@@ -8,10 +8,12 @@ import CustomButton from "../../components/CustomButton";
 import React, { useState } from "react";
 import { signUp } from "../../routes/auth_api";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SignUp = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
 
   const submit = async () => {
@@ -32,18 +34,32 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full`}
+    >
       <ScrollView>
         <View className="w-full h-full items-center justify-center px-4 my-2 min-h-[85vh]">
           <Text className="text-5xl">
-            <Text className="text-shadow-md  text-5xl font-extrabold text-secondary-100">
+            <Text
+              className={`text-shadow-md  text-5xl font-extrabold ${
+                theme === "dark"
+                  ? "text-secondary-darkText"
+                  : "text-secondary-100"
+              }`}
+            >
               Track{" "}
             </Text>
             <Text className="text-shadow-md  text-5xl font-extrabold text-territory-100">
               Expiry
             </Text>
           </Text>
-          <Text className="text-shadow-sm text-1xl font-pregular">
+          <Text
+            className={`text-1xl font-regular ${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            }`}
+          >
             Track and Manage Expiry Dates Seamlessly
           </Text>
           <Image
@@ -51,7 +67,13 @@ const SignUp = () => {
             className="w-[280px] h-[280px] mt-1"
             source={images.signUp}
           ></Image>
-          <Text className="text-shadow-md text-3xl font-pextrabold text-secondary-100">
+          <Text
+            className={`text-shadow-md text-3xl font-pextrabold ${
+              theme === "dark"
+                ? "text-secondary-darkText"
+                : "text-secondary-100"
+            }`}
+          >
             SIGN UP
           </Text>
           <FormField
@@ -60,9 +82,19 @@ const SignUp = () => {
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-1.5 px-2  space-y-0.5"
-            textStyles="text-black-100 text-base font-pmedium"
-            titleStyle="text-base text-black-100 font-pmedium"
-            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
           />
           <FormField
             title="Email"
@@ -70,9 +102,19 @@ const SignUp = () => {
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-3  px-2  space-y-0.5"
-            textStyles="text-black-100 text-base font-pmedium"
-            titleStyle="text-base text-black-100 font-pmedium"
-            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
           />
           <FormField
             title="Password"
@@ -80,9 +122,19 @@ const SignUp = () => {
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-3 px-2  space-y-0.5"
-            textStyles="text-black-100 text-base font-pmedium"
-            titleStyle="text-base text-black-100 font-pmedium"
-            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
           />
           <CustomButton
             title="SIGN UP"

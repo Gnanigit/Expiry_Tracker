@@ -2,16 +2,17 @@ import { View, Image, TextInput, TouchableOpacity } from "react-native";
 import React, { useState, useRef } from "react";
 import { icons } from "../constants";
 
-const SearchInput = ({ query, setQuery }) => {
+const SearchInput = ({ query, setQuery, inputViewStyle, textStyles }) => {
   const [input, setInput] = useState(query);
   const inputRef = useRef(null);
 
   return (
-    <View className="w-full bg-primary-100 border-2 px-4 h-16 border-secondary-200 rounded-2xl flex flex-row items-center space-x-4 mt-2">
+    <View className={`${inputViewStyle} space-x-4 mt-2 `}>
       <TextInput
         ref={inputRef}
-        className="text-base mt-1 text-gray-300 flex-1 font-pregular"
+        className={`mt-1 text-gray-300 flex-1  ${textStyles}`}
         value={input}
+        placeholderTextColor="#7b7b8b"
         placeholder="Search your interest..."
         onChangeText={(text) => {
           setInput(text);

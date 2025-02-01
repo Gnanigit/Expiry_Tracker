@@ -127,7 +127,9 @@ const Profile = () => {
 
   return (
     <SafeAreaView
-      className={`${theme === "dark" ? "bg-black" : "bg-primary"} h-full`}
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full`}
     >
       <Sidebar
         isVisible={isSidebarVisible}
@@ -170,14 +172,26 @@ const Profile = () => {
                   tintColor="rgba(244, 159, 28, 1)"
                   resizeMode="contain"
                 />
-                <Text className="text-sm text-secondary font-pmedium ">
+                <Text
+                  className={`text-sm ${
+                    theme === "dark"
+                      ? "text-secondary-darkText"
+                      : "text-secondary"
+                  } font-pmedium `}
+                >
                   {formData?.username}
                 </Text>
               </View>
               <View className="flex-row justify-center items-center space-x-1">
                 <Image source={icons.products} className="w-5 h-5" />
                 <Text>
-                  <Text className="text-md text-secondary font-pbold ">
+                  <Text
+                    className={`text-md ${
+                      theme === "dark"
+                        ? "text-secondary-darkText"
+                        : "text-secondary"
+                    } font-pbold`}
+                  >
                     {formData?.products}{" "}
                   </Text>
 
@@ -201,7 +215,9 @@ const Profile = () => {
                 className="w-5 h-5"
                 style={{
                   tintColor: isEditMode
-                    ? "rgba(94, 53, 177, 1)"
+                    ? theme === "dark"
+                      ? "rgb(171, 118, 246)"
+                      : "rgba(94, 53, 177, 1)"
                     : "rgba(244, 159, 28, 1)",
                 }}
                 resizeMode="contain"
@@ -216,10 +232,19 @@ const Profile = () => {
               value={formData.email}
               handleChangeText={(value) => handleInputChange("email", value)}
               otherStyles="mb-3"
+              textStyles={`${
+                theme === "dark" ? "text-gray-100" : "text-black"
+              } text-base font-pmedium`}
               titleStyle={`text-sm  ${
-                theme === "dark" ? "text-gray-100" : "text-black-100"
+                theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
+              inputViewStyle={`w-full ${
+                theme === "dark" ? "bg-primary-dark" : "bg-primary"
+              } border-2 px-2 h-12 ${
+                theme === "dark"
+                  ? "border-secondary-darkBorder"
+                  : "border-gray-300 "
+              } rounded-xl focus:border-secondary`}
               editable={isEditMode}
             />
 
@@ -231,10 +256,19 @@ const Profile = () => {
                 handleInputChange("firstName", value)
               }
               otherStyles="mb-3"
+              textStyles={`${
+                theme === "dark" ? "text-gray-100" : "text-black"
+              } text-base font-pmedium`}
               titleStyle={`text-sm  ${
-                theme === "dark" ? "text-gray-100" : "text-black-100"
+                theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
+              inputViewStyle={`w-full ${
+                theme === "dark" ? "bg-primary-dark" : "bg-primary"
+              } border-2 px-2 h-12 ${
+                theme === "dark"
+                  ? "border-secondary-darkBorder"
+                  : "border-gray-300 "
+              } rounded-xl focus:border-secondary`}
               editable={isEditMode}
             />
             <FormField
@@ -243,10 +277,19 @@ const Profile = () => {
               value={formData.lastName}
               handleChangeText={(value) => handleInputChange("lastName", value)}
               otherStyles="mb-3"
+              textStyles={`${
+                theme === "dark" ? "text-gray-100" : "text-black"
+              } text-base font-pmedium`}
               titleStyle={`text-sm  ${
-                theme === "dark" ? "text-gray-100" : "text-black-100"
+                theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
+              inputViewStyle={`w-full ${
+                theme === "dark" ? "bg-primary-dark" : "bg-primary"
+              } border-2 px-2 h-12 ${
+                theme === "dark"
+                  ? "border-secondary-darkBorder"
+                  : "border-gray-300 "
+              } rounded-xl focus:border-secondary`}
               editable={isEditMode}
             />
             <FormField
@@ -255,10 +298,19 @@ const Profile = () => {
               value={formData.address}
               handleChangeText={(value) => handleInputChange("address", value)}
               otherStyles="mb-3"
+              textStyles={`${
+                theme === "dark" ? "text-gray-100" : "text-black"
+              } text-base font-pmedium`}
               titleStyle={`text-sm  ${
-                theme === "dark" ? "text-gray-100" : "text-black-100"
+                theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
+              inputViewStyle={`w-full ${
+                theme === "dark" ? "bg-primary-dark" : "bg-primary"
+              } border-2 px-2 h-12 ${
+                theme === "dark"
+                  ? "border-secondary-darkBorder"
+                  : "border-gray-300 "
+              } rounded-xl focus:border-secondary`}
               editable={isEditMode}
             />
             <FormField
@@ -267,10 +319,19 @@ const Profile = () => {
               value={formData.pincode}
               handleChangeText={(value) => handleInputChange("pincode", value)}
               otherStyles="mb-3"
+              textStyles={`${
+                theme === "dark" ? "text-gray-100" : "text-black"
+              } text-base font-pmedium`}
               titleStyle={`text-sm  ${
-                theme === "dark" ? "text-gray-100" : "text-black-100"
+                theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle="w-full bg-primary border-2 px-2 h-12 border-gray-300 rounded-xl focus:border-secondary"
+              inputViewStyle={`w-full ${
+                theme === "dark" ? "bg-primary-dark" : "bg-primary"
+              } border-2 px-2 h-12 ${
+                theme === "dark"
+                  ? "border-secondary-darkBorder"
+                  : "border-gray-300 "
+              } rounded-xl focus:border-secondary`}
               editable={isEditMode}
               keyboardType="numeric"
             />

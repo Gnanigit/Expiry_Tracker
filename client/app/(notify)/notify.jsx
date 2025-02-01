@@ -8,7 +8,9 @@ const Notify = () => {
   const { theme } = useSelector((state) => state.theme);
   return (
     <SafeAreaView
-      className={`${theme === "dark" ? "bg-black" : "bg-primary"} flex-1`}
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } flex-1`}
     >
       <Navbar type={"notify"} />
       <View className="flex-1 items-center px-3 py-3"></View>

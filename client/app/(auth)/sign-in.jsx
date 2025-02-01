@@ -9,11 +9,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setIsLogged, setUser } from "../../redux/slices/auth";
 import { setProducts } from "../../redux/slices/products";
-
 import { signIn } from "../../routes/auth_api";
+import { useSelector } from "react-redux";
+
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { theme } = useSelector((state) => state.theme);
 
   const dispatch = useDispatch();
 
@@ -36,18 +38,32 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full`}
+    >
       <ScrollView>
         <View className="w-full h-full items-center justify-center px-4 my-2 min-h-[85vh]">
           <View className="flex-row">
-            <Text className="text-shadow-md text-5xl font-extrabold text-secondary-100">
+            <Text
+              className={`text-shadow-md text-5xl font-extrabold ${
+                theme === "dark"
+                  ? "text-secondary-darkText"
+                  : "text-secondary-100"
+              }`}
+            >
               Track{" "}
             </Text>
             <Text className="text-shadow-md text-5xl font-extrabold text-territory-100">
               Expiry
             </Text>
           </View>
-          <Text className="text-1xl font-regular">
+          <Text
+            className={`text-1xl font-regular ${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            }`}
+          >
             Track and Manage Expiry Dates Seamlessly
           </Text>
           <Image
@@ -55,7 +71,13 @@ const SignIn = () => {
             className="w-[350px] h-[350px] mt-1"
             source={images.signUp}
           ></Image>
-          <Text className="text-shadow-md text-3xl font-pextrabold text-secondary-100">
+          <Text
+            className={`text-shadow-md text-3xl font-pextrabold ${
+              theme === "dark"
+                ? "text-secondary-darkText"
+                : "text-secondary-100"
+            }`}
+          >
             SIGN IN
           </Text>
 
@@ -65,9 +87,19 @@ const SignIn = () => {
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-4  px-2  space-y-0.5"
-            titleStyle="text-base text-black-100 font-pmedium"
-            textStyles="text-black-100 text-base font-pmedium"
-            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
           />
           <FormField
             title="Password"
@@ -75,9 +107,19 @@ const SignIn = () => {
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-4 px-2  space-y-0.5"
-            textStyles="text-black-100 text-base font-pmedium"
-            titleStyle="text-base text-black-100 font-pmedium"
-            inputViewStyle="w-full bg-primary border-2 px-4 h-14 border-gray-300 rounded-2xl focus:border-secondary flex flex-row items-center"
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
           />
           <CustomButton
             title="SIGN IN"
