@@ -122,7 +122,7 @@ const Home = () => {
           >
             <Image
               className="w-12 h-12 object-contain ml-1"
-              source={icons.cart}
+              source={icons.addProduct}
             />
             <Text className="text-shadow-sm text-[15px] font-psemibold text-white ml-1 max-w-[75%]">
               Add product

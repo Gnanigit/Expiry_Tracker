@@ -3,6 +3,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { images } from "../constants";
 import { useSelector } from "react-redux";
+import { icons } from "../constants";
 
 const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {
   const statusColors = {
@@ -25,7 +26,7 @@ const ProductCard = ({ image, name, expDate, status, onDelete, type }) => {
       }}
     >
       <Image
-        source={image ? { uri: image } : images.thumbnail}
+        source={image ? { uri: image } : images.cart}
         className="w-12 h-12 rounded-xl m-0"
         resizeMode="cover"
       />
