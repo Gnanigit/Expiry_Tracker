@@ -17,7 +17,7 @@ const GlobalProvider = ({ children }) => {
   const { setColorScheme } = useColorScheme();
 
   useEffect(() => {
-    dispatch(setTheme(Appearance.getColorScheme() || "light"));
+    dispatch(setTheme(Appearance.getColorScheme()));
     getCurrentUser()
       .then((res) => {
         if (res) {
@@ -50,12 +50,10 @@ const GlobalProvider = ({ children }) => {
     const loadTheme = async () => {
       try {
         const storedTheme = await AsyncStorage.getItem("theme");
-        if (storedTheme) {
+        if (storedTheme === "system") {
+          dispatch(setTheme(Appearance.getColorScheme() || "light"));
+        } else if (storedTheme) {
           dispatch(setTheme(storedTheme));
-        } else {
-          const systemTheme = Appearance.getColorScheme() || "light";
-          dispatch(setTheme(systemTheme));
-          await AsyncStorage.setItem("theme", systemTheme);
         }
       } catch (error) {
         console.error("Failed to load theme:", error);
@@ -66,10 +64,26 @@ const GlobalProvider = ({ children }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    setColorScheme(theme);
+    if (theme === "system") {
+      setColorScheme(Appearance.getColorScheme());
+    } else {
+      setColorScheme(theme);
+    }
+
     AsyncStorage.setItem("theme", theme).catch((error) =>
       console.error("Failed to save theme:", error)
     );
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      if (theme === "system") {
+        dispatch(setTheme(colorScheme || "light"));
+      }
+    });
+
+    AsyncStorage.setItem("theme", theme).catch((error) =>
+      console.error("Failed to save theme:", error)
+    );
+
+    return () => subscription.remove();
   }, [theme]);
 
   return <>{children}</>;

@@ -190,13 +190,16 @@ const Home = () => {
 
       {/* Ready to Expire items */}
       <View
-        className={`w-full h-full ${
-          theme === "dark" ? "bg-primary-dark" : "bg-primary"
-        } px-2 items-center`}
+        className={`w-full h-full px-2 items-center`}
         style={{
+          backgroundColor:
+            theme === "dark" ? "rgba(31, 23, 49, 1)" : "rgb(255, 252, 255)",
           borderTopLeftRadius: 35,
           borderTopRightRadius: 35,
-          elevation: 10,
+          borderTopWidth: theme === "dark" ? 3 : 2,
+          borderTopColor:
+            theme === "dark" ? "rgba(42, 35, 58,1)" : "rgb(235, 235, 235)",
+          elevation: 15,
           flex: 1,
         }}
       >
