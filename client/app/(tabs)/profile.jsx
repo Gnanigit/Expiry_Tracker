@@ -125,6 +125,8 @@ const Profile = () => {
     }
   };
 
+  const background =
+    theme === "dark" ? "rgba(145, 114, 205, 0.19)" : "rgba(103, 22, 254, 0.41)";
   return (
     <SafeAreaView
       className={`${
@@ -238,9 +240,7 @@ const Profile = () => {
               titleStyle={`text-sm  ${
                 theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle={`w-full ${
-                theme === "dark" ? "bg-primary-dark" : "bg-primary"
-              } border-2 px-2 h-12 ${
+              inputViewStyle={`w-full  px-2 h-12 ${
                 theme === "dark"
                   ? "border-secondary-darkBorder"
                   : "border-gray-300 "
@@ -262,9 +262,7 @@ const Profile = () => {
               titleStyle={`text-sm  ${
                 theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle={`w-full ${
-                theme === "dark" ? "bg-primary-dark" : "bg-primary"
-              } border-2 px-2 h-12 ${
+              inputViewStyle={`w-full  px-2 h-12 ${
                 theme === "dark"
                   ? "border-secondary-darkBorder"
                   : "border-gray-300 "
@@ -283,9 +281,7 @@ const Profile = () => {
               titleStyle={`text-sm  ${
                 theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle={`w-full ${
-                theme === "dark" ? "bg-primary-dark" : "bg-primary"
-              } border-2 px-2 h-12 ${
+              inputViewStyle={`w-full  px-2 h-12 ${
                 theme === "dark"
                   ? "border-secondary-darkBorder"
                   : "border-gray-300 "
@@ -304,9 +300,7 @@ const Profile = () => {
               titleStyle={`text-sm  ${
                 theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle={`w-full ${
-                theme === "dark" ? "bg-primary-dark" : "bg-primary"
-              } border-2 px-2 h-12 ${
+              inputViewStyle={`w-full  px-2 h-12 ${
                 theme === "dark"
                   ? "border-secondary-darkBorder"
                   : "border-gray-300 "
@@ -325,9 +319,7 @@ const Profile = () => {
               titleStyle={`text-sm  ${
                 theme === "dark" ? "text-gray-200" : "text-black-100"
               } font-psmedium`}
-              inputViewStyle={`w-full ${
-                theme === "dark" ? "bg-primary-dark" : "bg-primary"
-              } border-2 px-2 h-12 ${
+              inputViewStyle={`w-full px-2 h-12 ${
                 theme === "dark"
                   ? "border-secondary-darkBorder"
                   : "border-gray-300 "

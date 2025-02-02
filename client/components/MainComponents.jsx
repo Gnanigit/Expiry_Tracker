@@ -8,12 +8,14 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import { icons } from "../constants";
+import { useSelector } from "react-redux";
 
 export default function MainComponents() {
   const [visible, setVisible] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
   const position = useSharedValue(0);
   const opacity = useSharedValue(0);
+  const { theme } = useSelector((state) => state.theme);
 
   const toggleBoxes = () => {
     if (visible) {
@@ -53,6 +55,11 @@ export default function MainComponents() {
   const boxStyle =
     "h-[80px] w-[180px] bg-secondary-300 flex-row items-center rounded-2xl px-3";
 
+  const boxBackgroundColor =
+    theme === "dark" ? "rgba(145, 114, 205, 0.19)" : "rgba(103, 22, 254, 0.41)";
+  const boxBorderColor =
+    theme === "dark" ? "rgba(164, 121, 249, 0.57)" : "rgba(105, 26, 251, 0.51)";
+
   return (
     <View className="items-center ">
       {/* Central Circle */}
@@ -70,15 +77,20 @@ export default function MainComponents() {
       <Animated.View style={getBoxStyle(-1, -1)} className="absolute">
         <TouchableOpacity
           className={boxStyle}
+          style={{
+            backgroundColor: boxBackgroundColor,
+            borderWidth: 1,
+            borderColor: boxBorderColor,
+          }}
           onPress={() =>
             router.push({
               pathname: "/main",
               params: { component: "ComponentA", unique: Date.now() },
             })
           }
-          style={{
-            elevation: isFullyVisible ? 7 : 0,
-          }}
+          // style={{
+          //   elevation: isFullyVisible ? 7 : 0,
+          // }}
         >
           <Image
             className="w-12 h-12 object-contain ml-1"
@@ -95,8 +107,13 @@ export default function MainComponents() {
         <TouchableOpacity
           className={boxStyle}
           style={{
-            elevation: isFullyVisible ? 7 : 0,
+            backgroundColor: boxBackgroundColor,
+            borderWidth: 1,
+            borderColor: boxBorderColor,
           }}
+          // style={{
+          //   elevation: isFullyVisible ? 7 : 0,
+          // }}
           onPress={() =>
             router.push({
               pathname: "/main",
@@ -119,8 +136,13 @@ export default function MainComponents() {
         <TouchableOpacity
           className={boxStyle}
           style={{
-            elevation: isFullyVisible ? 7 : 0,
+            backgroundColor: boxBackgroundColor,
+            borderWidth: 1,
+            borderColor: boxBorderColor,
           }}
+          // style={{
+          //   elevation: isFullyVisible ? 7 : 0,
+          // }}
         >
           <Image
             className="w-12 h-12 object-contain shadow-lg"
@@ -137,8 +159,13 @@ export default function MainComponents() {
         <TouchableOpacity
           className={boxStyle}
           style={{
-            elevation: isFullyVisible ? 7 : 0,
+            backgroundColor: boxBackgroundColor,
+            borderWidth: 1,
+            borderColor: boxBorderColor,
           }}
+          // style={{
+          //   elevation: isFullyVisible ? 7 : 0,
+          // }}
         >
           <Image
             className="w-12 h-12 object-contain ml-1 shadow-lg"

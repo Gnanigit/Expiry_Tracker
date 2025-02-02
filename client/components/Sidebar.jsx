@@ -72,7 +72,7 @@ const Sidebar = ({ isVisible, onClose }) => {
             tintColor="#CDCDE0"
           ></Image>
           <Text className="text-lg text-territory font-pmedium text-xl text-shadow-sm">
-            {user?.lastName}
+            {user?.lastName ? user?.lastName : user?.username}
           </Text>
         </View>
         <TouchableOpacity onPress={onClose} className="self-end">

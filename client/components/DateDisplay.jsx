@@ -3,7 +3,7 @@ import { View, Text, TextInput } from "react-native";
 
 const DateDisplay = ({ formattedDate }) => {
   return (
-    <View className="w-full flex-row  items-center justify-center">
+    <View className="w-full flex-row items-center justify-around">
       {/* Day Block */}
       <View className="items-center">
         <Text className="text-xs mb-1 text-gray-500">Day</Text>

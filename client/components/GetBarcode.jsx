@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -24,6 +24,8 @@ import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
 import { gifs, audio } from "../constants";
 import { addProduct } from "../redux/slices/products";
+import FormField from "./FormField";
+import { useSelector } from "react-redux";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -42,8 +44,12 @@ const GetBarcode = () => {
   const [processing, setProcessing] = useState(false);
   const [isFakeProductScannedOnce, setIsFakeProductScannedOnce] =
     useState(false);
-
+  const [prodNotFound, setProdNotFound] = useState(false);
   const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
+  const [cameraVisible, setCameraVisible] = useState(false);
+  const [photoUri, setPhotoUri] = useState(null);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     const getCameraPermissions = async () => {
@@ -124,6 +130,9 @@ const GetBarcode = () => {
           "The product you selected was not found in our database. For confirmation, please try scanning again one time."
         );
       } else {
+        setProdNotFound(true);
+        setExpPhotoPicker(true);
+        setProcessing(false);
         Alert.alert(
           "Alert",
           "The product you selected was not found in our database, Try to add Item Manually."
@@ -178,9 +187,9 @@ const GetBarcode = () => {
 
     try {
       const result = await createProduct(productData);
-
       dispatch(setUser(result.user));
       dispatch(addProduct(result.product));
+
       router.push("/home");
     } catch (err) {
       console.error("Error submitting product:", err);
@@ -189,6 +198,50 @@ const GetBarcode = () => {
   };
 
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
+
+  const openCamera = () => {
+    setCameraVisible(true);
+  };
+
+  const takePicture = async (val) => {
+    if (val === "prod-image") {
+      if (cameraRef.current) {
+        const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+        setImageUri(photo.uri);
+        setCameraVisible(false);
+
+        const { status } = await MediaLibrary.requestPermissionsAsync();
+        if (status === "granted") {
+          await MediaLibrary.saveToLibraryAsync(photo.uri);
+        } else {
+          Alert.alert(
+            "Permission Denied",
+            "Allow media permissions to save the photo."
+          );
+        }
+      }
+    } else {
+      const date = new Date();
+      const formattedDate = `${date.getDate()}/${
+        date.getMonth() + 1
+      }/${date.getFullYear()}`;
+      setExpDate(formattedDate);
+      setStatus("green");
+
+      const currentDate = new Date();
+      const diffInTime = date.getTime() - currentDate.getTime();
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)) + 10;
+
+      if (diffInDays <= 7) {
+        setStatus("red");
+      } else if (diffInDays <= 40) {
+        setStatus("yellow");
+      } else {
+        setStatus("green");
+      }
+      setCameraVisible(false);
+    }
+  };
 
   return (
     <View className="items-center h-full px-2 py-3 ">
@@ -203,38 +256,39 @@ const GetBarcode = () => {
         onDelete
       />
       <View className="relative">
-        {!scanned ? (
-          <CameraView
-            onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ["ean13", "ean8", "ean12"],
-            }}
-            className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
-          />
-        ) : processing ? (
-          <LottieView
-            className="w-[180px] h-[170px] mt-3"
-            source={gifs.processing}
-            autoPlay
-            loop
-          />
-        ) : productName === "" ? (
-          <LottieView
-            className="w-[180px] h-[170px] mt-3"
-            source={gifs.fake_product}
-            autoPlay
-            loop
-          />
-        ) : (
-          <LottieView
-            className="w-[180px] h-[170px] mt-3"
-            source={gifs.success}
-            autoPlay
-            loop
-          />
-        )}
+        {!prodNotFound &&
+          (!scanned ? (
+            <CameraView
+              onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+              barcodeScannerSettings={{
+                barcodeTypes: ["ean13", "ean8", "ean12"],
+              }}
+              className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
+            />
+          ) : processing ? (
+            <LottieView
+              className="w-[180px] h-[170px] mt-3"
+              source={gifs.processing}
+              autoPlay
+              loop
+            />
+          ) : productName === "" ? (
+            <LottieView
+              className="w-[180px] h-[170px] mt-3"
+              source={gifs.fake_product}
+              autoPlay
+              loop
+            />
+          ) : (
+            <LottieView
+              className="w-[180px] h-[170px] mt-3"
+              source={gifs.success}
+              autoPlay
+              loop
+            />
+          ))}
         {/* Moving Line */}
-        {!scanned && (
+        {!scanned && !prodNotFound && (
           <Animated.View
             style={{
               position: "absolute",
@@ -248,17 +302,95 @@ const GetBarcode = () => {
           />
         )}
       </View>
+      {!prodNotFound && (
+        <CustomButton
+          title="Scan Bar Code Again"
+          handlePress={() => setScanned(false)}
+          containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
+          disabled={!scanned}
+        />
+      )}
 
-      <CustomButton
-        title="Scan Bar Code Again"
-        handlePress={() => setScanned(false)}
-        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
-        disabled={!scanned}
-      />
+      {prodNotFound && (
+        <>
+          <Text className="text-shadow-sm text-sm font-pregular text-territory-100 mt-3">
+            Enter product manually
+          </Text>
+          <View className="w-full items-center mt-3">
+            <TouchableOpacity
+              onPress={() => openCamera()}
+              className="w-full items-center"
+            >
+              {!imageUri && (
+                <View
+                  className="bg-territory-100-40 border-territory-100 w-full h-20 rounded-2xl items-center justify-center flex-row"
+                  style={{
+                    borderWidth: 1.5,
+                    borderColor: "#F49F1C",
+                    borderStyle: "dashed",
+                    marginTop: -5,
+                  }}
+                >
+                  <Image
+                    source={icons.camera}
+                    resizeMode="contain"
+                    className="w-6 h-6"
+                  />
+                  <Text className="text-md font-semibold text-secondary-100 font-pmedium ml-2">
+                    Take a photo of product
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
 
+            {/* Camera Modal */}
+
+            <Modal visible={cameraVisible} animationType="slide">
+              <CameraView ref={cameraRef} className="flex-1" />
+              <View className="absolute bottom-10 w-full flex-row justify-center">
+                <TouchableOpacity
+                  onPress={() => takePicture("prod-image")}
+                  className="w-16 h-16 bg-white rounded-full border-4 border-gray-300"
+                />
+              </View>
+            </Modal>
+          </View>
+
+          <FormField
+            title="Product Name"
+            placeholder="Enter product name..."
+            value={productName}
+            handleChangeText={(e) => setProductName(e)}
+            otherStyles="mt-2  px-2  space-y-1"
+            titleStyle={`text-sm  ${
+              theme === "dark" ? "text-gray-200" : "text-black-100"
+            } font-psmedium`}
+            textStyles={`${
+              theme === "dark" ? "text-gray-100" : "text-black"
+            } text-base font-pmedium`}
+            inputViewStyle={`w-full ${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } border-2 px-4 h-14 ${
+              theme === "dark"
+                ? "border-secondary-darkBorder"
+                : "border-gray-300 "
+            } rounded-2xl focus:border-secondary flex flex-row items-center`}
+          />
+        </>
+      )}
+      {showExpPhotoPicker && (
+        <View
+          className="w-[96%] items-center my-7 mx-2"
+          style={{
+            borderBottomWidth: 1.5,
+            borderColor: "#F49F1C",
+            borderStyle: "dashed",
+          }}
+        />
+      )}
       <TouchableOpacity
-        onPress={() => takePicture("exp-date")}
-        className="w-full mt-12 items-center"
+        onPress={() => openCamera()}
+        className="w-full items-center"
       >
         {showExpPhotoPicker &&
           (priceImageUri ? (
@@ -287,6 +419,15 @@ const GetBarcode = () => {
               </Text>
             </View>
           ))}
+        <Modal visible={cameraVisible} animationType="slide">
+          <CameraView ref={cameraRef} className="flex-1" />
+          <View className="absolute bottom-10 w-full flex-row justify-center">
+            <TouchableOpacity
+              onPress={() => takePicture("exp-date")}
+              className="w-16 h-16 bg-white rounded-full border-4 border-gray-300"
+            />
+          </View>
+        </Modal>
       </TouchableOpacity>
       {showExpPhotoPicker && (
         <>
@@ -319,14 +460,12 @@ const GetBarcode = () => {
                   </Text>
 
                   {/* Calendar Trigger */}
-                  <TouchableOpacity
-                    onPress={() => setShowPicker(true)}
-                    className="w-full bg-secondary-100 py-3 rounded-md items-center mb-4"
-                  >
-                    <Text className="text-white font-psemibold">
-                      Open Calendar
-                    </Text>
-                  </TouchableOpacity>
+
+                  <CustomButton
+                    title="Open Calendar"
+                    handlePress={() => setShowPicker(true)}
+                    containerStyles="w-full py-3 rounded-md bg-secondary-100 mb-3"
+                  />
 
                   {/* Display Selected Date */}
                   <DateDisplay formattedDate={formattedDate} />

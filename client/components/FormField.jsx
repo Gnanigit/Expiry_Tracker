@@ -1,6 +1,7 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import icons from "../constants/icons";
+import { useSelector } from "react-redux";
 
 const FormField = ({
   title,
@@ -14,19 +15,20 @@ const FormField = ({
   editable = true, // Default is editable
   ...props
 }) => {
+  const { theme } = useSelector((state) => state.theme);
   const [showPassword, setShowPassword] = useState(false);
   const isPincodeField = title.toLowerCase() === "pincode";
+  const boxBackgroundColor =
+    theme === "dark"
+      ? "rgba(171, 150, 212, 0.12)"
+      : "rgba(213, 195, 249, 0.12)";
 
   return (
     <View className={`${otherStyles}`}>
       <Text className={`${titleStyle}`}>{title}</Text>
       <View
         className={`${inputViewStyle}`}
-        // style={{
-        //   borderWidth: 1.1,
-        //   borderColor: "#6b7280",
-        //   borderRadius: 12,
-        // }}
+        style={{ backgroundColor: boxBackgroundColor, borderWidth: 1.5 }}
       >
         <TextInput
           className={`flex-1 ${textStyles}`}
