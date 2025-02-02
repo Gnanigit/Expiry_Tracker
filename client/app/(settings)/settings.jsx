@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Appearance } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,12 +13,20 @@ const Settings = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
   const selectMode = (mode) => {
-    console.log(mode);
+    if (mode === "system") {
+      const systemTheme = Appearance.getColorScheme();
+
+      dispatch(setTheme(systemTheme));
+      setIsOpen(false);
+    } else {
+      dispatch(setTheme(mode));
+    }
+
     dispatch(setTheme(mode));
     setIsOpen(false);
   };
-
   return (
     <SafeAreaView
       className={`flex-1 ${
