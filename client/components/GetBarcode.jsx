@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableOpacity,
   Animated,
+  ScrollView,
 } from "react-native";
 import { setUser, setIsLogged } from "../redux/slices/auth";
 import { BlurView } from "expo-blur";
@@ -48,9 +49,12 @@ const GetBarcode = () => {
   const [prodNotFound, setProdNotFound] = useState(false);
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
-  const [cameraVisible, setCameraVisible] = useState(false);
+  const [productCameraVisible, setProductCameraVisible] = useState(false);
+  const [expiryCameraVisible, setExpiryCameraVisible] = useState(false);
+
   const [photoUri, setPhotoUri] = useState(null);
   const cameraRef = useRef(null);
+  const [expPhotoDone, setExpPhotoDone] = useState(false);
 
   useEffect(() => {
     const getCameraPermissions = async () => {
@@ -200,18 +204,21 @@ const GetBarcode = () => {
 
   // const formattedDateString = `${formattedDate.day}/${formattedDate.month}/${formattedDate.year}`;
 
-  const openCamera = () => {
-    setCameraVisible(true);
+  const openCamera = (val) => {
+    if (val === "prod-image") {
+      setProductCameraVisible(true);
+    } else {
+      setExpiryCameraVisible(true);
+    }
   };
 
   const takePicture = async (val) => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
-
+      console.log(val);
       if (val === "prod-image") {
         setImageUri(photo.uri);
-        setCameraVisible(false);
-
+        setProductCameraVisible(false);
         const { status } = await MediaLibrary.requestPermissionsAsync();
         if (status === "granted") {
           await MediaLibrary.saveToLibraryAsync(photo.uri);
@@ -222,9 +229,12 @@ const GetBarcode = () => {
           );
         }
       } else {
-        setCameraVisible(false);
+        setExpiryCameraVisible(false);
+        setExpPhotoDone(true);
         const expiryDate = await extractExpiryDate(photo.uri);
+        // const expiryDate = "12/04/2025";
         setExpDate(expiryDate);
+        setExpPhotoDone(false);
 
         const [day, month, year] = expiryDate.split("/").map(Number);
         const expiryDateObj = new Date(year, month - 1, day);
@@ -245,7 +255,15 @@ const GetBarcode = () => {
   };
 
   return (
-    <View className="items-center h-full px-2 py-3 ">
+    <ScrollView
+      contentContainerStyle={{
+        alignItems: "center",
+        marginTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 70,
+      }}
+    >
       <Text className="text-shadow-sm text-2xl font-pbold text-territory-100 mb-3">
         Add Product
       </Text>
@@ -257,7 +275,8 @@ const GetBarcode = () => {
         onDelete
       />
       <View className="relative">
-        {!prodNotFound &&
+        {expDate === "" && !expPhotoDone ? (
+          !prodNotFound &&
           (!scanned ? (
             <CameraView
               onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
@@ -268,26 +287,41 @@ const GetBarcode = () => {
             />
           ) : processing ? (
             <LottieView
-              className="w-[180px] h-[170px] mt-3"
+              className="w-[150px] h-[150px] mt-3"
               source={gifs.processing}
               autoPlay
               loop
             />
           ) : productName === "" ? (
             <LottieView
-              className="w-[180px] h-[170px] mt-3"
+              className="w-[150px] h-[150px] mt-3"
               source={gifs.fake_product}
               autoPlay
               loop
             />
           ) : (
             <LottieView
-              className="w-[180px] h-[170px] mt-3"
+              className="w-[150px] h-[150px] mt-3"
               source={gifs.success}
               autoPlay
               loop
             />
-          ))}
+          ))
+        ) : expPhotoDone ? (
+          <LottieView
+            className="w-[180px] h-[180px] mt-3"
+            source={gifs.Processing_exp_date_blue}
+            autoPlay
+            loop
+          />
+        ) : (
+          <LottieView
+            className="w-[150px] h-[150px] mt-3"
+            source={gifs.success}
+            autoPlay
+            loop
+          />
+        )}
         {/* Moving Line */}
         {!scanned && !prodNotFound && (
           <Animated.View
@@ -319,7 +353,7 @@ const GetBarcode = () => {
           </Text>
           <View className="w-full items-center mt-3">
             <TouchableOpacity
-              onPress={() => openCamera()}
+              onPress={() => openCamera("prod-image")}
               className="w-full items-center"
             >
               {!imageUri && (
@@ -346,7 +380,7 @@ const GetBarcode = () => {
 
             {/* Camera Modal */}
 
-            <Modal visible={cameraVisible} animationType="slide">
+            <Modal visible={productCameraVisible} animationType="slide">
               <CameraView ref={cameraRef} className="flex-1" />
               <View className="absolute bottom-10 w-full flex-row justify-center">
                 <TouchableOpacity
@@ -390,7 +424,7 @@ const GetBarcode = () => {
         />
       )}
       <TouchableOpacity
-        onPress={() => openCamera()}
+        onPress={() => openCamera("exp-date")}
         className="w-full items-center"
       >
         {showExpPhotoPicker &&
@@ -420,7 +454,7 @@ const GetBarcode = () => {
               </Text>
             </View>
           ))}
-        <Modal visible={cameraVisible} animationType="slide">
+        <Modal visible={expiryCameraVisible} animationType="slide">
           <CameraView ref={cameraRef} className="flex-1" />
           <View className="absolute bottom-10 w-full flex-row justify-center">
             <TouchableOpacity
@@ -499,7 +533,7 @@ const GetBarcode = () => {
           containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
         />
       )}
-    </View>
+    </ScrollView>
   );
 };
 
