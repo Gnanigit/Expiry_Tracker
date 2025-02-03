@@ -1,16 +1,52 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, View, Text, Image, Link } from "react-native";
+import { ScrollView, View, Text, Image } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 import images from "../constants/images";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import * as AuthSession from "expo-auth-session";
+
+const CLIENT_ID =
+  "1087964490068-odqso34pv65e4nqrn9265b63aba96oc6.apps.googleusercontent.com";
 
 const App = () => {
   const { theme } = useSelector((state) => state.theme);
   const backgroundColor =
     theme === "dark" ? "rgba(42, 35, 58,1)" : "rgba(255, 255, 255, 1)";
-  const style = theme == "dark" ? "light" : "dark";
+
+  const discovery = AuthSession.useAutoDiscovery("https://accounts.google.com");
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: CLIENT_ID,
+      redirectUri: AuthSession.makeRedirectUri(),
+      scopes: ["openid", "profile", "email"],
+      responseType: "code", // Authorization Code Flow
+    },
+    discovery
+  );
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { code } = response.params;
+      console.log("Authorization Code:", code);
+
+      // Now, send the authorization code to your backend to exchange it for an access token
+      fetch("https://your-backend-api.com/exchange-code", {
+        method: "POST",
+        body: JSON.stringify({ code }), // Pass the code to your backend
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Access Token:", data.access_token);
+          // You can now use the access token to make requests to Google APIs
+        })
+        .catch((err) => console.error("Error exchanging code for token:", err));
+    }
+  }, [response]);
+
   return (
     <SafeAreaView
       className={`${
@@ -38,7 +74,7 @@ const App = () => {
             resizeMode="contain"
             className="w-[500px] h-[520px] my-5"
             source={images.start}
-          ></Image>
+          />
 
           <CustomButton
             title="Continue with Email"
@@ -54,7 +90,7 @@ const App = () => {
           <CustomButton
             type="google"
             title="Continue with Google"
-            handlePress={() => router.push("/sign-up")}
+            handlePress={() => promptAsync()}
             containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
           />
         </View>
