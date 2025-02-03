@@ -26,6 +26,7 @@ import { gifs, audio } from "../constants";
 import { addProduct } from "../redux/slices/products";
 import FormField from "./FormField";
 import { useSelector } from "react-redux";
+import { extractExpiryDate } from "../utils/helper";
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -204,9 +205,10 @@ const GetBarcode = () => {
   };
 
   const takePicture = async (val) => {
-    if (val === "prod-image") {
-      if (cameraRef.current) {
-        const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+
+      if (val === "prod-image") {
         setImageUri(photo.uri);
         setCameraVisible(false);
 
@@ -219,27 +221,26 @@ const GetBarcode = () => {
             "Allow media permissions to save the photo."
           );
         }
-      }
-    } else {
-      const date = new Date();
-      const formattedDate = `${date.getDate()}/${
-        date.getMonth() + 1
-      }/${date.getFullYear()}`;
-      setExpDate(formattedDate);
-      setStatus("green");
-
-      const currentDate = new Date();
-      const diffInTime = date.getTime() - currentDate.getTime();
-      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)) + 10;
-
-      if (diffInDays <= 7) {
-        setStatus("red");
-      } else if (diffInDays <= 40) {
-        setStatus("yellow");
       } else {
-        setStatus("green");
+        setCameraVisible(false);
+        const expiryDate = await extractExpiryDate(photo.uri);
+        setExpDate(expiryDate);
+
+        const [day, month, year] = expiryDate.split("/").map(Number);
+        const expiryDateObj = new Date(year, month - 1, day);
+
+        const currentDate = new Date();
+        const diffInTime = expiryDateObj.getTime() - currentDate.getTime();
+        const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+
+        if (diffInDays <= 7) {
+          setStatus("red");
+        } else if (diffInDays <= 40) {
+          setStatus("yellow");
+        } else {
+          setStatus("green");
+        }
       }
-      setCameraVisible(false);
     }
   };
 
