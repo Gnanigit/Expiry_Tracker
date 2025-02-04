@@ -5,47 +5,42 @@ import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 import images from "../constants/images";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
-import * as AuthSession from "expo-auth-session";
 
-const CLIENT_ID =
-  "1087964490068-odqso34pv65e4nqrn9265b63aba96oc6.apps.googleusercontent.com";
+import "expo-dev-client";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import auth from "@react-native-firebase/auth";
 
 const App = () => {
+  GoogleSignin.configure({
+    webClientId:
+      "827269521347-b47m7ijdp3rtcuku3l7puvh6mf1nnpbj.apps.googleusercontent.com",
+  });
   const { theme } = useSelector((state) => state.theme);
   const backgroundColor =
     theme === "dark" ? "rgba(42, 35, 58,1)" : "rgba(255, 255, 255, 1)";
+  const onGoogleButtonPress = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
 
-  const discovery = AuthSession.useAutoDiscovery("https://accounts.google.com");
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId: CLIENT_ID,
-      redirectUri: AuthSession.makeRedirectUri(),
-      scopes: ["openid", "profile", "email"],
-      responseType: "code", // Authorization Code Flow
-    },
-    discovery
-  );
+      const userInfo = await GoogleSignin.signIn();
+      // console.log("User Info:", userInfo);
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      const { code } = response.params;
-      console.log("Authorization Code:", code);
+      if (!userInfo.data.idToken) {
+        throw new Error("No ID Token received from Google Sign-In");
+      }
 
-      // Now, send the authorization code to your backend to exchange it for an access token
-      fetch("https://your-backend-api.com/exchange-code", {
-        method: "POST",
-        body: JSON.stringify({ code }), // Pass the code to your backend
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Access Token:", data.access_token);
-          // You can now use the access token to make requests to Google APIs
-        })
-        .catch((err) => console.error("Error exchanging code for token:", err));
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        userInfo.data.idToken
+      );
+
+      const userDetails = await auth().signInWithCredential(googleCredential);
+      console.log("User signed in successfully!", userDetails);
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
     }
-  }, [response]);
+  };
 
   return (
     <SafeAreaView
@@ -90,7 +85,11 @@ const App = () => {
           <CustomButton
             type="google"
             title="Continue with Google"
-            handlePress={() => promptAsync()}
+            handlePress={() =>
+              onGoogleButtonPress().then(() =>
+                console.log("Continue with Google")
+              )
+            }
             containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
           />
         </View>

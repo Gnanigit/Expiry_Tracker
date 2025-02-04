@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Expiry_Tracker",
-    "slug": "Expiry_Tracker",
+    "slug": "expiry-tracker",
     "scheme": "Expiry_Tracker",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,10 +17,17 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/Expiry_Tracker_Logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+
+      "package": "com.gnani_178.expirytracker"
     },
     "web": {
       "favicon": "./assets/Expiry_Tracker_Logo.png"
@@ -34,7 +41,16 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
-      ]
-    ]
+      ],
+      ["@react-native-google-signin/google-signin"]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "539e204f-ca62-4c45-989e-809d83217ea2"
+      }
+    }
   }
 }

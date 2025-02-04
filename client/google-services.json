@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "827269521347",
+    "project_id": "expirytracker-24a91",
+    "storage_bucket": "expirytracker-24a91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827269521347:android:ca06e4981ec6f6224be776",
+        "android_client_info": {
+          "package_name": "com.gnani_178.expirytracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827269521347-h9a5iif72sahgpc630df4dm640fpdck6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gnani_178.expirytracker",
+            "certificate_hash": "a9f55337d2aa152e0051c0b7d94a7debbb517393"
+          }
+        },
+        {
+          "client_id": "827269521347-k3cs6cborjlo2vubathoekihqurcnqmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gnani_178.expirytracker",
+            "certificate_hash": "928e159e719be1e06a6d3b3b5a9ae8368eb51f9d"
+          }
+        },
+        {
+          "client_id": "827269521347-b47m7ijdp3rtcuku3l7puvh6mf1nnpbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8JAsFoJTRQVh7sBWDasqQ_o9gDvXwrOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827269521347-b47m7ijdp3rtcuku3l7puvh6mf1nnpbj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

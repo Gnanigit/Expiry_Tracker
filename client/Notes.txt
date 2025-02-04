@@ -1,15 +1,16 @@
-1. npx create-expo-app Expiry_Treacker --template blank
+1. npx create-expo-app Expiry_Tracker --template blank
 2. add babel.config.js
 3. npm install nativewind tailwindcss
 4. npx tailwindcss init
-5. npx install expo-router expo-status-bar react-native-safe-area-context react-native-screens expo-linking expo-constants 
-6.  npm install nativewind@2.0.11
+5. npx expo install expo-router expo-status-bar react-native-safe-area-context react-native-screens expo-linking expo-constants 
+6. npm install nativewind@2.0.11
 7. npm install --save-dev tailwindcss@3.3.2
+8. set  "main": "expo-router/entry", in package.json
 
 
 Expo App opening
 ipconfig
-setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.107
+setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.109
 
 start expo app with command -> {first it get's the current connected ipv4 address and sets it to environment variables and the updates the .env file}
 
@@ -17,3 +18,8 @@ start expo app with command -> {first it get's the current connected ipv4 addres
 
 RFID API key : n9puh5KB51whXFqK
 RFID URL :  https://gs1-eu1-pd-rfidcoder-app.azurewebsites.net/api/tag/epc/30F4257BF46DB64000000190?apikey=n9puh5KB51whXFqK
+
+
+eas build --profile development --platform android
+first SHA1 : 87:B4:2D:59:B5:78:3A:F5:C3:71:74:29:00:0F:51:78:C8:AC:CC:14
+second SHA2 : 9B:EC:83:0F:46:A1:B3:AD:AC:58:D4:07:C7:8B:B1:61:3D:FA:58:91

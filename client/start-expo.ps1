@@ -29,7 +29,8 @@ if ($ipAddress) {
 
     # Start Expo
     Write-Host "Starting Expo..."
-    npx expo start -c
+    # npx expo start -c
+    npx expo start --dev-client
 } else {
     Write-Host "No IPv4 address found!"
 }

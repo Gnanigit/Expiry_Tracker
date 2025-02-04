@@ -51,8 +51,6 @@ const GetBarcode = () => {
   const { theme } = useSelector((state) => state.theme);
   const [productCameraVisible, setProductCameraVisible] = useState(false);
   const [expiryCameraVisible, setExpiryCameraVisible] = useState(false);
-
-  const [photoUri, setPhotoUri] = useState(null);
   const cameraRef = useRef(null);
   const [expPhotoDone, setExpPhotoDone] = useState(false);
 
