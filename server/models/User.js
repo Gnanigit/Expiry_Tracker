@@ -48,6 +48,10 @@ const UserSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
+    google: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

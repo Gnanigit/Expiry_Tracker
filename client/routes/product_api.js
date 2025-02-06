@@ -28,6 +28,7 @@ const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 // };
 
 export const getProductName = async (code) => {
+  console.log(code);
   try {
     const response = await axios.get(`${baseURL}/product/prod-name`, {
       params: { code },

@@ -69,3 +69,27 @@ export const updateUserDetails = async (formData) => {
     throw error;
   }
 };
+
+export const loginWithGoogle = async (
+  firstName,
+  lastName,
+  email,
+  picture,
+  password,
+  google = true
+) => {
+  try {
+    const response = await axios.post(`${baseURL}/auth/google-login`, {
+      firstName,
+      lastName,
+      email,
+      picture,
+      password,
+      google,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

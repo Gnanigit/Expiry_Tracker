@@ -5,12 +5,17 @@ import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 import images from "../constants/images";
 import { useSelector } from "react-redux";
+import { loginWithGoogle } from "../routes/auth_api";
+import { useDispatch } from "react-redux";
+import { setProducts } from "../redux/slices/products";
+import { setIsLogged, setUser } from "../redux/slices/auth";
 
 import "expo-dev-client";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from "@react-native-firebase/auth";
 
 const App = () => {
+  const dispatch = useDispatch();
   GoogleSignin.configure({
     webClientId:
       "827269521347-b47m7ijdp3rtcuku3l7puvh6mf1nnpbj.apps.googleusercontent.com",
@@ -18,14 +23,15 @@ const App = () => {
   const { theme } = useSelector((state) => state.theme);
   const backgroundColor =
     theme === "dark" ? "rgba(42, 35, 58,1)" : "rgba(255, 255, 255, 1)";
+
   const onGoogleButtonPress = async () => {
     try {
+      await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
 
       const userInfo = await GoogleSignin.signIn();
-      // console.log("User Info:", userInfo);
 
       if (!userInfo.data.idToken) {
         throw new Error("No ID Token received from Google Sign-In");
@@ -36,9 +42,33 @@ const App = () => {
       );
 
       const userDetails = await auth().signInWithCredential(googleCredential);
-      console.log("User signed in successfully!", userDetails);
+      const {
+        picture,
+        email,
+        family_name: lastName,
+        given_name: firstName,
+      } = userDetails.additionalUserInfo.profile;
+
+      const password = userDetails.user.uid;
+      const google = true;
+
+      // Call backend Google login API
+      const result = await loginWithGoogle(
+        firstName,
+        lastName,
+        email,
+        picture,
+        password,
+        google
+      );
+
+      dispatch(setUser(result.user));
+      dispatch(setIsLogged(true));
+      dispatch(setProducts(result.formattedProducts));
+
+      router.push("/home");
     } catch (error) {
-      console.error("Google Sign-In Error:", error);
+      Alert.alert("Error", error.message);
     }
   };
 
@@ -94,7 +124,7 @@ const App = () => {
           />
         </View>
       </ScrollView>
-      <StatusBar backgroundColor={backgroundColor} style="light" />
+      <StatusBar backgroundColor={backgroundColor} style="dark" />
     </SafeAreaView>
   );
 };

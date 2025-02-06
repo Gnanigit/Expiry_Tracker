@@ -160,3 +160,66 @@ export const updateUserDetails = async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 };
+
+export const loginWithGoogle = async (req, res) => {
+  const { firstName, lastName, email, picture, password, google } = req.body;
+
+  try {
+    let existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+      // Hash UID as password
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      existingUser = new User({
+        email,
+        firstName,
+        lastName,
+        password: passwordHash,
+        username: email.split("@")[0],
+        avatar: picture,
+        google,
+      });
+
+      await existingUser.save();
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: existingUser._id, email: existingUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // Set the token in a cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    // Fetch and format the user's products
+    const allProducts = await Product.find({ userId: existingUser._id });
+    const formattedProducts = allProducts.map((product) => {
+      const expiryDate = new Date(product.expiryDate);
+      const formattedDate = `${expiryDate.getDate()}/${
+        expiryDate.getMonth() + 1
+      }/${expiryDate.getFullYear()}`;
+
+      return {
+        ...product._doc,
+        expiryDate: formattedDate,
+      };
+    });
+
+    return res.status(200).json({
+      message: "Login successful",
+      formattedProducts,
+      user: existingUser,
+    });
+  } catch (error) {
+    console.error("Error logging in with Google:", error);
+    return res.status(500).json({ error: "Error logging in with Google" });
+  }
+};
