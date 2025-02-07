@@ -56,7 +56,7 @@ export const extractExpiryDate = async (imageUri) => {
 
     return formattedDate;
   } catch (error) {
-    console.error("Error extracting expiry date:", error);
+    // console.error("Error extracting expiry date:", error);
     return "Failed to extract expiry date.";
   }
 };

@@ -213,7 +213,6 @@ const GetBarcode = () => {
   const takePicture = async (val) => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
-      console.log(val);
       if (val === "prod-image") {
         setImageUri(photo.uri);
         setProductCameraVisible(false);
@@ -230,9 +229,12 @@ const GetBarcode = () => {
         setExpiryCameraVisible(false);
         setExpPhotoDone(true);
         const expiryDate = await extractExpiryDate(photo.uri);
-        // const expiryDate = "12/04/2025";
-        setExpDate(expiryDate);
         setExpPhotoDone(false);
+        // const expiryDate = "12/04/2025";
+        if (expiryDate === "Failed to extract expiry date.") {
+          Alert.alert("Error", expiryDate + " Please select manually");
+          return;
+        }
 
         const [day, month, year] = expiryDate.split("/").map(Number);
         const expiryDateObj = new Date(year, month - 1, day);
@@ -471,7 +473,7 @@ const GetBarcode = () => {
           </View>
           <CustomButton
             title="Select Expiry Date Manually"
-            containerStyles="w-[75%] rounded-[10px] min-h-[50px] bg-secondary-200"
+            containerStyles="w-[70%] rounded-[10px] min-h-[45px] bg-secondary-200"
             handlePress={() => setIsPopupVisible(true)}
           />
 
@@ -528,7 +530,7 @@ const GetBarcode = () => {
         <CustomButton
           title="Add Product"
           handlePress={handleSubmit}
-          containerStyles="w-[40%] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
+          containerStyles="w-[40%] min-h-[40px] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
         />
       )}
     </ScrollView>

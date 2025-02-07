@@ -160,6 +160,12 @@ const Home = () => {
               borderWidth: 1,
               borderColor: boxBorderColor,
             }}
+            onPress={() =>
+              router.push({
+                pathname: "/main",
+                params: { component: "ComponentC", unique: Date.now() },
+              })
+            }
           >
             <Image
               className="w-12 h-12 object-contain shadow-lg"
@@ -176,6 +182,12 @@ const Home = () => {
               borderWidth: 1,
               borderColor: boxBorderColor,
             }}
+            onPress={() =>
+              router.push({
+                pathname: "/main",
+                params: { component: "ComponentD", unique: Date.now() },
+              })
+            }
           >
             <Image
               className="w-12 h-12 object-contain ml-1 shadow-lg"

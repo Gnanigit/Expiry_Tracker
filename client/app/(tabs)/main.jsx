@@ -9,6 +9,8 @@ import Sidebar from "../../components/Sidebar";
 import MainComponents from "../../components/MainComponents";
 import { icons } from "../../constants";
 import { useSelector } from "react-redux";
+import PriceComparison from "../../components/PriceComparison";
+import ProdDetails from "../../components/prodDetails";
 
 const Main = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -63,6 +65,35 @@ const Main = () => {
             <FakeOrNot />
           </ScrollView>
         );
+      case "ComponentC":
+        return (
+          <ScrollView
+            className={`${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } h-full`}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+          >
+            <PriceComparison />
+          </ScrollView>
+        );
+      case "ComponentD":
+        return (
+          <ScrollView
+            className={`${
+              theme === "dark" ? "bg-primary-dark" : "bg-primary"
+            } h-full`}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+          >
+            <ProdDetails />
+          </ScrollView>
+        );
+
       default:
         return (
           <SafeAreaView
