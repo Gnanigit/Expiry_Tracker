@@ -110,6 +110,7 @@ const upload = multer({
 export const getProductDetails = async (req, res) => {
   const { code } = req.query;
   console.log(code);
+  console.log("hello");
 
   if (!code) {
     return res.status(400).json({ message: "Barcode is required" });

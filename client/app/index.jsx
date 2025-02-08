@@ -24,6 +24,7 @@ const App = () => {
   const backgroundColor =
     theme === "dark" ? "rgba(42, 35, 58,1)" : "rgba(255, 255, 255, 1)";
 
+  const style = theme === "dark" ? "light" : "dark";
   const onGoogleButtonPress = async () => {
     try {
       await GoogleSignin.signOut();
@@ -124,7 +125,7 @@ const App = () => {
           />
         </View>
       </ScrollView>
-      <StatusBar backgroundColor={backgroundColor} style="dark" />
+      <StatusBar backgroundColor={backgroundColor} style={style} />
     </SafeAreaView>
   );
 };

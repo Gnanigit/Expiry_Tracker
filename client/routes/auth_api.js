@@ -32,14 +32,15 @@ export const getCurrentUser = async () => {
 
 export const signIn = async (email, password) => {
   try {
-    const response = await axios.post(`${baseURL}/auth/sign-in`, {
-      withCredentials: true,
-      email,
-      password,
-    });
-
+    const response = await axios.post(
+      `${baseURL}/auth/sign-in`,
+      { email, password },
+      { withCredentials: true }
+    );
+    console.log("signing in...");
     return response.data;
   } catch (error) {
+    console.error("Sign-in error:", error);
     throw error;
   }
 };

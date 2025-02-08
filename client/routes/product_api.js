@@ -38,6 +38,7 @@ export const getProductName = async (code) => {
     });
 
     if (response.data) {
+      console.log("getting product name");
       return response.data;
     } else {
       throw new Error("No response data from the server");

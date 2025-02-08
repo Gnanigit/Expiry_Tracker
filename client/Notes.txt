@@ -23,3 +23,6 @@ RFID URL :  https://gs1-eu1-pd-rfidcoder-app.azurewebsites.net/api/tag/epc/30F42
 eas build --profile development --platform android
 first SHA1 : 87:B4:2D:59:B5:78:3A:F5:C3:71:74:29:00:0F:51:78:C8:AC:CC:14
 second SHA2 : 9B:EC:83:0F:46:A1:B3:AD:AC:58:D4:07:C7:8B:B1:61:3D:FA:58:91
+
+ eas build --clear-cache --profile development --platform android
+

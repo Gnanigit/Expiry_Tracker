@@ -143,6 +143,12 @@ export default function MainComponents() {
           // style={{
           //   elevation: isFullyVisible ? 7 : 0,
           // }}
+          onPress={() =>
+            router.push({
+              pathname: "/main",
+              params: { component: "ComponentC", unique: Date.now() },
+            })
+          }
         >
           <Image
             className="w-12 h-12 object-contain shadow-lg"
@@ -163,6 +169,12 @@ export default function MainComponents() {
             borderWidth: 1,
             borderColor: boxBorderColor,
           }}
+          onPress={() =>
+            router.push({
+              pathname: "/main",
+              params: { component: "ComponentD", unique: Date.now() },
+            })
+          }
           // style={{
           //   elevation: isFullyVisible ? 7 : 0,
           // }}

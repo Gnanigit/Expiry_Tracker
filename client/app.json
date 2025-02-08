@@ -3,6 +3,7 @@
     "name": "Expiry_Tracker",
     "slug": "expiry-tracker",
     "scheme": "Expiry_Tracker",
+    "assetBundlePatterns": ["**/*"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/Expiry_Tracker_Logo.png",
@@ -26,7 +27,6 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-
       "package": "com.gnani_178.expirytracker"
     },
     "web": {
@@ -34,6 +34,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-font",
       [
         "expo-camera",
         {

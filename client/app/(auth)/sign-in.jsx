@@ -22,16 +22,19 @@ const SignIn = () => {
   const submit = async () => {
     if (!form.email || !form.password) {
       Alert.alert("Error", "Please fill in all fields");
+      return;
     }
     try {
       const result = await signIn(form.email, form.password);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
       dispatch(setUser(result.user));
       dispatch(setIsLogged(true));
       dispatch(setProducts(result.formattedProducts));
+
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
-      setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
     }

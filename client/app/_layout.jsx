@@ -1,17 +1,15 @@
 import { Stack, SplashScreen } from "expo-router";
-import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import GlobalProvider from "../redux/GlobalProvider";
 import { useSelector } from "react-redux";
 import { Redirect } from "expo-router";
 import React, { useEffect } from "react";
 import store from "../redux/store";
-import { useDispatch } from "react-redux";
+import { useFonts } from "expo-font";
 
 SplashScreen.preventAutoHideAsync();
 
 const AppContent = () => {
-  const dispatch = useDispatch();
   const { isLogged, authLoading, user } = useSelector((state) => state.auth);
 
   if (authLoading) {
@@ -36,13 +34,16 @@ const RootLayout = () => {
   });
 
   useEffect(() => {
-    if (error) {
-      console.error(error);
-    }
+    if (error) throw error;
+
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, error]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   if (!fontsLoaded && !error) {
     return null;

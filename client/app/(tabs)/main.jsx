@@ -10,7 +10,7 @@ import MainComponents from "../../components/MainComponents";
 import { icons } from "../../constants";
 import { useSelector } from "react-redux";
 import PriceComparison from "../../components/PriceComparison";
-import ProdDetails from "../../components/prodDetails";
+import ProdDetails from "../../components/ProdDetails";
 
 const Main = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);

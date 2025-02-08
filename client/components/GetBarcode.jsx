@@ -235,7 +235,7 @@ const GetBarcode = () => {
           Alert.alert("Error", expiryDate + " Please select manually");
           return;
         }
-
+        setExpDate(expiryDate);
         const [day, month, year] = expiryDate.split("/").map(Number);
         const expiryDateObj = new Date(year, month - 1, day);
 
