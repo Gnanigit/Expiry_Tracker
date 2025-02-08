@@ -36,6 +36,7 @@ const Search = () => {
           <SearchInput
             query={query}
             setQuery={setQuery}
+            placeholder="Search your products..."
             textStyles={`${
               theme === "dark" ? "text-gray-100" : "text-black"
             } text-base font-pregular`}

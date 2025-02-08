@@ -124,7 +124,7 @@ const Home = () => {
               className="w-10 h-10 object-contain ml-1"
               source={icons.addProduct}
             />
-            <Text className="text-shadow-sm text-[15px] font-psemibold text-white ml-1 max-w-[75%]">
+            <Text className="text-shadow-sm text-[14px] font-psemibold text-primary ml-2 max-w-[72%]">
               Add product
             </Text>
           </TouchableOpacity>
@@ -143,10 +143,10 @@ const Home = () => {
             }
           >
             <Image
-              className="w-12 h-12 object-contain ml-1 shadow-lg"
+              className="w-10 h-10 object-contain ml-1 shadow-lg"
               source={icons.fake}
             />
-            <Text className="text-shadow-sm text-[15px] font-psemibold  text-white ml-1 max-w-[75%]">
+            <Text className="text-shadow-sm text-[14px] font-psemibold  text-primary ml-2 max-w-[72%]">
               Fake Product Detection
             </Text>
           </TouchableOpacity>
@@ -168,10 +168,10 @@ const Home = () => {
             }
           >
             <Image
-              className="w-12 h-12 object-contain shadow-lg"
+              className="w-10 h-10 object-contain shadow-lg"
               source={icons.price}
             />
-            <Text className="text-shadow-sm text-[15px] font-psemibold  text-white ml-1 max-w-[75%]">
+            <Text className="text-shadow-sm text-[14px] font-psemibold  text-primary ml-2 max-w-[72%]">
               Price comparison
             </Text>
           </TouchableOpacity>
@@ -190,10 +190,10 @@ const Home = () => {
             }
           >
             <Image
-              className="w-12 h-12 object-contain ml-1 shadow-lg"
+              className="w-10 h-10 object-contain ml-1 shadow-lg"
               source={icons.product}
             />
-            <Text className="text-shadow-sm text-[15px] font-psemibold  text-white max-w-[75%]">
+            <Text className="text-shadow-sm text-[14px] font-psemibold  text-primary ml-2 max-w-[72%]">
               Product Details
             </Text>
           </TouchableOpacity>

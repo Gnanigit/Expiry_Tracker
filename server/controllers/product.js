@@ -5,6 +5,7 @@ import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import { console } from "inspector";
+import { scrapeAmazon } from "../utils/priceComaprison.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -300,5 +301,22 @@ export const searchProducts = async (req, res) => {
   } catch (error) {
     console.error("Error fetching posts:", error.message);
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getPriceComparison = async (req, res) => {
+  const { prodName } = req.query;
+  console.log("Received Product Name:", prodName);
+
+  if (!prodName) {
+    return res.status(400).json({ message: "Product Name is required" });
+  }
+
+  try {
+    const productDetails = await scrapeAmazon(prodName); // Fixed parameter
+    return res.status(200).json(productDetails);
+  } catch (error) {
+    console.error("Error in getPriceComparison:", error);
+    return res.status(500).json({ message: "Failed to fetch product details" });
   }
 };

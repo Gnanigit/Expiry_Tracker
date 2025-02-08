@@ -128,3 +128,16 @@ export const searchProducts = async (query) => {
     throw error;
   }
 };
+
+export const priceComparison = async (prodName) => {
+  try {
+    const response = await axios.get(`${baseURL}/product/price-comparison`, {
+      params: { prodName }, // Corrected parameter passing
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response?.data || error.message);
+    throw error;
+  }
+};
