@@ -32,8 +32,10 @@ import settings from "../assets/icons/settings.png";
 import light_mode from "../assets/icons/light-mode.png";
 import dark_mode from "../assets/icons/dark-mode.png";
 import system from "../assets/icons/system.png";
+import scanner from "../assets/icons/scanner.png";
 
 export default {
+  scanner,
   light_mode,
   dark_mode,
   system,

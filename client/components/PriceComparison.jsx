@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   FlatList,
   Button,
+  Image,
 } from "react-native";
 import { useSelector } from "react-redux";
 import BarcodeScanner from "./BarcodeScanner";
 import { priceComparison } from "../routes/product_api";
 import ItemProductList from "./ItemProductList";
 import SearchInput from "./SearchInput";
+import { icons } from "../constants";
 
 const platforms = [
   { id: "amazon", name: "Amazon" },
@@ -38,7 +40,8 @@ const PriceComparison = () => {
     console.log(productName);
     try {
       const result = await priceComparison(productName);
-      console.log("Backend Response:", result);
+      // console.log("Backend Response:", result);
+      setShowScanner(false);
       setAmazonProduct(result);
     } catch (error) {
       console.error("Error fetching price comparison:", error);
@@ -55,77 +58,81 @@ const PriceComparison = () => {
         paddingBottom: 70,
       }}
     >
-      <Text className="text-territory-100 mb-2 font-psemibold">
+      <Text className="text-territory-100 text-lg font-psemibold">
         Price Comparison
       </Text>
 
-      {!scannedProduct && showScanner ? (
+      {showScanner && (
         <BarcodeScanner onProductScanned={handleProductScanned} />
-      ) : (
-        <>
-          <SearchInput
-            setQuery={setScannedProduct}
-            onSearch={handleProductScanned}
-            type="price"
-            placeholder="Search any product..."
-            textStyles={`${
-              theme === "dark" ? "text-gray-100" : "text-black"
-            } text-base font-pregular`}
-            inputViewStyle={`w-full mb-5 ${
-              theme === "dark" ? "bg-primary-dark" : "bg-primary"
-            } border-2 px-4 h-16 ${
-              theme === "dark"
-                ? "border-secondary-darkBorder"
-                : "border-gray-300 "
-            } rounded-2xl focus:border-secondary flex flex-row items-center`}
-          />
-
-          <FlatList
-            data={platforms}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-              gap: 10,
-              paddingHorizontal: 1,
-            }}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => setSelectedPlatform(item.id)}
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  backgroundColor:
-                    selectedPlatform === item.id
-                      ? "rgba(244, 159, 28, 1)"
-                      : theme === "dark"
-                      ? "rgba(217, 202, 246, 0.19)"
-                      : "rgba(88, 88, 88, 0.27)",
-                  borderRadius: 20,
-                  minWidth: 80,
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  className={`${
-                    selectedPlatform === item.id
-                      ? "text-primary"
-                      : theme === "dark"
-                      ? "text-primary"
-                      : "text-secondary-100"
-                  } ${
-                    selectedPlatform === item.id ? "font-pbold" : "font-pmedium"
-                  }`}
-                >
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-
-          <ItemProductList data={amazonProduct} />
-        </>
       )}
+      <View className="flex-row justify-center items-center space-x-4">
+        <SearchInput
+          setQuery={setScannedProduct}
+          onSearch={handleProductScanned}
+          type="price"
+          placeholder="Search any product..."
+          textStyles={`${
+            theme === "dark" ? "text-gray-100" : "text-black"
+          } text-base font-pregular`}
+          inputViewStyle={`w-[85%] mb-5 ${
+            theme === "dark" ? "bg-primary-dark" : "bg-primary"
+          } border-2 px-4 h-14 ${
+            theme === "dark"
+              ? "border-secondary-darkBorder"
+              : "border-gray-300 "
+          } rounded-2xl focus:border-secondary flex flex-row items-center`}
+        />
+        <TouchableOpacity onPress={() => setShowScanner(true)}>
+          <Image className="w-9 h-9 mb-3" source={icons.scanner} />
+        </TouchableOpacity>
+      </View>
+
+      <>
+        <FlatList
+          data={platforms}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            gap: 10,
+            paddingHorizontal: 1,
+          }}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => setSelectedPlatform(item.id)}
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                backgroundColor:
+                  selectedPlatform === item.id
+                    ? "rgba(244, 159, 28, 1)"
+                    : theme === "dark"
+                    ? "rgba(217, 202, 246, 0.19)"
+                    : "rgba(88, 88, 88, 0.27)",
+                borderRadius: 20,
+                minWidth: 80,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                className={`${
+                  selectedPlatform === item.id
+                    ? "text-primary"
+                    : theme === "dark"
+                    ? "text-primary"
+                    : "text-secondary-100"
+                } ${
+                  selectedPlatform === item.id ? "font-pbold" : "font-pmedium"
+                }`}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+
+        <ItemProductList data={amazonProduct} />
+      </>
     </ScrollView>
   );
 };

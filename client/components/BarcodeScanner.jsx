@@ -82,7 +82,7 @@ const BarcodeScanner = ({ onProductScanned }) => {
 
   return (
     !scanned && (
-      <View>
+      <View className="mb-7">
         <CameraView
           onBarcodeScanned={handleBarcodeScanned}
           barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8", "ean12"] }}

@@ -46,6 +46,7 @@ export const scrapeAmazon = async (productName) => {
       const productName =
         item.querySelector(".s-title-instructions-style .a-link-normal h2 span")
           ?.innerText || "N/A";
+      const productLink = item.querySelector(".a-link-normal")?.href || "N/A";
       const productImage =
         item.querySelector(".s-image-square-aspect img")?.src || "N/A";
       const rating =
@@ -59,13 +60,24 @@ export const scrapeAmazon = async (productName) => {
           ".s-price-instructions-style .aok-inline-block .a-price .a-offscreen"
         )?.innerText || "N/A";
 
-      results.push({
-        actualName: productName,
-        productImage: productImage,
-        rating: rating,
-        currentPrice: currentPrice,
-        actualPrice: actualPrice,
-      });
+      if (
+        productName === "N/A" &&
+        productImage === "N/A" &&
+        rating === "N/A" &&
+        currentPrice === "N/A" &&
+        actualPrice === "N/A"
+      ) {
+        console.log("No product found for the given product name.");
+      } else {
+        results.push({
+          actualName: productName,
+          productImage: productImage,
+          productLink: productLink,
+          rating: rating,
+          currentPrice: currentPrice,
+          actualPrice: actualPrice,
+        });
+      }
     });
 
     return results;
