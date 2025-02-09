@@ -24,5 +24,138 @@ eas build --profile development --platform android
 first SHA1 : 87:B4:2D:59:B5:78:3A:F5:C3:71:74:29:00:0F:51:78:C8:AC:CC:14
 second SHA2 : 9B:EC:83:0F:46:A1:B3:AD:AC:58:D4:07:C7:8B:B1:61:3D:FA:58:91
 
- eas build --clear-cache --profile development --platform android
+eas build --clear-cache --profile development --platform android
 
+
+
+
+import {
+  View,
+  Text,
+  Button,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Navbar from "../../components/Navbar";
+import { useSelector } from "react-redux";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+const Notify = () => {
+  const { theme } = useSelector((state) => state.theme);
+  const [selectedItems, setSelectedItems] = useState(1);
+  const [permissionsGranted, setPermissionsGranted] = useState(false);
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      if (Device.isDevice) {
+        const { status: existingStatus } =
+          await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== "granted") {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+
+        setPermissionsGranted(finalStatus === "granted");
+      } else {
+        console.log("Use a physical device");
+      }
+    };
+
+    requestPermissions(); // Call the function inside useEffect
+  }, []);
+
+  const addToCart = async () => {
+    if (!permissionsGranted) {
+      console.log("Notifications not granted. Please enable them in settings.");
+      return;
+    }
+
+    // Schedule a notification 30 seconds from now using a date trigger
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Cart Reminder",
+        body: `${selectedItems} item(s) havebeen in the cart`,
+        sound: "default",
+      },
+      trigger: {
+        seconds: new Date(Date.now() + 30 * 1000),
+      },
+    });
+  };
+  return (
+    <SafeAreaView
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } flex-1`}
+    >
+      <Navbar type={"notify"} />
+      <View style={styles.container}>
+        <Text style={styles.title}>Cart Notification App</Text>
+        <Text style={styles.label}>Select Number of Items :</Text>
+        <Picker
+          selectedValue={selectedItems}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedItems(itemValue)}
+        >
+          {[...Array(10)].map((_, i) => (
+            <Picker.Item key={i} Label={` ${i + 1}`} value={i + 1} />
+          ))}
+        </Picker>
+        <TouchableOpacity onPress={addToCart} style={styles.button}>
+          <Text style={styles.buttonText}>Add to Cart</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Notify;
+
+// Styles for a modern UI design
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f0f0f0",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  picker: {
+    width: 200,
+    height: 50,
+  },
+  button: {
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    textAlign: "center",
+  },
+});
