@@ -31,6 +31,7 @@ export const getCurrentUser = async () => {
 };
 
 export const signIn = async (email, password) => {
+  console.log("signIn");
   try {
     const response = await axios.post(
       `${baseURL}/auth/sign-in`,

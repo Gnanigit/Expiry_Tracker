@@ -130,9 +130,10 @@ export const searchProducts = async (query) => {
 };
 
 export const priceComparison = async (prodName) => {
+  console.log(`Price comparison`);
   try {
     const response = await axios.get(`${baseURL}/product/price-comparison`, {
-      params: { prodName }, // Corrected parameter passing
+      params: { prodName },
       withCredentials: true,
     });
     return response.data;

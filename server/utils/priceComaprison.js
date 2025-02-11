@@ -1,6 +1,7 @@
 import puppeteer, { Browser } from "puppeteer";
 
 export const scrapeAmazon = async (productName) => {
+  console.log("hello");
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -82,55 +83,77 @@ export const scrapeAmazon = async (productName) => {
 
     return results;
   });
-
-  console.log("Extracted Products:", products);
   //   Browser.close();
   return products;
 };
 
 // Function to scrape Flipkart
-async function scrapeFlipkart(productName) {
+export const scrapeFlipkart = async (productName) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  const primaryUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(
-    productName
-  )}`;
-  const backupUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(
-    productName
-  )}&otracker=search`;
+  console.log("Opening Flipkart...");
+  await page.goto(
+    `https://www.flipkart.com/search?q=${encodeURIComponent(
+      productName
+    )}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&sort=price_asc`,
+    { waitUntil: "networkidle2" }
+  );
 
-  try {
-    await page.goto(primaryUrl, { waitUntil: "networkidle2", timeout: 10000 });
-  } catch (error) {
-    console.error(
-      `Failed to load primary URL: ${primaryUrl}, trying backup URL...`
-    );
-    try {
-      await page.goto(backupUrl, { waitUntil: "networkidle2", timeout: 10000 });
-    } catch (backupError) {
-      console.error(`Failed to load backup URL: ${backupUrl}`);
-      await browser.close();
-      throw new Error("Both primary and backup URLs failed");
-    }
-  }
+  const products = await page.evaluate(() => {
+    const productRows = document.querySelectorAll("._75nlfW");
+    let productList = [];
+    let maxProducts = 8;
 
-  await page.waitForSelector("._1AtVbE", { timeout: 10000 });
+    productRows.forEach((row) => {
+      const productCards = row.querySelectorAll(".slAVV4");
 
-  const product = await page.evaluate(() => {
-    const item = document.querySelector("._1AtVbE");
-    if (!item) return null;
-    return {
-      actualName: item.querySelector("._4rR01T, .s1Q9rs")?.innerText || "N/A",
-      description: item.querySelector(".fMghEO")?.innerText || "N/A",
-      price: item.querySelector("._30jeq3")?.innerText || "N/A",
-      info: item.querySelector("._3Djpdu")?.innerText || "N/A",
-    };
+      productCards.forEach((card) => {
+        if (productList.length >= maxProducts) return;
+
+        const productAnchor = card.querySelector(".VJA3rP");
+        const productLink = productAnchor
+          ? `https://www.flipkart.com${productAnchor.getAttribute("href")}`
+          : null;
+
+        const imgTag = productAnchor?.querySelector(".DByuf4");
+        const productImage = imgTag ? imgTag.getAttribute("src") : null;
+
+        const nameAnchor = card.querySelector(".wjcEIp");
+        const actualName = nameAnchor ? nameAnchor.innerText.trim() : null;
+
+        // Extract rating
+        const ratingSpan = card.querySelector(".XQDdHH");
+        const rating = ratingSpan ? ratingSpan.innerText.trim() : null;
+
+        // Extract prices
+        const priceDiv = card.querySelector(".Nx9bqj");
+        const currentPrice = priceDiv ? priceDiv.innerText.trim() : null;
+
+        const actualPriceDiv = card.querySelector(".yRaY8j");
+        const actualPrice = actualPriceDiv
+          ? actualPriceDiv.innerText.trim()
+          : null;
+
+        if (actualName && productLink) {
+          productList.push({
+            actualName,
+            productImage,
+            productLink,
+            rating,
+            currentPrice,
+            actualPrice,
+          });
+        }
+      });
+    });
+
+    return productList;
   });
 
   await browser.close();
-  return product;
-}
+  return products.slice(0, 8);
+};
 
 // Function to scrape Tata 1mg
 async function scrapeTata1mg(productName) {

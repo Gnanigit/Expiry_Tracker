@@ -27,24 +27,40 @@ const platforms = [
   { id: "myntra", name: "Myntra" },
   { id: "ajio", name: "Ajio" },
 ];
-
 const PriceComparison = () => {
   const [selectedPlatform, setSelectedPlatform] = useState("amazon");
   const [scannedProduct, setScannedProduct] = useState(null);
   const { theme } = useSelector((state) => state.theme);
   const [amazonProduct, setAmazonProduct] = useState([]);
+  const [flipkartProduct, setFlipkartProduct] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
+
+  const platformProducts = {
+    amazon: amazonProduct,
+    flipkart: flipkartProduct,
+    tata1mg: [],
+    apollo: [],
+    netmeds: [],
+    pharmeasy: [],
+    bigbasket: [],
+    grofers: [],
+    myntra: [],
+    ajio: [],
+  };
 
   const handleProductScanned = async (productName) => {
     setScannedProduct(productName);
     console.log(productName);
     try {
       const result = await priceComparison(productName);
-      // console.log("Backend Response:", result);
+
       setShowScanner(false);
-      setAmazonProduct(result);
+
+      // Extract Amazon and Flipkart products separately
+      setAmazonProduct(result.amazon || []);
+      setFlipkartProduct(result.flipkart || []);
     } catch (error) {
-      console.error("Error fetching price comparison:", error);
+      console.error("Error fetching product details:", error);
     }
   };
 
@@ -131,7 +147,7 @@ const PriceComparison = () => {
           )}
         />
 
-        <ItemProductList data={amazonProduct} />
+        <ItemProductList data={platformProducts[selectedPlatform] || []} />
       </>
     </ScrollView>
   );

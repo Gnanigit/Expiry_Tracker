@@ -5,7 +5,7 @@ import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import { console } from "inspector";
-import { scrapeAmazon } from "../utils/priceComaprison.js";
+import { scrapeAmazon, scrapeFlipkart } from "../utils/priceComaprison.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -313,8 +313,13 @@ export const getPriceComparison = async (req, res) => {
   }
 
   try {
-    const productDetails = await scrapeAmazon(prodName); // Fixed parameter
-    return res.status(200).json(productDetails);
+    const amazonProductDetails = await scrapeAmazon(prodName); // Fixed parameter
+    const flipkartProductDetails = await scrapeFlipkart(prodName); // Fixed parameter
+    console.log("Flipkart Product Details:", flipkartProductDetails);
+    return res.status(200).json({
+      amazon: amazonProductDetails,
+      flipkart: flipkartProductDetails,
+    });
   } catch (error) {
     console.error("Error in getPriceComparison:", error);
     return res.status(500).json({ message: "Failed to fetch product details" });
