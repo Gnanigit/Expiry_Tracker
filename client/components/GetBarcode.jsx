@@ -28,6 +28,8 @@ import { addProduct } from "../redux/slices/products";
 import FormField from "./FormField";
 import { useSelector } from "react-redux";
 import { extractExpiryDate } from "../utils/helper";
+import { sendExpiryNotification } from "../utils/ExpiryNotify";
+
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
   const [code, setCode] = useState(null);
@@ -192,6 +194,29 @@ const GetBarcode = () => {
       const result = await createProduct(productData);
       dispatch(setUser(result.user));
       dispatch(addProduct(result.product));
+      const today = new Date();
+
+      const [day, month, year] = expDate.split("/").map(Number);
+      const expiryDateGot = new Date(year, month - 1, day);
+
+      if (isNaN(expiryDateGot)) {
+        console.error("Invalid expiry date:", expDate);
+        return;
+      }
+
+      const leftDays = Math.max(
+        0,
+        Math.ceil((expiryDateGot - today) / (1000 * 60 * 60 * 24))
+      );
+      console.log("Days Left:", leftDays);
+
+      // Trigger notification
+      sendExpiryNotification({
+        productName,
+        leftDays,
+        expDate,
+        status,
+      });
 
       router.push("/home");
     } catch (err) {

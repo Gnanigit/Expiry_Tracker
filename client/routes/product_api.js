@@ -83,7 +83,7 @@ export const getAllProducts = async () => {
         "Content-Type": "application/json",
       },
     });
-
+    console.log("getting all products");
     if (response.data) {
       return response.data;
     } else {

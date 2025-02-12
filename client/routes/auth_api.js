@@ -38,7 +38,7 @@ export const signIn = async (email, password) => {
       { email, password },
       { withCredentials: true }
     );
-    console.log("signing in...");
+    console.log("signing in..");
     return response.data;
   } catch (error) {
     console.error("Sign-in error:", error);

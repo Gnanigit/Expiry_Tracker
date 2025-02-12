@@ -17,33 +17,32 @@ const GlobalProvider = ({ children }) => {
   const { setColorScheme } = useColorScheme();
 
   useEffect(() => {
-    dispatch(setTheme(Appearance.getColorScheme()));
-    getCurrentUser()
-      .then((res) => {
+    const fetchUserAndProducts = async () => {
+      try {
+        dispatch(setTheme(Appearance.getColorScheme()));
+        const res = await getCurrentUser();
         if (res) {
           dispatch(setIsLogged(true));
           dispatch(setUser(res));
-
-          return getAllProducts();
+          const products = await getAllProducts();
+          dispatch(setProducts(products));
         } else {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
         }
-      })
-      .then((products) => {
-        dispatch(setProducts(products));
-      })
-      .catch((error) => {
+      } catch (error) {
         if (!isLogged) {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
         } else {
           console.error("Error fetching user:", error);
         }
-      })
-      .finally(() => {
+      } finally {
         dispatch(setLoading(false));
-      });
+      }
+    };
+
+    fetchUserAndProducts();
   }, [dispatch]);
 
   useEffect(() => {

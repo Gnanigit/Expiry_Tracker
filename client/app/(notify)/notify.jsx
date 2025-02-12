@@ -51,7 +51,7 @@ const Notify = () => {
         body: "You clicked the Notify button!",
         sound: "default",
       },
-      trigger: { seconds: 1 }, // Notification will appear after 1 second
+      trigger: { seconds: 1 },
     });
   };
 
