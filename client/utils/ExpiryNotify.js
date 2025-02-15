@@ -27,6 +27,15 @@ export const requestNotificationPermissions = async () => {
   return finalStatus === "granted";
 };
 
+const getStatusCircle = (status) => {
+  const statusMap = {
+    red: "🔴",
+    green: "🟢",
+    yellow: "🟡",
+  };
+
+  return statusMap[status.toLowerCase()] || "⚪";
+};
 // Function to send expiry notification
 export const sendExpiryNotification = async ({
   productName,
@@ -43,7 +52,9 @@ export const sendExpiryNotification = async ({
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "⚠️ Expiry Alert!",
-      body: `📦 ${productName} expires in ⏳ ${leftDays} days! 🗓️ Expiry Date: ${expDate} - ⚡ Status: ${status}`,
+      body: `📦 ${productName} expires in ⏳ ${leftDays} days! 🗓️ Expiry Date: ${expDate} - ⚡ Status: ${getStatusCircle(
+        status
+      )}`,
       sound: "default",
     },
 

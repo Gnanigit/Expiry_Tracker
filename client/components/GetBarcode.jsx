@@ -29,6 +29,8 @@ import FormField from "./FormField";
 import { useSelector } from "react-redux";
 import { extractExpiryDate } from "../utils/helper";
 import { sendExpiryNotification } from "../utils/ExpiryNotify";
+import extractExpiryDateAzure from "../utils/helper";
+import { uploadImageForProcessing } from "../routes/product_api";
 
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -253,7 +255,11 @@ const GetBarcode = () => {
       } else {
         setExpiryCameraVisible(false);
         setExpPhotoDone(true);
-        const expiryDate = await extractExpiryDate(photo.uri);
+        // const expiryDate = await extractExpiryDate(photo.uri);
+        console.log("ready");
+        // const expiryDate = await extractExpiryDateAzure(photo.uri);
+        const expiryDate = await uploadImageForProcessing(photo.uri);
+        console.log("Detected Expiry Date:", expiryDate);
         setExpPhotoDone(false);
         // const expiryDate = "12/04/2025";
         if (expiryDate === "Failed to extract expiry date.") {

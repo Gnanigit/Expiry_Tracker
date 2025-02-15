@@ -89,7 +89,7 @@ export const loginWithGoogle = async (
       password,
       google,
     });
-
+    console.log("login with Google");
     return response.data;
   } catch (error) {
     throw error;

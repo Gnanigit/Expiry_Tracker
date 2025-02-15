@@ -23,13 +23,11 @@ const platforms = [
   { id: "netmeds", name: "Netmeds" },
   { id: "pharmeasy", name: "Pharmeasy" },
   { id: "bigbasket", name: "BigBasket" },
-  { id: "grofers", name: "Grofers" },
-  { id: "myntra", name: "Myntra" },
-  { id: "ajio", name: "Ajio" },
 ];
 const PriceComparison = () => {
   const [selectedPlatform, setSelectedPlatform] = useState("amazon");
   const [scannedProduct, setScannedProduct] = useState(null);
+
   const { theme } = useSelector((state) => state.theme);
   const [amazonProduct, setAmazonProduct] = useState([]);
   const [flipkartProduct, setFlipkartProduct] = useState([]);
@@ -43,9 +41,6 @@ const PriceComparison = () => {
     netmeds: [],
     pharmeasy: [],
     bigbasket: [],
-    grofers: [],
-    myntra: [],
-    ajio: [],
   };
 
   const handleProductScanned = async (productName) => {

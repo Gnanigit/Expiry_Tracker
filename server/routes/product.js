@@ -6,10 +6,13 @@ import {
   deleteProduct,
   searchProducts,
   getPriceComparison,
+  // extractExpiryDateAzure,
+
   // getProductName,
   // getBarcodeNumber,
 } from "../controllers/product.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
+import { extractExpiryDateAzure } from "../controllers/temp.js";
 const ProductRouter = express.Router();
 
 ProductRouter.get("/prod-name", getProductDetails);
@@ -20,6 +23,8 @@ ProductRouter.get("/price-comparison", authenticateUser, getPriceComparison);
 ProductRouter.post("/create-product", authenticateUser, createProduct);
 
 ProductRouter.delete("/delete-product", authenticateUser, deleteProduct);
+
+ProductRouter.post("/process-image", extractExpiryDateAzure);
 
 export default ProductRouter;
 

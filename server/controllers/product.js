@@ -4,7 +4,7 @@ import multer from "multer";
 import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
-import { console } from "inspector";
+// import { console } from "inspector";
 import { scrapeAmazon, scrapeFlipkart } from "../utils/priceComaprison.js";
 
 const upload = multer({

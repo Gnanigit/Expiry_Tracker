@@ -1,7 +1,6 @@
-import * as FileSystem from "expo-file-system";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import * as FileSystem from "expo-file-system"; // For reading image files
+import { GoogleGenerativeAI } from "@google/generative-ai"; // Google Gemini API
 import { GEMINI_API_KEY } from "@env";
-
 const API_KEY = GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 

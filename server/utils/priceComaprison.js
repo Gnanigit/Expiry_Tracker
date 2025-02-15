@@ -42,7 +42,7 @@ export const scrapeAmazon = async (productName) => {
     const results = [];
 
     items.forEach((item, index) => {
-      if (index >= 5) return;
+      if (index >= 8) return;
 
       const productName =
         item.querySelector(".s-title-instructions-style .a-link-normal h2 span")
