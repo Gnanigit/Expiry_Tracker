@@ -12,7 +12,7 @@ const ProdDetails = () => {
         paddingBottom: 70,
       }}
     >
-      <Text className="text-territory-100">ProdDetails</Text>
+      <Text className="text-territory-100">Product Details</Text>
     </ScrollView>
   );
 };

@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { setUser, setIsLogged } from "../redux/slices/auth";
+import { addNotification } from "../redux/slices/notify";
 import { BlurView } from "expo-blur";
 import { useDispatch } from "react-redux";
 import CustomButton from "../components/CustomButton";
@@ -31,6 +32,7 @@ import { extractExpiryDate } from "../utils/helper";
 import { sendExpiryNotification } from "../utils/ExpiryNotify";
 import extractExpiryDateAzure from "../utils/helper";
 import { uploadImageForProcessing } from "../routes/product_api";
+import { storeNotification } from "../routes/notification_api";
 
 const GetBarcode = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -211,9 +213,20 @@ const GetBarcode = () => {
         Math.ceil((expiryDateGot - today) / (1000 * 60 * 60 * 24))
       );
       console.log("Days Left:", leftDays);
+      const productId = result.product._id;
+      const res = await storeNotification(
+        productId,
+        productName,
+        leftDays,
+        expDate,
+        status,
+        imageUri
+      );
+
+      dispatch(addNotification(res.notification));
 
       // Trigger notification
-      sendExpiryNotification({
+      await sendExpiryNotification({
         productName,
         leftDays,
         expDate,

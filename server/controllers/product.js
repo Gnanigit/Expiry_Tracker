@@ -4,6 +4,7 @@ import multer from "multer";
 import getProdInfo from "../utils/getProdInfo.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import Notification from "../models/notify.js";
 // import { console } from "inspector";
 import { scrapeAmazon, scrapeFlipkart } from "../utils/priceComaprison.js";
 
@@ -242,7 +243,7 @@ export const getAllProducts = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   const { productId } = req.query;
-  console.log(productId);
+
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
@@ -257,12 +258,17 @@ export const deleteProduct = async (req, res) => {
     }
 
     user.numberOfProducts = user.numberOfProducts - 1;
-    console.log(user);
+
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Product deleted successfully", deletedProduct, user });
+    const deletedNotification = await Notification.deleteMany({ productId });
+
+    return res.status(200).json({
+      message: "Product deleted successfully",
+      deletedProduct,
+
+      user,
+    });
   } catch (error) {
     return res
       .status(500)

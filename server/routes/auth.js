@@ -7,6 +7,7 @@ import {
   updateUserDetails,
   loginWithGoogle,
 } from "../controllers/auth.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,6 +18,6 @@ router.post("/google-login", loginWithGoogle);
 
 router.put("/update-user-details", updateUserDetails);
 
-router.get("/current-user", getCurrentUser);
+router.get("/current-user", authenticateUser, getCurrentUser);
 
 export default router;

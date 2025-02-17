@@ -9,6 +9,8 @@ import { Appearance } from "react-native";
 import { setTheme } from "./slices/theme";
 import { useColorScheme } from "nativewind";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAllNotifications } from "../routes/notification_api";
+import { setNotifications } from "./slices/notify";
 
 const GlobalProvider = ({ children }) => {
   const { isLogged, user, authLoading } = useSelector((state) => state.auth);
@@ -40,6 +42,8 @@ const GlobalProvider = ({ children }) => {
           // Fetch products
           const products = await getAllProducts(token);
           dispatch(setProducts(products));
+          const notifications = await getAllNotifications(token);
+          dispatch(setNotifications(notifications));
         } else {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));

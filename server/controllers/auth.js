@@ -105,15 +105,12 @@ export async function signIn(req, res) {
 }
 
 export const getCurrentUser = async (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized, no token found" });
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized, user not found" });
   }
 
   try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findById({ _id: verified.userId });
+    const user = await User.findById(req.user.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -121,8 +118,8 @@ export const getCurrentUser = async (req, res) => {
 
     return res.status(200).json(user);
   } catch (err) {
-    console.error("Error verifying token:", err);
-    return res.status(403).json({ message: "Invalid token" });
+    console.error("Error fetching user:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

@@ -8,6 +8,7 @@ import ProductCard from "../../components/ProductCard";
 import { deleteProductById } from "../../routes/product_api";
 import { removeProduct } from "../../redux/slices/products";
 import { setUser } from "../../redux/slices/auth";
+import { removeNotification } from "../../redux/slices/notify";
 import { router } from "expo-router";
 
 const History = () => {
@@ -37,6 +38,7 @@ const History = () => {
             try {
               const result = await deleteProductById(id);
               dispatch(removeProduct(id));
+              dispatch(removeNotification(id));
               dispatch(setUser(result.user));
               router.push("/history");
               Alert.alert("Success", "Product deleted successfully");

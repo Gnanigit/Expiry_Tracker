@@ -1,0 +1,32 @@
+export const sampleNotifications = [
+  {
+    _id: "1",
+    productImage: "https://via.placeholder.com/150",
+    productName: "Milk",
+    message: "Milk is about to expire soon!",
+    leftDays: 2,
+    expDate: "20/02/2025",
+    status: "red",
+    createdAt: new Date(),
+  },
+  {
+    _id: "2",
+    productImage: "https://via.placeholder.com/150",
+    productName: "Eggs",
+    message: "Eggs are fresh but expiring in a few days.",
+    leftDays: 5,
+    expDate: "23/02/2025",
+    status: "yellow",
+    createdAt: new Date(),
+  },
+  {
+    _id: "3",
+    productImage: "https://via.placeholder.com/150",
+    productName: "Vegetables",
+    message: "Your veggies are fresh!",
+    leftDays: 10,
+    expDate: "28/02/2025",
+    status: "green",
+    createdAt: new Date(),
+  },
+];
