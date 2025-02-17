@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setIsLogged, setUser, setLoading } from "./slices/auth";
+import { setIsLogged, setUser, setAuthLoading } from "./slices/auth";
 import { setProducts } from "./slices/products";
 import { getCurrentUser } from "../routes/auth_api";
 import { getAllProducts } from "../routes/product_api";
@@ -20,25 +20,36 @@ const GlobalProvider = ({ children }) => {
     const fetchUserAndProducts = async () => {
       try {
         dispatch(setTheme(Appearance.getColorScheme()));
-        const res = await getCurrentUser();
+
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem("authToken");
+
+        if (!token) {
+          dispatch(setIsLogged(false));
+          dispatch(setUser(null));
+          dispatch(setAuthLoading(false));
+          return;
+        }
+
+        // Verify token with the backend
+        const res = await getCurrentUser(token);
         if (res) {
           dispatch(setIsLogged(true));
           dispatch(setUser(res));
-          const products = await getAllProducts();
+
+          // Fetch products
+          const products = await getAllProducts(token);
           dispatch(setProducts(products));
         } else {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
         }
       } catch (error) {
-        if (!isLogged) {
-          dispatch(setIsLogged(false));
-          dispatch(setUser(null));
-        } else {
-          console.error("Error fetching user:", error);
-        }
+        console.error("Error fetching user:", error);
+        dispatch(setIsLogged(false));
+        dispatch(setUser(null));
       } finally {
-        dispatch(setLoading(false));
+        dispatch(setAuthLoading(false));
       }
     };
 

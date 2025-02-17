@@ -1,41 +1,25 @@
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { REACT_NATIVE_APP_SERVER_DOMAIN } from "@env";
-const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 import * as ImageManipulator from "expo-image-manipulator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// export const getBarcodeNumber = async (image) => {
-//   try {
-//     const response = await axios.post(
-//       `${baseURL}/product/scan-barcode`,
-//       image,
-//       {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
+const baseURL = REACT_NATIVE_APP_SERVER_DOMAIN;
 
-//     if (response.data) {
-//       return response.data;
-//     } else {
-//       throw new Error("No response data from the server");
-//     }
-//   } catch (error) {
-//     console.error("Error in getBarcodeNumber:", error);
-//     throw new Error(
-//       error.response?.data?.message || "Failed to fetch barcode number"
-//     );
-//   }
-// };
+// Helper function to get token from AsyncStorage
+const getAuthToken = async () => {
+  return await AsyncStorage.getItem("authToken");
+};
 
 export const getProductName = async (code) => {
   console.log(code);
   try {
+    const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/prod-name`, {
       params: { code },
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -54,14 +38,15 @@ export const getProductName = async (code) => {
 
 export const createProduct = async (productData) => {
   try {
+    const token = await getAuthToken();
     const response = await axios.post(
       `${baseURL}/product/create-product`,
       productData,
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       }
     );
 
@@ -71,18 +56,20 @@ export const createProduct = async (productData) => {
       throw new Error("No response data from the server");
     }
   } catch (error) {
-    console.error("Error in getProductName:", error);
+    console.error("Error in createProduct:", error);
     throw new Error(
-      error.response?.data?.message || "Failed to fetch product name"
+      error.response?.data?.message || "Failed to create product"
     );
   }
 };
 
 export const getAllProducts = async () => {
   try {
+    const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/getAllProducts`, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     console.log("getting all products");
@@ -92,9 +79,9 @@ export const getAllProducts = async () => {
       throw new Error("No response data from the server");
     }
   } catch (error) {
-    console.error("Error in getProductName:", error);
+    console.error("Error in getAllProducts:", error);
     throw new Error(
-      error.response?.data?.message || "Failed to fetch product name"
+      error.response?.data?.message || "Failed to fetch products"
     );
   }
 };
@@ -102,15 +89,14 @@ export const getAllProducts = async () => {
 export const uploadImageForProcessing = async (imageUri) => {
   try {
     console.log("Original Image URI:", imageUri);
+    const token = await getAuthToken();
 
     // Resize & compress the image using Expo Image Manipulator
     const manipulatedImage = await ImageManipulator.manipulateAsync(
       imageUri,
-      [{ resize: { width: 600, height: 600 } }], // Resize to max 800x800
+      [{ resize: { width: 600, height: 600 } }], // Resize to max 600x600
       { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Reduce quality to 70%
     );
-
-    // console.log("Resized Image URI:", manipulatedImage.uri);
 
     // Convert resized image to Base64
     const base64Image = await FileSystem.readAsStringAsync(
@@ -124,12 +110,13 @@ export const uploadImageForProcessing = async (imageUri) => {
       `${baseURL}/product/process-image`,
       { image: base64Image }, // Send Base64 image to backend
       {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
-    // console.log("Image processing response:", response.data);
     return response.data.expiryDate; // Expected response: Extracted expiry date
   } catch (error) {
     console.error("Error in uploadImageForProcessing:", error.message);
@@ -139,12 +126,13 @@ export const uploadImageForProcessing = async (imageUri) => {
 
 export const deleteProductById = async (productId) => {
   try {
+    const token = await getAuthToken();
     const response = await axios.delete(`${baseURL}/product/delete-product`, {
       params: { productId },
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     });
 
     return response.data;
@@ -158,9 +146,12 @@ export const deleteProductById = async (productId) => {
 
 export const searchProducts = async (query) => {
   try {
+    const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/search-products`, {
       params: { query },
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -171,9 +162,12 @@ export const searchProducts = async (query) => {
 export const priceComparison = async (prodName) => {
   console.log(`Price comparison`);
   try {
+    const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/price-comparison`, {
       params: { prodName },
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {

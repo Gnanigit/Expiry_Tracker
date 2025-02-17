@@ -95,6 +95,7 @@ export async function signIn(req, res) {
 
     return res.status(200).json({
       message: "Sign in successful",
+      token,
       formattedProducts,
       user,
     });
@@ -250,6 +251,7 @@ export const loginWithGoogle = async (req, res) => {
 
     return res.status(200).json({
       message: "Login successful",
+      token,
       formattedProducts,
       user: existingUser,
     });
