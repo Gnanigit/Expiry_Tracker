@@ -41,8 +41,9 @@ export async function signIn(req, res) {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      throw new Error("User does not exist. ");
+      throw new Error("User does not exist.");
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       throw new Error("Incorrect password.");
@@ -63,24 +64,42 @@ export async function signIn(req, res) {
     });
 
     const allProducts = await Product.find({ userId: user._id });
-    const formattedProducts = allProducts.map((product) => {
-      const expiryDate = new Date(product.expiryDate);
-      const formattedDate = `${expiryDate.getDate()}/${
-        expiryDate.getMonth() + 1
-      }/${expiryDate.getFullYear()}`;
+    const currentDate = new Date();
 
-      return {
-        ...product._doc,
-        expiryDate: formattedDate,
-      };
-    });
+    // Update status based on expiry date condition
+    const formattedProducts = await Promise.all(
+      allProducts.map(async (product) => {
+        const expiryDate = new Date(product.expiryDate);
+        const diffInTime = expiryDate.getTime() - currentDate.getTime();
+        const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+
+        let status = "green";
+        if (diffInDays <= 7) {
+          status = "red";
+        } else if (diffInDays <= 40) {
+          status = "yellow";
+        }
+
+        // Update status in the database
+        await Product.findByIdAndUpdate(product._id, { status });
+
+        return {
+          ...product._doc,
+          expiryDate: `${expiryDate.getDate()}/${
+            expiryDate.getMonth() + 1
+          }/${expiryDate.getFullYear()}`,
+          status,
+        };
+      })
+    );
+
     return res.status(200).json({
-      message: "Product deleted successfully",
+      message: "Sign in successful",
       formattedProducts,
       user,
     });
   } catch (err) {
-    throw new Error(err);
+    res.status(500).json({ error: err.message });
   }
 }
 
@@ -201,17 +220,33 @@ export const loginWithGoogle = async (req, res) => {
 
     // Fetch and format the user's products
     const allProducts = await Product.find({ userId: existingUser._id });
-    const formattedProducts = allProducts.map((product) => {
-      const expiryDate = new Date(product.expiryDate);
-      const formattedDate = `${expiryDate.getDate()}/${
-        expiryDate.getMonth() + 1
-      }/${expiryDate.getFullYear()}`;
+    const currentDate = new Date();
 
-      return {
-        ...product._doc,
-        expiryDate: formattedDate,
-      };
-    });
+    const formattedProducts = await Promise.all(
+      allProducts.map(async (product) => {
+        const expiryDate = new Date(product.expiryDate);
+        const diffInTime = expiryDate.getTime() - currentDate.getTime();
+        const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+
+        let status = "green";
+        if (diffInDays <= 7) {
+          status = "red";
+        } else if (diffInDays <= 40) {
+          status = "yellow";
+        }
+
+        // Update status in the database
+        await Product.findByIdAndUpdate(product._id, { status });
+
+        return {
+          ...product._doc,
+          expiryDate: `${expiryDate.getDate()}/${
+            expiryDate.getMonth() + 1
+          }/${expiryDate.getFullYear()}`,
+          status,
+        };
+      })
+    );
 
     return res.status(200).json({
       message: "Login successful",

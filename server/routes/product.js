@@ -12,7 +12,7 @@ import {
   // getBarcodeNumber,
 } from "../controllers/product.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
-import { extractExpiryDateAzure } from "../controllers/temp.js";
+import { extractExpiryDateAzure } from "../controllers/Azure.js";
 const ProductRouter = express.Router();
 
 ProductRouter.get("/prod-name", getProductDetails);

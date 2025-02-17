@@ -242,6 +242,7 @@ export const getAllProducts = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   const { productId } = req.query;
+  console.log(productId);
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);
 

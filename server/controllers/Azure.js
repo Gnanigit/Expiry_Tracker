@@ -3,9 +3,12 @@ import path from "path";
 import { promisify } from "util";
 import axios from "axios";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
 const endpoint = process.env.AZURE_ENDPOINT;
-const apiKey = process.env.AZURE_API_KEY;
+const apiKey_1 = process.env.AZURE_API_KEY_1;
+const apiKey_2 = process.env.AZURE_API_KEY_2;
 
 // Fix for __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -32,19 +35,22 @@ export const extractExpiryDateAzure = async (req, res) => {
     const imagePath = path.join(uploadDir, "image.jpg");
     await writeFileAsync(imagePath, image, "base64");
 
-    console.log("Image saved at:", imagePath);
+    // console.log("Image saved at:", imagePath);
 
     // Send the image to Azure for processing
     const imageBuffer = fs.readFileSync(imagePath);
-    console.log("Image buffer:", imageBuffer);
-
+    // console.log("Image buffer:", imageBuffer);
     const response = await axios.post(
       `${endpoint}/vision/v3.2/read/analyze`,
       imageBuffer,
       {
         headers: {
-          "Ocp-Apim-Subscription-Key": apiKey,
+          "Ocp-Apim-Subscription-Key": apiKey_1,
           "Content-Type": "application/octet-stream",
+        },
+        params: {
+          features: "Read",
+          language: "en",
         },
       }
     );
@@ -62,10 +68,10 @@ export const extractExpiryDateAzure = async (req, res) => {
     let resultReady = false;
 
     while (!resultReady) {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 sec before retrying
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const resultResponse = await axios.get(operationUrl, {
-        headers: { "Ocp-Apim-Subscription-Key": apiKey },
+        headers: { "Ocp-Apim-Subscription-Key": apiKey_1 },
       });
 
       if (resultResponse.data.status === "succeeded") {
@@ -97,6 +103,7 @@ function extractExpiryDateFromText(text) {
     /\b(\d{2})[\/-](\d{2})[\/-](\d{4})\b/, // DD/MM/YYYY or MM/DD/YYYY
     /\b(\d{2})[\/-](\d{4})\b/, // MM/YYYY
     /\b(January|February|March|April|May|June|July|August|September|October|November|December)[\/-](\d{4})\b/, // Month-YYYY
+    /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\/-](\d{4})\b/, // Short month names (Jan-Dec)-YYYY
   ];
 
   let extractedDate = null;

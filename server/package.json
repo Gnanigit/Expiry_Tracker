@@ -11,6 +11,7 @@
   "author": "Gnani",
   "license": "ISC",
   "dependencies": {
+    "@azure-rest/ai-vision-image-analysis": "^1.0.0-beta.3",
     "@dicebear/avatars": "^4.10.8",
     "@dicebear/avatars-identicon-sprites": "^4.10.8",
     "axios": "^1.7.9",

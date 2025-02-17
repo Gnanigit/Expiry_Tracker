@@ -110,7 +110,7 @@ export const uploadImageForProcessing = async (imageUri) => {
       { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Reduce quality to 70%
     );
 
-    console.log("Resized Image URI:", manipulatedImage.uri);
+    // console.log("Resized Image URI:", manipulatedImage.uri);
 
     // Convert resized image to Base64
     const base64Image = await FileSystem.readAsStringAsync(
@@ -129,10 +129,55 @@ export const uploadImageForProcessing = async (imageUri) => {
       }
     );
 
-    console.log("Image processing response:", response.data);
+    // console.log("Image processing response:", response.data);
     return response.data.expiryDate; // Expected response: Extracted expiry date
   } catch (error) {
     console.error("Error in uploadImageForProcessing:", error.message);
     throw new Error("Failed to process image");
+  }
+};
+
+export const deleteProductById = async (productId) => {
+  try {
+    const response = await axios.delete(`${baseURL}/product/delete-product`, {
+      params: { productId },
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in deleteProductById:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to delete product"
+    );
+  }
+};
+
+export const searchProducts = async (query) => {
+  try {
+    const response = await axios.get(`${baseURL}/product/search-products`, {
+      params: { query },
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const priceComparison = async (prodName) => {
+  console.log(`Price comparison`);
+  try {
+    const response = await axios.get(`${baseURL}/product/price-comparison`, {
+      params: { prodName },
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response?.data || error.message);
+    throw error;
   }
 };

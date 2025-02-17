@@ -25,6 +25,7 @@ const History = () => {
   };
 
   const handleDelete = (id) => {
+    console.log(id);
     Alert.alert(
       "Delete Confirmation",
       "Are you sure you want to delete this item?",
@@ -36,7 +37,6 @@ const History = () => {
             try {
               const result = await deleteProductById(id);
               dispatch(removeProduct(id));
-
               dispatch(setUser(result.user));
               router.push("/history");
               Alert.alert("Success", "Product deleted successfully");
