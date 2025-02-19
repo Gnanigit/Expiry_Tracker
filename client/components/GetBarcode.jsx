@@ -298,6 +298,11 @@ const GetBarcode = () => {
     }
   };
 
+  const setManually = () => {
+    setProdNotFound(true);
+    setExpPhotoPicker(true);
+    setProcessing(false);
+  };
   return (
     <ScrollView
       contentContainerStyle={{
@@ -382,12 +387,20 @@ const GetBarcode = () => {
         )}
       </View>
       {!prodNotFound && (
-        <CustomButton
-          title="Scan Bar Code Again"
-          handlePress={() => setScanned(false)}
-          containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
-          disabled={!scanned}
-        />
+        <View className="flex-row ">
+          <CustomButton
+            title="Scan Bar Code Again"
+            handlePress={() => setScanned(false)}
+            containerStyles="w-[55%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200 mr-2"
+            disabled={!scanned}
+          />
+          <CustomButton
+            title="Enter Manually"
+            handlePress={() => setManually()}
+            containerStyles="w-[40%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
+            disabled={scanned}
+          />
+        </View>
       )}
 
       {prodNotFound && (

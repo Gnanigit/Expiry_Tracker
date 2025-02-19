@@ -23,9 +23,8 @@ const GlobalProvider = ({ children }) => {
       try {
         dispatch(setTheme(Appearance.getColorScheme()));
 
-        // Retrieve token from AsyncStorage
+        // Ensure token is fully retrieved before proceeding
         const token = await AsyncStorage.getItem("authToken");
-
         if (!token) {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
@@ -33,23 +32,30 @@ const GlobalProvider = ({ children }) => {
           return;
         }
 
-        // Verify token with the backend
-        const res = await getCurrentUser(token);
-        if (res) {
-          dispatch(setIsLogged(true));
-          dispatch(setUser(res));
+        console.log("Token retrieved:", token); // Debugging
 
-          // Fetch products
-          const products = await getAllProducts(token);
-          dispatch(setProducts(products));
-          const notifications = await getAllNotifications(token);
-          dispatch(setNotifications(notifications));
-        } else {
+        // Fetch user
+        const res = await getCurrentUser(token);
+        if (!res) {
           dispatch(setIsLogged(false));
           dispatch(setUser(null));
+          dispatch(setAuthLoading(false));
+          return;
         }
+
+        dispatch(setIsLogged(true));
+        dispatch(setUser(res));
+
+        // Fetch products and notifications after user is confirmed
+        const [products, notifications] = await Promise.all([
+          getAllProducts(token),
+          getAllNotifications(token),
+        ]);
+
+        dispatch(setProducts(products));
+        dispatch(setNotifications(notifications));
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("Error fetching user/products:", error);
         dispatch(setIsLogged(false));
         dispatch(setUser(null));
       } finally {

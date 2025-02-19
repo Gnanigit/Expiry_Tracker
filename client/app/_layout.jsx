@@ -59,6 +59,7 @@ const RootLayout = () => {
           <Stack.Screen name="(notify)" options={{ headerShown: false }} />
           <Stack.Screen name="(search)" options={{ headerShown: false }} />
           <Stack.Screen name="(settings)" options={{ headerShown: false }} />
+          <Stack.Screen name="(todo)" options={{ headerShown: false }} />
         </Stack>
         <AppContent />
       </GlobalProvider>

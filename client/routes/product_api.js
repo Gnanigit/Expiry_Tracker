@@ -63,19 +63,19 @@ export const createProduct = async (productData) => {
   }
 };
 
-export const getAllProducts = async (token = null) => {
+export const getAllProducts = async (token) => {
   try {
     if (!token) {
       token = await getAuthToken();
     }
-    token = await getAuthToken();
+
     const response = await axios.get(`${baseURL}/product/getAllProducts`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("getting all products");
+
     if (response.data) {
       return response.data;
     } else {
