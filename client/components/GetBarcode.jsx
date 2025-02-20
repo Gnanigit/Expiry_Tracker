@@ -92,13 +92,13 @@ const GetBarcode = () => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(linePosition, {
-          toValue: 157,
-          duration: 1000,
+          toValue: 220,
+          duration: 1300,
           useNativeDriver: true,
         }),
         Animated.timing(linePosition, {
           toValue: 30,
-          duration: 1000,
+          duration: 1300,
           useNativeDriver: true,
         }),
       ])
@@ -116,7 +116,16 @@ const GetBarcode = () => {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return (
+      <View className="justify-center w-full h-full items-center">
+        <LottieView
+          className="w-[150px] h-[150px] mt-3"
+          source={gifs.loading}
+          autoPlay
+          loop
+        />
+      </View>
+    );
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
@@ -378,7 +387,7 @@ const GetBarcode = () => {
               position: "absolute",
               top: 0,
               left: 0,
-              width: "79.8%",
+              width: "80.6%",
               height: 2,
               backgroundColor: "red",
               transform: [{ translateY: linePosition }],
@@ -393,12 +402,14 @@ const GetBarcode = () => {
             handlePress={() => setScanned(false)}
             containerStyles="w-[55%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200 mr-2"
             disabled={!scanned}
+            fontStyles="font-pregular"
           />
           <CustomButton
             title="Enter Manually"
             handlePress={() => setManually()}
             containerStyles="w-[40%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
             disabled={scanned}
+            fontStyles="font-pregular"
           />
         </View>
       )}
@@ -532,6 +543,7 @@ const GetBarcode = () => {
             title="Select Expiry Date Manually"
             containerStyles="w-[70%] rounded-[10px] min-h-[45px] bg-secondary-200"
             handlePress={() => setIsPopupVisible(true)}
+            fontStyles="font-pregular"
           />
 
           <Modal
@@ -557,6 +569,7 @@ const GetBarcode = () => {
                     title="Open Calendar"
                     handlePress={() => setShowPicker(true)}
                     containerStyles="w-full py-3 rounded-md bg-secondary-100 mb-3"
+                    fontStyles="font-pregular"
                   />
 
                   {/* Display Selected Date */}
@@ -566,6 +579,7 @@ const GetBarcode = () => {
                     title="Done"
                     handlePress={() => setIsPopupVisible(false)}
                     containerStyles="w-full py-3 rounded-md bg-secondary-100 mt-5"
+                    fontStyles="font-pregular"
                   />
                 </View>
               </View>
@@ -588,6 +602,7 @@ const GetBarcode = () => {
           title="Add Product"
           handlePress={handleSubmit}
           containerStyles="w-[40%] min-h-[40px] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
+          fontStyles="font-pmedium"
         />
       )}
     </ScrollView>

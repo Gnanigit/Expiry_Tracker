@@ -83,11 +83,15 @@ const BarcodeScanner = ({ onProductScanned }) => {
   return (
     !scanned && (
       <View className="mb-7">
-        <CameraView
-          onBarcodeScanned={handleBarcodeScanned}
-          barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8", "ean12"] }}
-          className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
-        />
+        {!scanned && (
+          <CameraView
+            onBarcodeScanned={handleBarcodeScanned}
+            barcodeScannerSettings={{
+              barcodeTypes: ["ean13", "ean8", "ean12"],
+            }}
+            className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
+          />
+        )}
         <Animated.View
           style={{
             position: "absolute",

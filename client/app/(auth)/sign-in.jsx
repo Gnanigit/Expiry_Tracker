@@ -11,6 +11,7 @@ import { setIsLogged, setUser } from "../../redux/slices/auth";
 import { setProducts } from "../../redux/slices/products";
 import { signIn } from "../../routes/auth_api";
 import { useSelector } from "react-redux";
+import { icons } from "../../constants";
 
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -88,6 +89,7 @@ const SignIn = () => {
             title="Email"
             placeholder="Enter Email..."
             value={form.email}
+            icon={icons.email_icon}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-4  px-2  space-y-0.5"
             titleStyle={`text-sm  ${
@@ -107,6 +109,7 @@ const SignIn = () => {
           <FormField
             title="Password"
             placeholder="Enter Password..."
+            icon={icons.password}
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-4 px-2  space-y-0.5"
@@ -128,6 +131,7 @@ const SignIn = () => {
             title="SIGN IN"
             handlePress={submit}
             containerStyles="w-[50%] rounded-[50px] min-h-[55px] mt-4 bg-secondary-200"
+            fontStyles="font-pmedium"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

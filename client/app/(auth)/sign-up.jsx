@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { signUp } from "../../routes/auth_api";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { icons } from "../../constants";
 
 const SignUp = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -80,6 +81,7 @@ const SignUp = () => {
             title="Username"
             placeholder="Enter Username..."
             value={form.username}
+            icon={icons.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-1.5 px-2  space-y-0.5"
             textStyles={`${
@@ -99,6 +101,7 @@ const SignUp = () => {
           <FormField
             title="Email"
             placeholder="Enter Email..."
+            icon={icons.email_icon}
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-3  px-2  space-y-0.5"
@@ -120,6 +123,7 @@ const SignUp = () => {
             title="Password"
             placeholder="Enter Password..."
             value={form.password}
+            icon={icons.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-3 px-2  space-y-0.5"
             textStyles={`${
@@ -140,6 +144,7 @@ const SignUp = () => {
             title="SIGN UP"
             handlePress={submit}
             containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4 bg-secondary-200"
+            fontStyles="font-pmedium"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

@@ -99,7 +99,16 @@ const FakeOrNot = () => {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting camera permission...</Text>;
+    return (
+      <View className="justify-center w-full h-full items-center">
+        <LottieView
+          className="w-[150px] h-[150px] mt-3"
+          source={gifs.loading}
+          autoPlay
+          loop
+        />
+      </View>
+    );
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
@@ -167,6 +176,7 @@ const FakeOrNot = () => {
         handlePress={() => setScanned(false)}
         containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
         disabled={!scanned}
+        fontStyles="font-pregular"
       />
       {product !== null && (
         <View

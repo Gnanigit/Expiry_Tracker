@@ -234,6 +234,7 @@ const Profile = () => {
               value={formData.email}
               handleChangeText={(value) => handleInputChange("email", value)}
               otherStyles="mb-3"
+              icon={icons.email_icon}
               textStyles={`${
                 theme === "dark" ? "text-gray-100" : "text-black"
               } text-base font-pmedium`}
@@ -252,6 +253,7 @@ const Profile = () => {
               title="First Name"
               placeholder="Add your First Name"
               value={formData.firstName}
+              icon={icons.firstName}
               handleChangeText={(value) =>
                 handleInputChange("firstName", value)
               }
@@ -273,6 +275,7 @@ const Profile = () => {
               title="Last Name"
               placeholder="Add your Last Name"
               value={formData.lastName}
+              icon={icons.lastName}
               handleChangeText={(value) => handleInputChange("lastName", value)}
               otherStyles="mb-3"
               textStyles={`${
@@ -292,6 +295,7 @@ const Profile = () => {
               title="Address"
               placeholder="Add your Address"
               value={formData.address}
+              icon={icons.location}
               handleChangeText={(value) => handleInputChange("address", value)}
               otherStyles="mb-3"
               textStyles={`${
@@ -311,6 +315,7 @@ const Profile = () => {
               title="Pincode"
               placeholder="Add your Pincode"
               value={formData.pincode}
+              icon={icons.pincode}
               handleChangeText={(value) => handleInputChange("pincode", value)}
               otherStyles="mb-3"
               textStyles={`${
@@ -334,6 +339,7 @@ const Profile = () => {
               handlePress={handleUpdate}
               disabled={loading}
               containerStyles="w-[50%] rounded-lg min-h-[45px] mt-2 bg-territory-100 mb-2"
+              fontStyles="font-pmedium"
             />
           )}
         </View>

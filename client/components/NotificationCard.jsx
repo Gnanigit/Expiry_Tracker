@@ -35,8 +35,12 @@ const NotificationCard = ({ notification }) => {
       />
 
       <View className="flex-1">
-        <View className="flex-row justify-center items-center space-x-2">
-          <Text className="text-sm font-pmedium">
+        <View className="flex-row space-x-2 items-center px-1">
+          <Text
+            className={`text-sm font-pmedium ${
+              theme === "dark" ? "text-secondary-darkText" : "text-secondary"
+            }`}
+          >
             {notification.productName}
           </Text>
           <View
@@ -46,21 +50,35 @@ const NotificationCard = ({ notification }) => {
           ></View>
         </View>
 
-        <Text className="text-sm text-gray-600 italic">
+        <Text
+          className={`text-sm text-gray-600 italic ${
+            theme === "dark" ? "text-gray-200" : "text-black-200"
+          }`}
+        >
           {notification.leftDays > 0
             ? `⚠️ Your product ${notification.productName} expires in ${notification.leftDays} days!`
             : `❌ ${notification.productName} has expired on ${notification.expDate}! Please discard it.`}
         </Text>
 
-        <Text className="text-xs text-gray-500 mt-1">
-          🗓️ Expiry Date: {notification.expDate} ({notification.leftDays} days
-          left)
+        <Text
+          className={`text-xs text-gray-500 mt-1 ${
+            theme === "dark" ? "text-gray-100" : "text-black-200"
+          }`}
+        >
+          🗓️ Expiry Date:{" "}
+          <Text className="font-psemibold">
+            {notification.expDate} ({notification.leftDays} days left)
+          </Text>
         </Text>
 
         {/* Status Badge */}
 
         {/* Notification Date */}
-        <Text className="text-xs text-gray-700 mt-2">
+        <Text
+          className={`text-xs text-gray-700 mt-2 ${
+            theme === "dark" ? "text-gray-200" : "text-black-200"
+          }`}
+        >
           📅 {new Date(notification.createdAt).toDateString()}
         </Text>
       </View>

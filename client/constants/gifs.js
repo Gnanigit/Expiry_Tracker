@@ -3,6 +3,7 @@ import processing from "../assets/gifs/processing.json";
 import fake_product from "../assets/gifs/fake_product.json";
 import Processing_exp_date_yellow from "../assets/gifs/Processing_exp_date_yellow.json";
 import Processing_exp_date_blue from "../assets/gifs/Processing_exp_date_blue.json";
+import loading from "../assets/gifs/loading.json";
 
 export default {
   Processing_exp_date_blue,
@@ -10,4 +11,5 @@ export default {
   success,
   processing,
   fake_product,
+  loading,
 };

@@ -34,8 +34,20 @@ import dark_mode from "../assets/icons/dark-mode.png";
 import system from "../assets/icons/system.png";
 import scanner from "../assets/icons/scanner.png";
 import todo from "../assets/icons/todo.png";
+import email_icon from "../assets/icons/email-icon.png";
+import firstName from "../assets/icons/first-name.png";
+import lastName from "../assets/icons/first-name.png";
+import pincode from "../assets/icons/pincode.png";
+import location from "../assets/icons/location.png";
+import password from "../assets/icons/password.png";
 
 export default {
+  password,
+  location,
+  email_icon,
+  firstName,
+  lastName,
+  pincode,
   todo,
   scanner,
   light_mode,

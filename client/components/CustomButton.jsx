@@ -9,6 +9,7 @@ const CustomButton = ({
   isLoading,
   type,
   disabled,
+  fontStyles,
 }) => {
   return (
     <TouchableOpacity
@@ -30,7 +31,7 @@ const CustomButton = ({
       )}
 
       <Text
-        className={`text-primary font-pmedium text-lg ${
+        className={`text-primary ${fontStyles} text-lg ${
           disabled ? "text-gray-400" : "text-primary"
         }`}
       >

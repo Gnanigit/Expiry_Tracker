@@ -12,6 +12,7 @@ const FormField = ({
   titleStyle,
   textStyles,
   inputViewStyle,
+  icon,
   editable = true, // Default is editable
   ...props
 }) => {
@@ -27,9 +28,14 @@ const FormField = ({
     <View className={`${otherStyles}`}>
       <Text className={`${titleStyle}`}>{title}</Text>
       <View
-        className={`${inputViewStyle}`}
+        className={`${inputViewStyle} flex-row justify-center items-center space-x-2`}
         style={{ backgroundColor: boxBackgroundColor, borderWidth: 1.5 }}
       >
+        <Image
+          className="w-5 h-5"
+          source={icon}
+          tintColor="rgba(244, 159, 28, 1)"
+        ></Image>
         <TextInput
           className={`flex-1 ${textStyles}`}
           value={value}
