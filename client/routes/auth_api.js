@@ -30,7 +30,7 @@ export const getCurrentUser = async (token = null) => {
     if (!token) {
       token = await getAuthToken();
     }
-
+    console.log("Current user");
     const response = await axios.get(`${baseURL}/auth/current-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });

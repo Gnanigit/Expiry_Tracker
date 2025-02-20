@@ -68,7 +68,7 @@ export const getAllProducts = async (token) => {
     if (!token) {
       token = await getAuthToken();
     }
-
+    console.log("Get all products");
     const response = await axios.get(`${baseURL}/product/getAllProducts`, {
       headers: {
         "Content-Type": "application/json",

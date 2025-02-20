@@ -47,7 +47,7 @@ export const getAllNotifications = async (token) => {
     if (!token) {
       token = await getAuthToken();
     }
-
+    console.log(`Getting all notifications`);
     const response = await axios.get(`${baseURL}/notify/get-all-notifies`, {
       headers: { Authorization: `Bearer ${token}` },
     });
