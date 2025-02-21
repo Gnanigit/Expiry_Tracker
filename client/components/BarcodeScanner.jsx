@@ -12,22 +12,33 @@ const BarcodeScanner = ({ onProductScanned }) => {
   const [linePosition] = useState(new Animated.Value(30));
 
   useEffect(() => {
+    let isMounted = true;
+    let soundObject;
+
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
+      if (isMounted) setHasPermission(status === "granted");
+    };
+
+    const loadSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(audio.beep);
+        soundObject = sound;
+        if (isMounted) setSound(soundObject);
+      } catch (error) {
+        console.error("Error loading sound:", error);
+      }
     };
 
     getCameraPermissions();
-
-    const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(audio.beep);
-      setSound(sound);
-    };
     loadSound();
 
     return () => {
-      if (sound) {
-        sound.unloadAsync();
+      isMounted = false;
+      if (soundObject) {
+        soundObject
+          .unloadAsync()
+          .catch((error) => console.error("Error unloading sound:", error));
       }
     };
   }, []);

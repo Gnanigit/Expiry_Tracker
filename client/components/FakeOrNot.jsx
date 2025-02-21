@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, Animated, Alert, Image, ScrollView } from "react-native";
 import CustomButton from "./CustomButton";
 import { Camera, CameraView } from "expo-camera";
@@ -17,57 +17,33 @@ const FakeOrNot = () => {
   const [processing, setProcessing] = useState(false);
   const [isFakeProductScannedOnce, setIsFakeProductScannedOnce] =
     useState(false);
-  const handleBarcodeScanned = async ({ type, data }) => {
-    setScanned(true);
-    if (sound) {
-      await sound.replayAsync();
-    }
-    setProcessing(true);
-    handleDone(data);
-  };
-
-  const handleDone = async (code) => {
-    try {
-      const result = await getProductName(code);
-
-      setProduct(result);
-      setProcessing(false);
-      setIsFakeProductScannedOnce(false);
-    } catch (error) {
-      setProduct(null);
-      if (!isFakeProductScannedOnce) {
-        setIsFakeProductScannedOnce(true);
-        Alert.alert(
-          "Fake Product",
-          "The product you selected is fake and was not found in our database. For confirmation, please try scanning again one time."
-        );
-      } else {
-        Alert.alert(
-          "Fake Product",
-          "The product you selected is fake and was not found in our database."
-        );
-      }
-      setProcessing(false);
-    }
-  };
 
   useEffect(() => {
+    let isMounted = true;
+    let soundObject;
+
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
+      if (isMounted) setHasPermission(status === "granted");
+    };
+
+    const loadSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(audio.beep);
+        soundObject = sound;
+        if (isMounted) setSound(soundObject);
+      } catch (error) {
+        console.error("Error loading sound:", error);
+      }
     };
 
     getCameraPermissions();
-
-    const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(audio.beep);
-      setSound(sound);
-    };
     loadSound();
 
     return () => {
-      if (sound) {
-        sound
+      isMounted = false;
+      if (soundObject) {
+        soundObject
           .unloadAsync()
           .catch((error) => console.error("Error unloading sound:", error));
       }
@@ -96,6 +72,42 @@ const FakeOrNot = () => {
         }),
       ])
     ).start();
+  };
+
+  const handleBarcodeScanned = useCallback(
+    async ({ type, data }) => {
+      setScanned(true);
+      if (sound) {
+        await sound.replayAsync(); // Play the beep sound
+      }
+      setProcessing(true);
+      handleDone(data);
+    },
+    [sound]
+  );
+
+  const handleDone = async (code) => {
+    try {
+      const result = await getProductName(code);
+      setProduct(result);
+      setProcessing(false);
+      setIsFakeProductScannedOnce(false);
+    } catch (error) {
+      setProduct(null);
+      if (!isFakeProductScannedOnce) {
+        setIsFakeProductScannedOnce(true);
+        Alert.alert(
+          "Fake Product",
+          "The product you selected is fake. Try scanning again to confirm."
+        );
+      } else {
+        Alert.alert(
+          "Fake Product",
+          "This product is not found in our database."
+        );
+      }
+      setProcessing(false);
+    }
   };
 
   if (hasPermission === null) {
@@ -129,9 +141,7 @@ const FakeOrNot = () => {
         {!scanned ? (
           <CameraView
             onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ["ean13", "ean8"],
-            }}
+            barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8"] }}
             className="w-[300px] h-[230px] mt-3 rounded-2xl relative"
           />
         ) : processing ? (
