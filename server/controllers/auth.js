@@ -105,6 +105,7 @@ export async function signIn(req, res) {
 }
 
 export const getCurrentUser = async (req, res) => {
+  console.log(req.body);
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized, user not found" });
   }

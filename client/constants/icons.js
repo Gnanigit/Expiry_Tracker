@@ -40,8 +40,17 @@ import lastName from "../assets/icons/first-name.png";
 import pincode from "../assets/icons/pincode.png";
 import location from "../assets/icons/location.png";
 import password from "../assets/icons/password.png";
+import play from "../assets/icons/play.png";
+import pause from "../assets/icons/pause.png";
+import speaker_off from "../assets/icons/speaker_off.png";
+import speaker_on from "../assets/icons/speaker_on.png";
 
 export default {
+  play,
+  pause,
+  speaker_off,
+  speaker_on,
+
   password,
   location,
   email_icon,

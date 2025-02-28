@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, Animated, Alert, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Animated,
+  Alert,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import CustomButton from "./CustomButton";
 import { Camera, CameraView } from "expo-camera";
 import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
 import { audio } from "../constants";
 import { getProductName } from "../routes/product_api";
-import { gifs } from "../constants";
+import { gifs, icons } from "../constants";
+import * as Speech from "expo-speech";
+import { useSelector } from "react-redux";
 
 const FakeOrNot = () => {
   const [sound, setSound] = useState(null);
@@ -17,7 +27,10 @@ const FakeOrNot = () => {
   const [processing, setProcessing] = useState(false);
   const [isFakeProductScannedOnce, setIsFakeProductScannedOnce] =
     useState(false);
-
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [speechText, setSpeechText] = useState("");
+  const { theme } = useSelector((state) => state.theme);
   useEffect(() => {
     let isMounted = true;
     let soundObject;
@@ -78,7 +91,7 @@ const FakeOrNot = () => {
     async ({ type, data }) => {
       setScanned(true);
       if (sound) {
-        await sound.replayAsync(); // Play the beep sound
+        await sound.replayAsync();
       }
       setProcessing(true);
       handleDone(data);
@@ -89,6 +102,7 @@ const FakeOrNot = () => {
   const handleDone = async (code) => {
     try {
       const result = await getProductName(code);
+      setSpeechText(result);
       setProduct(result);
       setProcessing(false);
       setIsFakeProductScannedOnce(false);
@@ -125,6 +139,56 @@ const FakeOrNot = () => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  // text to speech
+  // const speak = () => {
+  //   console.log(speechText);
+  //   const content = `Product name: ${speechText.name} Category: ${
+  //     speechText.category || "Not specified"
+  //   } Description: ${speechText.description}`;
+  //   const thingToSay = content;
+  //   Speech.speak(thingToSay);
+  // };
+
+  const speak = () => {
+    const content = `Product name: ${speechText.name} Category: ${
+      speechText.category || "Not specified"
+    } Description: ${speechText.description}`;
+    Speech.speak(content, {
+      onDone: () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      },
+      onStopped: () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      },
+    });
+    setIsSpeaking(true);
+    setIsPaused(false);
+  };
+  const stopSpeech = () => {
+    Speech.stop();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  // Pause speech (iOS only)
+  const pauseSpeech = () => {
+    Speech.pause();
+    setIsPaused(true);
+  };
+
+  // Resume speech (iOS only)
+  const resumeSpeech = () => {
+    Speech.resume();
+    setIsPaused(false);
+  };
+
+  const backgroundColor =
+    theme === "dark" ? "rgba(217, 202, 246, 0.19)" : "rgba(141, 80, 255, 0.34)";
+  const borderColor =
+    theme === "dark" ? "rgba(163, 121, 249, 0.39)" : "rgba(141, 80, 255, 0.59)";
 
   return (
     <ScrollView
@@ -180,14 +244,42 @@ const FakeOrNot = () => {
           />
         )}
       </View>
+      <View className="items-center justify-around w-full flex-row">
+        <CustomButton
+          title="Scan Bar Code Again"
+          handlePress={() => setScanned(false)}
+          containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
+          disabled={!scanned}
+          fontStyles="font-pregular"
+        />
+        {scanned && (
+          <View
+            className="flex-row justify-around w-[100px] bg-secondary h-[80%] items-center mt-3 rounded-2xl"
+            style={{ borderWidth: 1, borderColor: "#ccc" }}
+            pointerEvents={scanned ? "auto" : "none"}
+          >
+            {/* Toggle Speaker On/Off */}
+            <TouchableOpacity onPress={isSpeaking ? stopSpeech : speak}>
+              <Image
+                className="w-6 h-6"
+                source={isSpeaking ? icons.speaker_off : icons.speaker_on}
+                style={{ tintColor: "#F49F1C" }}
+              />
+            </TouchableOpacity>
 
-      <CustomButton
-        title="Scan Bar Code Again"
-        handlePress={() => setScanned(false)}
-        containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
-        disabled={!scanned}
-        fontStyles="font-pregular"
-      />
+            {/* Toggle Pause/Play */}
+            {isSpeaking && (
+              <TouchableOpacity onPress={isPaused ? resumeSpeech : pauseSpeech}>
+                <Image
+                  className="w-6 h-6"
+                  source={isPaused ? icons.play : icons.pause}
+                  style={{ tintColor: "#F49F1C" }}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </View>
       {product !== null && (
         <View
           className="bg-territory-100-40 rounded-2xl items-center mt-5 mx-2 px-2 py-2"
