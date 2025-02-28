@@ -30,11 +30,11 @@ export const getCurrentUser = async (token = null) => {
     if (!token) {
       token = await getAuthToken();
     }
-    console.log("Got token");
+
     const response = await axios.get(`${baseURL}/auth/current-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("Current user");
+
     return response.data;
   } catch (error) {
     console.error("Auto-login error:", error);

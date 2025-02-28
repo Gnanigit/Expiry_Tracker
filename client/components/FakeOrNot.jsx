@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import CustomButton from "./CustomButton";
 import { Camera, CameraView } from "expo-camera";
@@ -17,6 +18,9 @@ import { getProductName } from "../routes/product_api";
 import { gifs, icons } from "../constants";
 import * as Speech from "expo-speech";
 import { useSelector } from "react-redux";
+import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
+import languages from "../utils/languages";
 
 const FakeOrNot = () => {
   const [sound, setSound] = useState(null);
@@ -31,6 +35,9 @@ const FakeOrNot = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [speechText, setSpeechText] = useState("");
   const { theme } = useSelector((state) => state.theme);
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     let isMounted = true;
     let soundObject;
@@ -140,21 +147,13 @@ const FakeOrNot = () => {
     return <Text>No access to camera</Text>;
   }
 
-  // text to speech
-  // const speak = () => {
-  //   console.log(speechText);
-  //   const content = `Product name: ${speechText.name} Category: ${
-  //     speechText.category || "Not specified"
-  //   } Description: ${speechText.description}`;
-  //   const thingToSay = content;
-  //   Speech.speak(thingToSay);
-  // };
-
   const speak = () => {
-    const content = `Product name: ${speechText.name} Category: ${
+    const content = `Product name: ${speechText.name} and Category: ${
       speechText.category || "Not specified"
-    } Description: ${speechText.description}`;
+    } and Description: ${speechText.description}`;
+
     Speech.speak(content, {
+      language: selectedLanguage,
       onDone: () => {
         setIsSpeaking(false);
         setIsPaused(false);
@@ -164,9 +163,11 @@ const FakeOrNot = () => {
         setIsPaused(false);
       },
     });
+
     setIsSpeaking(true);
     setIsPaused(false);
   };
+
   const stopSpeech = () => {
     Speech.stop();
     setIsSpeaking(false);
@@ -248,35 +249,66 @@ const FakeOrNot = () => {
         <CustomButton
           title="Scan Bar Code Again"
           handlePress={() => setScanned(false)}
-          containerStyles="w-[60%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
+          containerStyles="w-[52%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
           disabled={!scanned}
-          fontStyles="font-pregular"
+          fontStyles="font-psmall"
         />
         {scanned && (
-          <View
-            className="flex-row justify-around w-[100px] bg-secondary h-[80%] items-center mt-3 rounded-2xl"
-            style={{ borderWidth: 1, borderColor: "#ccc" }}
-            pointerEvents={scanned ? "auto" : "none"}
-          >
-            {/* Toggle Speaker On/Off */}
+          <View className="flex-row justify-between w-[180px] bg-secondary h-[70%] items-center mt-3 rounded-xl px-2">
             <TouchableOpacity onPress={isSpeaking ? stopSpeech : speak}>
               <Image
                 className="w-6 h-6"
-                source={isSpeaking ? icons.speaker_off : icons.speaker_on}
+                source={isSpeaking ? icons.speaker_on : icons.speaker_off}
                 style={{ tintColor: "#F49F1C" }}
               />
             </TouchableOpacity>
 
-            {/* Toggle Pause/Play */}
-            {isSpeaking && (
-              <TouchableOpacity onPress={isPaused ? resumeSpeech : pauseSpeech}>
-                <Image
-                  className="w-6 h-6"
-                  source={isPaused ? icons.play : icons.pause}
-                  style={{ tintColor: "#F49F1C" }}
-                />
-              </TouchableOpacity>
-            )}
+            <View className="flex-1 ml-2">
+              <DropDownPicker
+                open={open}
+                value={selectedLanguage}
+                items={languages}
+                setOpen={setOpen}
+                setValue={setSelectedLanguage}
+                searchable={true}
+                placeholder="Select Language"
+                listMode="MODAL"
+                modalProps={{ animationType: "slide", bottomOffset: 50 }}
+                searchPlaceholder="Search for a language..."
+                style={{
+                  borderWidth: 0,
+                  backgroundColor: "transparent",
+                  borderRadius: 12,
+                  width: "100%",
+                  shadowOpacity: 0.2,
+                  shadowRadius: 4,
+                }}
+                textStyle={{
+                  color: "rgba(244, 159, 28, 1)",
+                  fontWeight: "500",
+                  fontSize: 16,
+                }}
+                searchContainerStyle={{
+                  borderBottomWidth: 0,
+                  paddingVertical: 10,
+                }}
+                searchTextInputStyle={{
+                  backgroundColor: "#F4F4F4",
+                  color: "#000000",
+                  borderRadius: 8,
+                  paddingVertical: 15,
+                  paddingHorizontal: 15,
+                  fontSize: 14,
+                  fontWeight: "500",
+                  borderWidth: 1,
+                  borderColor: "#ccc",
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  shadowOffset: { width: 0, height: 1 },
+                }}
+              />
+            </View>
           </View>
         )}
       </View>
