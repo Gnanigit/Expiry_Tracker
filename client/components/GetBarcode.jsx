@@ -289,10 +289,10 @@ const GetBarcode = () => {
         setExpiryCameraVisible(false);
         setExpPhotoDone(true);
         // const expiryDate = await extractExpiryDate(photo.uri);
-        console.log("ready");
+        // console.log("ready");
         // const expiryDate = await extractExpiryDateAzure(photo.uri);
         const expiryDate = await uploadImageForProcessing(photo.uri);
-        console.log("Detected Expiry Date:", expiryDate);
+        // console.log("Detected Expiry Date:", expiryDate);
         setExpPhotoDone(false);
         // const expiryDate = "12/04/2025";
         if (expiryDate === "Failed to extract expiry date.") {

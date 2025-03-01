@@ -91,7 +91,7 @@ export const getAllProducts = async (token) => {
 
 export const uploadImageForProcessing = async (imageUri) => {
   try {
-    console.log("Original Image URI:", imageUri);
+    // console.log("Original Image URI:", imageUri);
     const token = await getAuthToken();
 
     // Resize & compress the image using Expo Image Manipulator
@@ -120,7 +120,7 @@ export const uploadImageForProcessing = async (imageUri) => {
       }
     );
 
-    return response.data.expiryDate; // Expected response: Extracted expiry date
+    return response.data.expiryDate;
   } catch (error) {
     console.error("Error in uploadImageForProcessing:", error.message);
     throw new Error("Failed to process image");
