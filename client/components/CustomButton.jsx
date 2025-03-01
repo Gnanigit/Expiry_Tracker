@@ -31,7 +31,7 @@ const CustomButton = ({
       )}
 
       <Text
-        className={`text-primary ${fontStyles} text-lg ${
+        className={`text-primary ${fontStyles}  ${
           disabled ? "text-gray-400" : "text-primary"
         }`}
       >

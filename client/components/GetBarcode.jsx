@@ -413,14 +413,14 @@ const GetBarcode = () => {
             handlePress={() => setScanned(false)}
             containerStyles="w-[55%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200 mr-2"
             disabled={!scanned}
-            fontStyles="font-pregular"
+            fontStyles="font-pregular text-lg"
           />
           <CustomButton
             title="Enter Manually"
             handlePress={() => setManually()}
             containerStyles="w-[40%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
             disabled={scanned}
-            fontStyles="font-pregular"
+            fontStyles="font-pregular text-lg"
           />
         </View>
       )}
@@ -590,7 +590,7 @@ const GetBarcode = () => {
                     title="Done"
                     handlePress={() => setIsPopupVisible(false)}
                     containerStyles="w-full py-3 rounded-md bg-secondary-100 mt-5"
-                    fontStyles="font-pregular"
+                    fontStyles="font-pregular text-lg"
                   />
                 </View>
               </View>

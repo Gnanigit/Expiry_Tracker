@@ -30,11 +30,10 @@ export const getCurrentUser = async (token = null) => {
     if (!token) {
       token = await getAuthToken();
     }
-
     const response = await axios.get(`${baseURL}/auth/current-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
+    console.log("getting current user");
     return response.data;
   } catch (error) {
     console.error("Auto-login error:", error);
@@ -43,7 +42,6 @@ export const getCurrentUser = async (token = null) => {
 };
 
 export const signIn = async (email, password) => {
-  console.log("signIn");
   try {
     const response = await axios.post(`${baseURL}/auth/sign-in`, {
       email,
@@ -51,8 +49,6 @@ export const signIn = async (email, password) => {
     });
 
     const { token, user, formattedProducts } = response.data;
-
-    console.log("signing in..");
     await AsyncStorage.setItem("authToken", token);
     return response.data;
   } catch (error) {
@@ -113,10 +109,9 @@ export const loginWithGoogle = async (
       google,
     });
     const { token, user, formattedProducts } = response.data;
-    console.log("google lo");
-    console.log("signing in..");
+
     await AsyncStorage.setItem("authToken", token);
-    console.log("login with Google");
+
     return response.data;
   } catch (error) {
     throw error;

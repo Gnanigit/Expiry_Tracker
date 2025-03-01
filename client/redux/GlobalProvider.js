@@ -32,10 +32,9 @@ const GlobalProvider = ({ children }) => {
           return;
         }
 
-        const userPromise = getCurrentUser(token);
-        const productsPromise = getAllProducts(token);
-        const notificationsPromise = getAllNotifications(token);
-
+        const userPromise = await getCurrentUser(token);
+        const productsPromise = await getAllProducts(token);
+        const notificationsPromise = await getAllNotifications(token);
         const [user, products, notifications] = await Promise.all([
           userPromise,
           productsPromise,

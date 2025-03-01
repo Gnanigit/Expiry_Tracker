@@ -88,7 +88,7 @@ export const extractExpiryDateAzure = async (req, res) => {
 
     // Step 4: Extract expiry dates from text
     const expiryDate = extractExpiryDateFromText(extractedText);
-    console.log("Formatted Expiry Date:", expiryDate);
+    // console.log("Formatted Expiry Date:", expiryDate);
 
     res.json({ expiryDate });
   } catch (error) {
@@ -100,28 +100,36 @@ export const extractExpiryDateAzure = async (req, res) => {
 // Function to extract expiry dates from text
 function extractExpiryDateFromText(text) {
   const datePatterns = [
-    /\b(\d{2})[\/-](\d{2})[\/-](\d{4})\b/, // DD/MM/YYYY or MM/DD/YYYY
-    /\b(\d{2})[\/-](\d{4})\b/, // MM/YYYY
-    /\b(January|February|March|April|May|June|July|August|September|October|November|December)[\/-](\d{4})\b/, // Month-YYYY
-    /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\/-](\d{4})\b/, // Short month names (Jan-Dec)-YYYY
+    /\b(\d{2})[\/-](\d{2})[\/-](\d{4})\b/g, // DD/MM/YYYY or MM/DD/YYYY
+    /\b(\d{2})[\/-](\d{2})[\/-](\d{2})\b/g, // DD-MM-YY
+    /\b(\d{2})[\/-](\d{4})\b/g, // MM-YYYY
+    /\b(January|February|March|April|May|June|July|August|September|October|November|December)[\/-](\d{4})\b/g, // Month-YYYY
+    /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\/-](\d{4})\b/g, // Short month names (Jan-Dec)-YYYY
   ];
 
-  let extractedDate = null;
+  let extractedDates = [];
 
   for (const pattern of datePatterns) {
-    const match = text.match(pattern);
-    if (match) {
+    const matches = text.matchAll(pattern);
+    for (const match of matches) {
+      // console.log(match);
       if (match.length === 4) {
-        extractedDate = new Date(`${match[3]}-${match[2]}-${match[1]}`);
-      } else if (match.length === 3) {
-        extractedDate = new Date(`${match[2]}-${match[1]}-15`);
+        extractedDates.push(new Date(`${match[3]}-${match[2]}-${match[1]}`));
+      } else if (match.length === 3 && match[1].length === 2) {
+        // If MM-YYYY, assume the date is the 1st of the month
+        extractedDates.push(new Date(`${match[2]}-${match[1]}-01`));
       }
     }
+    break;
   }
 
-  return extractedDate
-    ? `${extractedDate.getDate()}/${
-        extractedDate.getMonth() + 1
-      }/${extractedDate.getFullYear()}`
-    : "Not found";
+  if (extractedDates.length === 0) return "Not found";
+
+  // If there are two dates (Manufacture and Expiry), return the 2nd one
+  let expiryDate =
+    extractedDates.length > 1 ? extractedDates[1] : extractedDates[0];
+
+  return `${expiryDate.getDate()}/${
+    expiryDate.getMonth() + 1
+  }/${expiryDate.getFullYear()}`;
 }

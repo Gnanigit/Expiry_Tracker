@@ -107,7 +107,7 @@ const App = () => {
             type="email"
             handlePress={() => router.push("/sign-in")}
             containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
-            fontStyles="font-pmedium"
+            fontStyles="font-pmedium text-lg"
           />
           <View className="flex-row items-center my-2">
             <View className="flex-1 h-[2px] bg-territory-100 mx-2" />
@@ -117,7 +117,7 @@ const App = () => {
           <CustomButton
             type="google"
             title="Continue with Google"
-            fontStyles="font-pmedium"
+            fontStyles="font-pmedium text-lg"
             handlePress={() =>
               onGoogleButtonPress().then(() =>
                 console.log("Continue with Google")

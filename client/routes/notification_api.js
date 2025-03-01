@@ -51,7 +51,7 @@ export const getAllNotifications = async (token) => {
     const response = await axios.get(`${baseURL}/notify/get-all-notifies`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
+    console.log("getting all notifications");
     return response.data;
   } catch (error) {
     console.error(

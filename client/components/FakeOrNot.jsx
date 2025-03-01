@@ -18,9 +18,9 @@ import { getProductName } from "../routes/product_api";
 import { gifs, icons } from "../constants";
 import * as Speech from "expo-speech";
 import { useSelector } from "react-redux";
-import RNPickerSelect from "react-native-picker-select";
 import DropDownPicker from "react-native-dropdown-picker";
 import languages from "../utils/languages";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const FakeOrNot = () => {
   const [sound, setSound] = useState(null);
@@ -187,7 +187,9 @@ const FakeOrNot = () => {
   };
 
   const backgroundColor =
-    theme === "dark" ? "rgba(217, 202, 246, 0.19)" : "rgba(141, 80, 255, 0.34)";
+    theme === "dark"
+      ? "rgba(217, 202, 246, 0.19)"
+      : "rgba(225, 209, 255, 0.34)";
   const borderColor =
     theme === "dark" ? "rgba(163, 121, 249, 0.39)" : "rgba(141, 80, 255, 0.59)";
 
@@ -249,21 +251,27 @@ const FakeOrNot = () => {
         <CustomButton
           title="Scan Bar Code Again"
           handlePress={() => setScanned(false)}
-          containerStyles="w-[52%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
+          containerStyles="w-[45%] rounded-[10px] min-h-[40px] mt-3 bg-secondary-200"
           disabled={!scanned}
-          fontStyles="font-psmall"
+          fontStyles="font-psemibold text-sm"
         />
         {scanned && (
-          <View className="flex-row justify-between w-[180px] bg-secondary h-[70%] items-center mt-3 rounded-xl px-2">
+          <View
+            className="flex-row justify-between w-[160px] h-[70%] items-center mt-3 rounded-xl px-2"
+            style={{
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              borderWidth: 1,
+            }}
+          >
             <TouchableOpacity onPress={isSpeaking ? stopSpeech : speak}>
               <Image
-                className="w-6 h-6"
+                style={styles.image}
                 source={isSpeaking ? icons.speaker_on : icons.speaker_off}
-                style={{ tintColor: "#F49F1C" }}
               />
             </TouchableOpacity>
 
-            <View className="flex-1 ml-2">
+            <View style={styles.dropdownContainer}>
               <DropDownPicker
                 open={open}
                 value={selectedLanguage}
@@ -275,38 +283,27 @@ const FakeOrNot = () => {
                 listMode="MODAL"
                 modalProps={{ animationType: "slide", bottomOffset: 50 }}
                 searchPlaceholder="Search for a language..."
-                style={{
-                  borderWidth: 0,
-                  backgroundColor: "transparent",
-                  borderRadius: 12,
-                  width: "100%",
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
+                style={styles.dropdownStyle}
+                textStyle={styles.textStyle}
+                searchContainerStyle={styles.searchContainerStyle}
+                searchTextInputStyle={styles.searchTextInputStyle}
+                modalContentContainerStyle={{
+                  backgroundColor: backgroundColor,
                 }}
-                textStyle={{
-                  color: "rgba(244, 159, 28, 1)",
-                  fontWeight: "500",
-                  fontSize: 16,
-                }}
-                searchContainerStyle={{
-                  borderBottomWidth: 0,
-                  paddingVertical: 10,
-                }}
-                searchTextInputStyle={{
-                  backgroundColor: "#F4F4F4",
-                  color: "#000000",
-                  borderRadius: 8,
-                  paddingVertical: 15,
-                  paddingHorizontal: 15,
-                  fontSize: 14,
-                  fontWeight: "500",
-                  borderWidth: 1,
-                  borderColor: "#ccc",
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 4,
-                  shadowOffset: { width: 0, height: 1 },
-                }}
+                ArrowDownIconComponent={() => (
+                  <MaterialIcons
+                    name="keyboard-arrow-down"
+                    size={24}
+                    color="rgba(244, 159, 28, 1)"
+                  />
+                )}
+                ArrowUpIconComponent={() => (
+                  <MaterialIcons
+                    name="keyboard-arrow-up"
+                    size={24}
+                    color="rgba(244, 159, 28, 1)"
+                  />
+                )}
               />
             </View>
           </View>
@@ -393,5 +390,54 @@ const FakeOrNot = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 24,
+    height: 24,
+    marginLeft: 8,
+    tintColor: "rgba(244, 159, 28, 1)",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  dropdownContainer: {
+    flex: 1,
+    marginLeft: 5,
+  },
+  dropdownStyle: {
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    width: "100%",
+  },
+  textStyle: {
+    color: "rgba(244, 159, 28, 1)",
+    fontWeight: "bold",
+    fontSize: 15,
+    textShadowColor: "rgba(0, 0, 0, 0.1)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  searchContainerStyle: {
+    borderBottomWidth: 0,
+    paddingVertical: 10,
+  },
+  searchTextInputStyle: {
+    backgroundColor: "rgba(217, 202, 246, 0.19)",
+    color: "#000000",
+    borderRadius: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    fontSize: 15,
+    fontWeight: "bold",
+    borderWidth: 1,
+    borderColor: "rgba(163, 121, 249, 0.39)sss",
+    shadowColor: "rgba(0, 0, 0, 0.04)",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+  },
+});
 
 export default FakeOrNot;

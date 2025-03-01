@@ -75,7 +75,7 @@ export const getAllProducts = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    console.log("getAllProducts");
     if (response.data) {
       return response.data;
     } else {

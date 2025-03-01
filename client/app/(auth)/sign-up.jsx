@@ -144,7 +144,7 @@ const SignUp = () => {
             title="SIGN UP"
             handlePress={submit}
             containerStyles="w-[42%] rounded-[50px] min-h-[55px] mt-4 bg-secondary-200"
-            fontStyles="font-pmedium"
+            fontStyles="font-pmedium text-lg"
           />
           <View className="justify-center gap-2 pt-4 flex-row">
             <Text className="text-lg text-gray-300 font-pregular">

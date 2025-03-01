@@ -3,7 +3,7 @@ import Notification from "../models/notify.js";
 export const addNotification = async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log(userId);
+    // console.log(userId);
     const { productId, productImage, productName, leftDays, expDate, status } =
       req.body;
     console.log(productId, productImage, productName, leftDays);
@@ -18,7 +18,7 @@ export const addNotification = async (req, res) => {
     });
 
     await newNotification.save();
-    console.log(newNotification);
+    // console.log(newNotification);
 
     res.status(201).json({ success: true, notification: newNotification });
   } catch (error) {
@@ -30,7 +30,7 @@ export const addNotification = async (req, res) => {
 export const getAllNotifications = async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log("Fetching notifications for user:", userId);
+    // console.log("Fetching notifications for user:", userId);
 
     const notifications = await Notification.find({ userId }).sort({
       createdAt: -1,
