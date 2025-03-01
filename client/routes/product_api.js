@@ -178,3 +178,34 @@ export const priceComparison = async (prodName) => {
     throw error;
   }
 };
+
+export const getSpeechToText = async (audioUri) => {
+  try {
+    console.log("Uploading audio file:", audioUri);
+
+    const formData = new FormData();
+    formData.append("file", {
+      uri: audioUri,
+      name: "audio.m4a",
+      type: "audio/mp4",
+    });
+
+    const response = await axios.post(
+      `${baseURL}/product/speech-to-text`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data.text || "No text recognized";
+  } catch (error) {
+    console.error(
+      "Error uploading audio:",
+      error.response?.data || error.message
+    );
+    return "Error processing speech";
+  }
+};
