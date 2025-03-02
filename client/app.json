@@ -52,6 +52,12 @@
           "recordAudioAndroid": true
         }
       ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
       ["@react-native-google-signin/google-signin"]
     ],
     "extra": {

@@ -30,10 +30,11 @@ export const getCurrentUser = async (token = null) => {
     if (!token) {
       token = await getAuthToken();
     }
+
     const response = await axios.get(`${baseURL}/auth/current-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("getting current user");
+
     return response.data;
   } catch (error) {
     console.error("Auto-login error:", error);
@@ -66,7 +67,7 @@ export const logout = async (dispatch) => {
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    await AsyncStorage.removeItem("authToken"); // Clear token from storage
+    await AsyncStorage.removeItem("authToken");
     dispatch(setIsLogged(false));
     dispatch(setUser(null));
     dispatch(clearProducts());
@@ -100,6 +101,7 @@ export const loginWithGoogle = async (
   google = true
 ) => {
   try {
+    console.log(`loginWithGoogle`);
     const response = await axios.post(`${baseURL}/auth/google-login`, {
       firstName,
       lastName,
@@ -108,6 +110,7 @@ export const loginWithGoogle = async (
       password,
       google,
     });
+    console.log(`loginWith`);
     const { token, user, formattedProducts } = response.data;
 
     await AsyncStorage.setItem("authToken", token);

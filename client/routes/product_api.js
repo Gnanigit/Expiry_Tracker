@@ -68,14 +68,14 @@ export const getAllProducts = async (token) => {
     if (!token) {
       token = await getAuthToken();
     }
-
+    console.log("getAllProducts");
     const response = await axios.get(`${baseURL}/product/getAllProducts`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("getAllProducts");
+    console.log("getAllProduct");
     if (response.data) {
       return response.data;
     } else {
@@ -179,27 +179,44 @@ export const priceComparison = async (prodName) => {
   }
 };
 
+const convertAudioToBase64 = async (audioUri) => {
+  try {
+    console.log("Converting audio to Base64:", audioUri);
+
+    // Read audio file and convert to Base64
+    const base64Audio = await FileSystem.readAsStringAsync(audioUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    return base64Audio;
+  } catch (error) {
+    console.error("Error converting audio to Base64:", error);
+    return null;
+  }
+};
+
+// Upload audio to server
 export const getSpeechToText = async (audioUri) => {
   try {
     console.log("Uploading audio file:", audioUri);
 
-    const formData = new FormData();
-    formData.append("file", {
-      uri: audioUri,
-      name: "audio.m4a",
-      type: "audio/mp4",
-    });
+    const base64Audio = await convertAudioToBase64(audioUri);
+    if (!base64Audio) {
+      return "Error converting audio to Base64";
+    }
 
     const response = await axios.post(
       `${baseURL}/product/speech-to-text`,
-      formData,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        audioBase64: base64Audio,
+        format: "wav", // Ensure backend knows it's WAV
+      },
+      {
+        headers: { "Content-Type": "application/json" },
       }
     );
 
+    console.log("Server response:", response.data);
     return response.data.text || "No text recognized";
   } catch (error) {
     console.error(

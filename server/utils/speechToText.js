@@ -1,107 +1,92 @@
-import speechSdk from "microsoft-cognitiveservices-speech-sdk";
-import dotenv from "dotenv";
+import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import fs from "fs";
 import path from "path";
-import multer from "multer";
-import { Readable } from "stream";
+import { fileURLToPath } from "url";
+import util from "util";
+import ffmpeg from "fluent-ffmpeg";
+import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 
-dotenv.config();
+// Set ffmpeg path
+ffmpeg.setFfmpegPath(ffmpegPath.path);
 
-// Multer for handling file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = "uploads/";
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
-export const upload = multer({ storage });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Function to convert file to stream
-const fileToStream = (filePath) => {
-  const buffer = fs.readFileSync(filePath);
-  return Readable.from(buffer);
-};
+// Promisify file operations
+const writeFile = util.promisify(fs.writeFile);
+const unlinkFile = util.promisify(fs.unlink);
 
-// Speech-to-Text Processing
 export const speechToText = async (req, res) => {
-  try {
-    console.log("Received speech request");
+  const { audioUrl, format } = req.body; // Format can be "mp3", "mp4", etc.
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+  if (!audioUrl) {
+    return res.status(422).json({ error: "No audio data provided." });
+  }
+
+  try {
+    const uploadsDir = path.join(__dirname, "../uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
     }
 
-    const audioFilePath = path.join(process.cwd(), req.file.path);
-    console.log("Processing audio:", audioFilePath);
+    // Save the received file
+    const inputFilePath = path.join(uploadsDir, `input_audio.${format}`);
+    const audioBuffer = Buffer.from(audioUrl, "base64");
+    await writeFile(inputFilePath, audioBuffer);
 
-    // Azure Speech SDK Configuration
-    const speechConfig = speechSdk.SpeechConfig.fromSubscription(
+    // Ensure file exists and is not empty
+    const stats = fs.statSync(inputFilePath);
+    if (stats.size === 0) {
+      await unlinkFile(inputFilePath);
+      return res.status(400).json({ error: "Audio file is empty." });
+    }
+
+    // Convert to WAV if needed
+    let finalFilePath = inputFilePath;
+
+    if (format !== "wav" || format === "wav") {
+      finalFilePath = path.join(uploadsDir, "converted_audio.wav");
+      await new Promise((resolve, reject) => {
+        ffmpeg(inputFilePath)
+          .toFormat("wav")
+          .audioFrequency(16000) // Set sample rate to 16kHz (recommended by Azure)
+          .on("end", resolve)
+          .on("error", reject)
+          .save(finalFilePath);
+      });
+      await unlinkFile(inputFilePath); // Remove original file
+    }
+
+    // Configure Azure Speech SDK
+    const speechConfig = sdk.SpeechConfig.fromSubscription(
       process.env.AZURE_SPEECH_TO_TEXT_API_KEY_1,
       process.env.AZURE_REGION
     );
+
     speechConfig.speechRecognitionLanguage = "en-US";
-
-    // Increase silence timeout to avoid early cut-offs
-    speechConfig.setProperty(
-      speechSdk.PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs,
-      "10000"
-    );
-    speechConfig.setProperty(
-      speechSdk.PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs,
-      "5000"
+    const audioConfig = sdk.AudioConfig.fromWavFileInput(
+      fs.readFileSync(finalFilePath)
     );
 
-    // Convert audio file to a stream and use fromStreamInput()
-    const audioStream = fileToStream(audioFilePath);
-    const pushStream = speechSdk.AudioInputStream.createPushStream();
-    audioStream.on("data", (chunk) => pushStream.write(chunk));
-    audioStream.on("end", () => pushStream.close());
-
-    const audioConfig = speechSdk.AudioConfig.fromStreamInput(pushStream);
-    const recognizer = new speechSdk.SpeechRecognizer(
+    const speechRecognizer = new sdk.SpeechRecognizer(
       speechConfig,
       audioConfig
     );
 
-    console.log("Recognizer initialized, starting recognition...");
-
-    recognizer.recognizeOnceAsync((result) => {
-      console.log("Full Azure Response:", JSON.stringify(result, null, 2));
-
-      fs.unlinkSync(audioFilePath); // Delete file after processing
-
-      if (result.reason === speechSdk.ResultReason.RecognizedSpeech) {
-        console.log(`Recognized: ${result.text}`);
+    // Perform speech recognition
+    speechRecognizer.recognizeOnceAsync((result) => {
+      if (result.reason === sdk.ResultReason.RecognizedSpeech) {
         res.json({ text: result.text });
-      } else if (result.reason === speechSdk.ResultReason.NoMatch) {
-        console.log("No speech detected.");
-        res.json({ text: "No speech recognized" });
-      } else if (result.reason === speechSdk.ResultReason.Canceled) {
-        const cancellationDetails =
-          speechSdk.CancellationDetails.fromResult(result);
-        console.error(
-          "Speech recognition canceled:",
-          cancellationDetails.reason
-        );
-        if (cancellationDetails.reason === speechSdk.CancellationReason.Error) {
-          console.error("Error details:", cancellationDetails.errorDetails);
-        }
-        res.status(500).json({
-          error: "Speech recognition canceled",
-          details: cancellationDetails,
-        });
-      } else {
-        res.status(500).json({ error: "Unknown error occurred" });
+      } else if (result.reason === sdk.ResultReason.NoMatch) {
+        res.status(400).json({ error: "No speech recognized." });
+      } else if (result.reason === sdk.ResultReason.Canceled) {
+        res.status(400).json({ error: "Speech recognition canceled." });
       }
+      speechRecognizer.close();
+      unlinkFile(finalFilePath); // Clean up
     });
   } catch (error) {
-    console.error("Speech-to-Text Error:", error);
-    res.status(500).json({ error: "Error processing speech" });
+    console.error("Error processing speech to text:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 };

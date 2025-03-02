@@ -13,7 +13,7 @@ import {
 } from "../controllers/product.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
 import { extractExpiryDateAzure } from "../controllers/Azure.js";
-import { speechToText, upload } from "../utils/speechToText.js";
+import { speechToText } from "../utils/speechToText.js";
 const ProductRouter = express.Router();
 
 ProductRouter.get("/prod-name", getProductDetails);
@@ -22,7 +22,7 @@ ProductRouter.get("/search-products", authenticateUser, searchProducts);
 ProductRouter.get("/price-comparison", authenticateUser, getPriceComparison);
 
 ProductRouter.post("/create-product", authenticateUser, createProduct);
-ProductRouter.post("/speech-to-text", upload.single("file"), speechToText);
+ProductRouter.post("/speech-to-text", speechToText);
 
 ProductRouter.delete("/delete-product", authenticateUser, deleteProduct);
 
