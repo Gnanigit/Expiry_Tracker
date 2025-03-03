@@ -14,12 +14,14 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useWebFocus from "../../hooks/useWebFocus";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
+import TodoCard from "../../components/TodoCard";
 
 const Todo = () => {
   const { theme } = useSelector((state) => state.theme);
   const [transcribedSpeech, setTranscribedSpeech] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [todoItems, setTodoItems] = useState([]);
   const isWebFocused = useWebFocus();
   const audioRecordingRef = useRef(null);
 
@@ -30,6 +32,20 @@ const Todo = () => {
       }
     };
   }, []);
+
+  const parseTodoItems = (text) => {
+    const items = text.split(" add. ").filter(Boolean);
+    return items.map((item) => {
+      const parts = item.split(" ");
+      const weight = parts.slice(-2).join(" ");
+      const name = parts.slice(0, -2).join(" ");
+      return {
+        name,
+        weight,
+        date: new Date().toLocaleDateString(),
+      };
+    });
+  };
 
   const startRecording = async () => {
     try {
@@ -89,13 +105,17 @@ const Todo = () => {
         throw new Error("No audio URI found");
       }
 
-      // Ensure file extension is `.wav`
       if (!uri.endsWith(".wav")) {
         uri = uri.replace(/\.\w+$/, ".wav");
       }
 
       const speechTranscript = await transcribeSpeech(uri);
       setTranscribedSpeech(speechTranscript || "");
+
+      if (speechTranscript) {
+        const parsedItems = parseTodoItems(speechTranscript);
+        setTodoItems(parsedItems);
+      }
     } catch (e) {
       console.error("Error stopping or transcribing recording", e);
     } finally {
@@ -104,7 +124,11 @@ const Todo = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      className={`${
+        theme === "dark" ? "bg-primary-dark" : "bg-primary"
+      } h-full`}
+    >
       <Navbar type={"todo"} />
       <ScrollView style={styles.mainScrollContainer}>
         <View style={styles.mainInnerContainer}>
@@ -135,6 +159,16 @@ const Todo = () => {
               <FontAwesome name="stop" size={40} color="white" />
             </TouchableOpacity>
           </View>
+          <View style={styles.todoContainer}>
+            {todoItems.map((item, index) => (
+              <TodoCard
+                key={index}
+                name={item.name}
+                weight={item.weight}
+                date={item.date}
+              />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -142,7 +176,12 @@ const Todo = () => {
 };
 
 const styles = StyleSheet.create({
-  mainScrollContainer: { padding: 20, height: "100%", width: "100%" },
+  mainScrollContainer: {
+    paddingBottom: 100,
+    height: "100%",
+    width: "100%",
+    marginBottom: 50,
+  },
   mainInnerContainer: {
     gap: 75,
     height: "100%",
@@ -162,7 +201,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     padding: 20,
-    marginBottom: 20,
+
     borderRadius: 5,
   },
   transcribedText: {
@@ -175,6 +214,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     gap: 20,
+  },
+  todoContainer: {
+    width: "100%",
+    marginTop: 20,
   },
   microphoneButton: {
     backgroundColor: "red",

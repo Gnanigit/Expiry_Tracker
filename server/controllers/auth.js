@@ -7,8 +7,6 @@ import Product from "../models/Product.js";
 
 export const signUp = async (req, res) => {
   const { email, password, username } = req.body;
-  console.log(email);
-
   try {
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -105,7 +103,6 @@ export async function signIn(req, res) {
 }
 
 export const getCurrentUser = async (req, res) => {
-  console.log(req.body);
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized, user not found" });
   }
