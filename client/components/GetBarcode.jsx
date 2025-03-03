@@ -475,7 +475,7 @@ const GetBarcode = () => {
             placeholder="Enter product name..."
             value={productName}
             handleChangeText={(e) => setProductName(e)}
-            otherStyles="mt-2  px-2  space-y-1"
+            otherStyles="mt-2 space-y-1"
             titleStyle={`text-sm  ${
               theme === "dark" ? "text-gray-200" : "text-black-100"
             } font-psmedium`}
@@ -484,7 +484,7 @@ const GetBarcode = () => {
             } text-base font-pmedium`}
             inputViewStyle={`w-full ${
               theme === "dark" ? "bg-primary-dark" : "bg-primary"
-            } border-2 px-4 h-14 ${
+            } border-2 h-14 ${
               theme === "dark"
                 ? "border-secondary-darkBorder"
                 : "border-gray-300 "
@@ -552,9 +552,9 @@ const GetBarcode = () => {
           </View>
           <CustomButton
             title="Select Expiry Date Manually"
-            containerStyles="w-[70%] rounded-[10px] min-h-[45px] bg-secondary-200"
+            containerStyles="w-[80%] rounded-[10px] min-h-[45px] bg-secondary-200"
             handlePress={() => setIsPopupVisible(true)}
-            fontStyles="font-pregular"
+            fontStyles="font-pregular text-lg"
           />
 
           <Modal
@@ -613,7 +613,7 @@ const GetBarcode = () => {
           title="Add Product"
           handlePress={handleSubmit}
           containerStyles="w-[40%] min-h-[40px] py-2 rounded-full bg-secondary-100 mt-5 bg-secondary-200"
-          fontStyles="font-pmedium"
+          fontStyles="font-pmedium text-lg"
         />
       )}
     </ScrollView>

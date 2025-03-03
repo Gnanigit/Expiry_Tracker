@@ -101,7 +101,7 @@ export const loginWithGoogle = async (
   google = true
 ) => {
   try {
-    console.log(`loginWithGoogle`);
+    console.log(`loginWithGoogle account`);
     const response = await axios.post(`${baseURL}/auth/google-login`, {
       firstName,
       lastName,
