@@ -6,46 +6,31 @@ const TodoCard = ({ name, weight, date }) => {
   const [isChecked, setChecked] = useState(false);
 
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.weight}>{weight}</Text>
-        <Text style={styles.date}>{date}</Text>
+    <View
+      className="w-full flex-row justify-between item-center p-4"
+      style={{
+        elevation: 2,
+        backgroundColor: "rgb(244, 244, 244)",
+        borderColor: "#ddd",
+        borderWidth: 0.2,
+        borderRadius: 5,
+        shadowColor: "#000",
+      }}
+    >
+      <View className="flex-row items-center w-[60%] h-[100%] justify-between">
+        <Text>{name}</Text>
+        <Text>{weight}</Text>
       </View>
-      <Checkbox value={isChecked} onValueChange={setChecked} />
+      <View className="flex-row items-center justify-between w-[30%]">
+        <Text className="text-gray">{date}</Text>
+        <Checkbox
+          className="p-0 m-0"
+          value={isChecked}
+          onValueChange={setChecked}
+        />
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
-    marginVertical: 5,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  infoContainer: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  weight: {
-    fontSize: 16,
-    color: "gray",
-  },
-  date: {
-    fontSize: 14,
-    color: "#555",
-  },
-});
 
 export default TodoCard;

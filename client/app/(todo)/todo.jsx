@@ -7,9 +7,11 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import LottieView from "lottie-react-native";
 import Navbar from "../../components/Navbar";
 import { Audio } from "expo-av";
 import { transcribeSpeech } from "../../utils/transcribeSpeech";
+import { gifs } from "../../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useWebFocus from "../../hooks/useWebFocus";
 import { useSelector } from "react-redux";
@@ -25,6 +27,15 @@ const Todo = () => {
   const isWebFocused = useWebFocus();
   const audioRecordingRef = useRef(null);
 
+  const handleStartRecording = () => {
+    setIsRecording(true);
+    startRecording(); // Call your recording function
+  };
+
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    stopRecording(); // Call your stop recording function
+  };
   useEffect(() => {
     return () => {
       if (audioRecordingRef.current && isRecording) {
@@ -34,9 +45,9 @@ const Todo = () => {
   }, []);
 
   const parseTodoItems = (text) => {
-    const items = text.split(" add. ").filter(Boolean);
+    const items = text.split(/\s*add\.?\s*/i).filter(Boolean);
     return items.map((item) => {
-      const parts = item.split(" ");
+      const parts = item.trim().split(" ");
       const weight = parts.slice(-2).join(" ");
       const name = parts.slice(0, -2).join(" ");
       return {
@@ -130,36 +141,80 @@ const Todo = () => {
       } h-full`}
     >
       <Navbar type={"todo"} />
-      <ScrollView style={styles.mainScrollContainer}>
-        <View style={styles.mainInnerContainer}>
-          <Text style={styles.title}>Add</Text>
-          <View style={styles.transcriptionContainer}>
+      <ScrollView className="p-3">
+        <View className="space-y-3 items-center justify-center">
+          <View>
+            <Text className="text-shadow-sm text-center text-xl font-psemibold text-territory-100">
+              Add Your Items
+            </Text>
+            <Text
+              className={`text-center font-pmedium ${
+                theme === "dark" ? "text-gray-200" : "text-gray-600"
+              } `}
+            >
+              {"Speak (Example: Rice 1kg add)"}
+            </Text>
+          </View>
+          <View
+            className={`rounded-md h-40 m-3 w-[100%] p-2 ${
+              theme === "dark" ? "bg-secondary-darkBox" : "bg-primary-100"
+            }`}
+            style={{
+              borderColor: "rgba(94, 53, 177, 1)",
+              borderWidth: 1,
+              borderRadius: 10,
+            }}
+          >
             {isTranscribing ? (
               <ActivityIndicator size="small" color="#000" />
             ) : (
-              <Text style={styles.transcribedText}>
+              <Text
+                className={`font-pregular text-sm ${
+                  theme === "dark" ? "text-gray-100" : "text-gray-600"
+                }`}
+              >
                 {transcribedSpeech ||
-                  "Your transcribed text will be shown here"}
+                  "Your transcribed text will be shown here..."}
               </Text>
             )}
           </View>
-          <View style={styles.buttonContainer}>
+          <View className="flex-row space-x-7">
+            {!isRecording && (
+              <TouchableOpacity
+                className="w-14 h-14 rounded-full"
+                style={{
+                  backgroundColor: "red",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={handleStartRecording}
+                disabled={isRecording || isTranscribing}
+              >
+                <FontAwesome name="microphone" size={30} color="white" />
+              </TouchableOpacity>
+            )}
+            {isRecording && (
+              <LottieView
+                className="w-[56px] h-[56px]"
+                source={gifs.recording}
+                autoPlay
+                loop
+              />
+            )}
             <TouchableOpacity
-              style={[styles.microphoneButton, isRecording && styles.recording]}
-              onPress={startRecording}
-              disabled={isRecording || isTranscribing}
-            >
-              <FontAwesome name="microphone" size={40} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.stopButton, !isRecording && styles.disabled]}
-              onPress={stopRecording}
+              className="w-14 h-14 rounded-full"
+              style={{
+                backgroundColor: "black",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={handleStopRecording}
               disabled={!isRecording || isTranscribing}
             >
-              <FontAwesome name="stop" size={40} color="white" />
+              <FontAwesome name="stop" size={30} color="white" />
             </TouchableOpacity>
           </View>
-          <View style={styles.todoContainer}>
+          <View className="w-full">
             {todoItems.map((item, index) => (
               <TodoCard
                 key={index}
@@ -174,73 +229,5 @@ const Todo = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  mainScrollContainer: {
-    paddingBottom: 100,
-    height: "100%",
-    width: "100%",
-    marginBottom: 50,
-  },
-  mainInnerContainer: {
-    gap: 75,
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    flexGrow: 1,
-  },
-  title: {
-    fontSize: 35,
-    padding: 5,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  transcriptionContainer: {
-    backgroundColor: "rgb(220,220,220)",
-    width: "100%",
-    height: 300,
-    padding: 20,
-
-    borderRadius: 5,
-  },
-  transcribedText: {
-    fontSize: 20,
-    padding: 5,
-    color: "#000",
-    textAlign: "left",
-    width: "100%",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 20,
-  },
-  todoContainer: {
-    width: "100%",
-    marginTop: 20,
-  },
-  microphoneButton: {
-    backgroundColor: "red",
-    width: 75,
-    height: 75,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  stopButton: {
-    backgroundColor: "black",
-    width: 75,
-    height: 75,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  recording: {
-    backgroundColor: "darkred",
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-});
 
 export default Todo;
