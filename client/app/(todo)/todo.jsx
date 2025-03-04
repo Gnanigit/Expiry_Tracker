@@ -17,6 +17,8 @@ import useWebFocus from "../../hooks/useWebFocus";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TodoCard from "../../components/TodoCard";
+import CustomButton from "../../components/CustomButton";
+import { todo } from "../../routes/Todo";
 
 const Todo = () => {
   const { theme } = useSelector((state) => state.theme);
@@ -134,6 +136,22 @@ const Todo = () => {
     }
   };
 
+  const submit = async () => {
+    console.log("Saving");
+    if (todoItems.length === 0) {
+      alert("No items to save.");
+      return;
+    }
+    console.log("Saving");
+    try {
+      const result = await todo(todoItems);
+      console.log(result);
+      alert("Items saved successfully!");
+      // setTodoItems([]); // Clear the list after saving
+    } catch (error) {
+      alert("An error occurred while saving.");
+    }
+  };
   return (
     <SafeAreaView
       className={`${
@@ -214,7 +232,7 @@ const Todo = () => {
               <FontAwesome name="stop" size={30} color="white" />
             </TouchableOpacity>
           </View>
-          <View className="w-full">
+          <View className="w-full space-y-5">
             {todoItems.map((item, index) => (
               <TodoCard
                 key={index}
@@ -224,6 +242,12 @@ const Todo = () => {
               />
             ))}
           </View>
+          <CustomButton
+            title="Save Items"
+            handlePress={submit}
+            containerStyles="w-[50%] rounded-[50px] min-h-[55px] mt-4 bg-secondary-200"
+            fontStyles="font-pmedium text-lg"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

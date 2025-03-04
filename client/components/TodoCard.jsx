@@ -7,7 +7,7 @@ const TodoCard = ({ name, weight, date }) => {
 
   return (
     <View
-      className="w-full flex-row justify-between item-center p-4"
+      className="w-full flex-row justify-between item-center p-4 mt-1 mb-1"
       style={{
         elevation: 2,
         backgroundColor: "rgb(244, 244, 244)",

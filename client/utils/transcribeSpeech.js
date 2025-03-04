@@ -31,7 +31,7 @@ export const transcribeSpeech = async (recordingUri) => {
         encoding: FileSystem.EncodingType.Base64,
       });
     }
-    console.log("converting speech to text.");
+    console.log("converting speech to text....");
     const response = await fetch(`${baseURL}/product/speech-to-text`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,7 +40,7 @@ export const transcribeSpeech = async (recordingUri) => {
         format: "wav",
       }),
     });
-
+    console.log("converting speech to text....");
     const result = await response.json();
 
     return result?.text || "";

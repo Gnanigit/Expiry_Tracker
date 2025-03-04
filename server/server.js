@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import router from "./routes/auth.js";
 import ProductRouter from "./routes/product.js";
 import notifyRouter from "./routes/notify.js";
+import TodoRouter from "./routes/todo.js";
 
 // load environment variables
 dotenv.config();
@@ -28,6 +29,7 @@ const HOST = "0.0.0.0";
 app.use("/auth", router);
 app.use("/product", ProductRouter);
 app.use("/notify", notifyRouter);
+app.use("/todos", TodoRouter);
 
 // connect to MongoDB
 mongoose
