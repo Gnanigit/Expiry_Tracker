@@ -11,6 +11,8 @@ import { useColorScheme } from "nativewind";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAllNotifications } from "../routes/notification_api";
 import { setNotifications } from "./slices/notify";
+import { getAllTodos } from "../routes/todo_api";
+import { setTodos } from "./slices/todo";
 
 const GlobalProvider = ({ children }) => {
   const { isLogged, user, authLoading } = useSelector((state) => state.auth);
@@ -35,10 +37,12 @@ const GlobalProvider = ({ children }) => {
         const userPromise = await getCurrentUser(token);
         const productsPromise = await getAllProducts(token);
         const notificationsPromise = await getAllNotifications(token);
-        const [user, products, notifications] = await Promise.all([
+        const todosPromise = await getAllTodos(token);
+        const [user, products, notifications, todos] = await Promise.all([
           userPromise,
           productsPromise,
           notificationsPromise,
+          todosPromise,
         ]);
 
         if (!user) {
@@ -51,6 +55,7 @@ const GlobalProvider = ({ children }) => {
 
         dispatch(setProducts(products));
         dispatch(setNotifications(notifications));
+        dispatch(setTodos(todos));
       } catch (error) {
         console.error("Error fetching user/products:", error);
         dispatch(setIsLogged(false));

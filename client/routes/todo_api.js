@@ -23,6 +23,25 @@ export const todo = async (todoItems) => {
     return response.data;
   } catch (error) {
     console.error("Error saving todos:", error);
-    throw error; // Throw error so the calling function can handle it
+    throw error;
+  }
+};
+
+export const getAllTodos = async (token) => {
+  try {
+    if (!token) {
+      token = await getAuthToken();
+    }
+
+    const response = await axios.get(`${baseURL}/todos/all-todos`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+    throw error;
   }
 };

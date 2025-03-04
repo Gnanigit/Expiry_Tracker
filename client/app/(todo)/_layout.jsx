@@ -1,14 +1,13 @@
 import React from "react";
 import { Stack } from "expo-router";
 
-const todoLayout = () => {
+const TodoLayout = () => {
   return (
-    <>
-      <Stack>
-        <Stack.Screen name="todo" options={{ headerShown: false }} />
-      </Stack>
-    </>
+    <Stack>
+      <Stack.Screen name="todo" options={{ headerShown: false }} />
+      <Stack.Screen name="create" options={{ headerShown: false }} />
+    </Stack>
   );
 };
 
-export default todoLayout;
+export default TodoLayout;

@@ -3,6 +3,7 @@ import authReducer from "./slices/auth";
 import productsReducer from "./slices/products";
 import themeReducer from "./slices/theme";
 import notificationReducer from "./slices/notify";
+import todoReducer from "./slices/todo";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     products: productsReducer,
     theme: themeReducer,
     notifications: notificationReducer,
+    todo: todoReducer,
   },
 });
 

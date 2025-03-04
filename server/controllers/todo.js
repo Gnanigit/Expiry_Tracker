@@ -23,3 +23,15 @@ export const createTodo = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getAllTodos = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    console.log(userId);
+    const todos = await Todo.find({ userId: userId });
+    res.status(200).json(todos);
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
