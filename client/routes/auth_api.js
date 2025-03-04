@@ -30,11 +30,11 @@ export const getCurrentUser = async (token = null) => {
     if (!token) {
       token = await getAuthToken();
     }
-    console.log("getting current user");
+
     const response = await axios.get(`${baseURL}/auth/current-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("getting current user");
+
     return response.data;
   } catch (error) {
     console.error("Auto-login error:", error);
@@ -101,7 +101,6 @@ export const loginWithGoogle = async (
   google = true
 ) => {
   try {
-    console.log(`login With Google account`);
     const response = await axios.post(`${baseURL}/auth/google-login`, {
       firstName,
       lastName,
@@ -110,7 +109,7 @@ export const loginWithGoogle = async (
       password,
       google,
     });
-    console.log(`loginWith google`);
+
     const { token, user, formattedProducts } = response.data;
 
     await AsyncStorage.setItem("authToken", token);

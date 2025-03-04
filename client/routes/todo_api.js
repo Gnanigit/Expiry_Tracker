@@ -39,6 +39,7 @@ export const getAllTodos = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error("Error fetching todos:", error);
