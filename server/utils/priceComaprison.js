@@ -1,7 +1,6 @@
 import puppeteer, { Browser } from "puppeteer";
 
 export const scrapeAmazon = async (productName) => {
-  console.log("hello");
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -92,7 +91,7 @@ export const scrapeFlipkart = async (productName) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  console.log("Opening Flipkart...");
+  // console.log("Opening Flipkart...");
   await page.goto(
     `https://www.flipkart.com/search?q=${encodeURIComponent(
       productName

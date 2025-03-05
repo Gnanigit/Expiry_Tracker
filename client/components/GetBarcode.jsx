@@ -232,7 +232,7 @@ const GetBarcode = () => {
         0,
         Math.ceil((expiryDateGot - today) / (1000 * 60 * 60 * 24))
       );
-      console.log("Days Left:", leftDays);
+      // console.log("Days Left:", leftDays);
       const productId = result.product._id;
       const res = await storeNotification(
         productId,

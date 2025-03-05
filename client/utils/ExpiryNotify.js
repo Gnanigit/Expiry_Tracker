@@ -48,7 +48,7 @@ export const sendExpiryNotification = async ({
     console.log("Notifications not granted. Please enable them in settings.");
     return;
   }
-  console.log(leftDays);
+
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "⚠️ Expiry Alert!",

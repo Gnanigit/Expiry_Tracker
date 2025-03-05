@@ -25,7 +25,7 @@ export const extractExpiryDate = async (imageUri) => {
     });
 
     const text = response.response.text();
-    console.log("Extracted Expiry Date Raw:", text);
+    // console.log("Extracted Expiry Date Raw:", text);
 
     const datePatterns = [
       /\b(\d{1,2})[\/\s-](\d{1,2})[\/\s-](\d{4})\b/,
@@ -51,7 +51,7 @@ export const extractExpiryDate = async (imageUri) => {
     const formattedDate = `${extractedDate.getDate()}/${
       extractedDate.getMonth() + 1
     }/${extractedDate.getFullYear()}`;
-    console.log("Formatted Expiry Date:", formattedDate);
+    // console.log("Formatted Expiry Date:", formattedDate);
 
     return formattedDate;
   } catch (error) {

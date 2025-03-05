@@ -111,8 +111,6 @@ const upload = multer({
 
 export const getProductDetails = async (req, res) => {
   const { code } = req.query;
-  console.log(code);
-  console.log("hello");
 
   if (!code) {
     return res.status(400).json({ message: "Barcode is required" });
@@ -279,7 +277,7 @@ export const deleteProduct = async (req, res) => {
 export const searchProducts = async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log(userId);
+
     const { query } = req.query;
 
     const exactMatches = await Product.find({
@@ -313,16 +311,15 @@ export const searchProducts = async (req, res) => {
 
 export const getPriceComparison = async (req, res) => {
   const { prodName } = req.query;
-  console.log("Received Product Name:", prodName);
 
   if (!prodName) {
     return res.status(400).json({ message: "Product Name is required" });
   }
 
   try {
-    const amazonProductDetails = await scrapeAmazon(prodName); // Fixed parameter
-    const flipkartProductDetails = await scrapeFlipkart(prodName); // Fixed parameter
-    console.log("Flipkart Product Details:", flipkartProductDetails);
+    const amazonProductDetails = await scrapeAmazon(prodName);
+    const flipkartProductDetails = await scrapeFlipkart(prodName);
+
     return res.status(200).json({
       amazon: amazonProductDetails,
       flipkart: flipkartProductDetails,
@@ -330,5 +327,51 @@ export const getPriceComparison = async (req, res) => {
   } catch (error) {
     console.error("Error in getPriceComparison:", error);
     return res.status(500).json({ message: "Failed to fetch product details" });
+  }
+};
+
+export const deleteProducts = async (req, res) => {
+  const { productIds } = req.body;
+
+  if (!Array.isArray(productIds) || productIds.length === 0) {
+    return res.status(400).json({ message: "Invalid productIds" });
+  }
+
+  try {
+    // Delete multiple products at once
+    const deletedProducts = await Product.deleteMany({
+      _id: { $in: productIds },
+    });
+
+    if (deletedProducts.deletedCount === 0) {
+      return res.status(404).json({ message: "No products found" });
+    }
+
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user product count
+    user.numberOfProducts -= productIds.length;
+    await user.save();
+
+    // Delete related notifications
+    const deletedNotifications = await Notification.deleteMany({
+      productId: { $in: productIds },
+    });
+
+    return res.status(200).json({
+      message: "Products deleted successfully",
+      deletedProducts,
+      user,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error deleting products", error: error.message });
   }
 };

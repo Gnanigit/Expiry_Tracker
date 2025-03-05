@@ -6,6 +6,7 @@ import {
   deleteProduct,
   searchProducts,
   getPriceComparison,
+  deleteProducts,
   // extractExpiryDateAzure,
 
   // getProductName,
@@ -25,6 +26,8 @@ ProductRouter.post("/create-product", authenticateUser, createProduct);
 ProductRouter.post("/speech-to-text", speechToText);
 
 ProductRouter.delete("/delete-product", authenticateUser, deleteProduct);
+
+ProductRouter.delete("/delete-products", authenticateUser, deleteProducts);
 
 ProductRouter.post("/process-image", extractExpiryDateAzure);
 

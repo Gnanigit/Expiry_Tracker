@@ -61,7 +61,7 @@ export const extractExpiryDateAzure = async (req, res) => {
       throw new Error("Operation URL not found in response");
     }
 
-    console.log("Processing image, waiting for results...");
+    // console.log("Processing image, waiting for results...");
 
     // Step 3: Poll for the result (Azure takes time to process)
     let extractedText = "";

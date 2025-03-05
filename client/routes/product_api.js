@@ -12,7 +12,7 @@ const getAuthToken = async () => {
 };
 
 export const getProductName = async (code) => {
-  console.log(code);
+  // console.log(code);
   try {
     const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/prod-name`, {
@@ -24,7 +24,7 @@ export const getProductName = async (code) => {
     });
 
     if (response.data) {
-      console.log("getting product name");
+      // console.log("getting product name");
       return response.data;
     } else {
       throw new Error("No response data from the server");
@@ -163,7 +163,7 @@ export const searchProducts = async (query) => {
 };
 
 export const priceComparison = async (prodName) => {
-  console.log(`Price comparison`);
+  // console.log(`Price comparison`);
   try {
     const token = await getAuthToken();
     const response = await axios.get(`${baseURL}/product/price-comparison`, {
@@ -181,7 +181,7 @@ export const priceComparison = async (prodName) => {
 
 const convertAudioToBase64 = async (audioUri) => {
   try {
-    console.log("Converting audio to Base64:", audioUri);
+    // console.log("Converting audio to Base64:", audioUri);
 
     // Read audio file and convert to Base64
     const base64Audio = await FileSystem.readAsStringAsync(audioUri, {
@@ -198,7 +198,7 @@ const convertAudioToBase64 = async (audioUri) => {
 // Upload audio to server
 export const getSpeechToText = async (audioUri) => {
   try {
-    console.log("Uploading audio file:", audioUri);
+    // console.log("Uploading audio file:", audioUri);
 
     const base64Audio = await convertAudioToBase64(audioUri);
     if (!base64Audio) {
@@ -216,7 +216,6 @@ export const getSpeechToText = async (audioUri) => {
       }
     );
 
-    console.log("Server response:", response.data);
     return response.data.text || "No text recognized";
   } catch (error) {
     console.error(
@@ -224,5 +223,25 @@ export const getSpeechToText = async (audioUri) => {
       error.response?.data || error.message
     );
     return "Error processing speech";
+  }
+};
+
+export const deleteProducts = async (productIds) => {
+  try {
+    const token = await getAuthToken();
+    const response = await axios.delete(`${baseURL}/product/delete-products`, {
+      data: { productIds }, // Send as body data
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting products:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to delete products"
+    );
   }
 };

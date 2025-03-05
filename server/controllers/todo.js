@@ -37,6 +37,8 @@ export const getAllTodos = async (req, res) => {
 
 export const deleteTodos = async (req, res) => {
   try {
+    const { todoIds } = req.body;
+
     if (!todoIds || !Array.isArray(todoIds) || todoIds.length === 0) {
       return res.status(400).json({ message: "Invalid todo IDs" });
     }

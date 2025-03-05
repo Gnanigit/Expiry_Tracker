@@ -45,7 +45,7 @@ const PriceComparison = () => {
 
   const handleProductScanned = async (productName) => {
     setScannedProduct(productName);
-    console.log(productName);
+
     try {
       const result = await priceComparison(productName);
 

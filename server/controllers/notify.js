@@ -6,7 +6,7 @@ export const addNotification = async (req, res) => {
     // console.log(userId);
     const { productId, productImage, productName, leftDays, expDate, status } =
       req.body;
-    console.log(productId, productImage, productName, leftDays);
+    // console.log(productId, productImage, productName, leftDays);
     const newNotification = new Notification({
       userId,
       productId,

@@ -24,7 +24,6 @@ const todo = () => {
   const [selectionMode, setSelectionMode] = useState(false);
   const dispatch = useDispatch();
 
-  // Handle long press (First selection requires long press)
   const handleLongPress = (id) => {
     if (!selectionMode) {
       setSelectionMode(true);
@@ -73,7 +72,7 @@ const todo = () => {
     >
       <Navbar type="todo" />
 
-      <View className="h-8 flex-row justify-end items-center px-4">
+      <View className="h-10 flex-row justify-end items-center px-4">
         <TouchableOpacity
           onPress={handleDelete}
           disabled={selectedTodos.length === 0}
@@ -102,7 +101,7 @@ const todo = () => {
         </Text>
       ) : (
         <FlatList
-          className="px-3 py-3"
+          className="px-3"
           data={todos}
           keyExtractor={(item) => item._id || item.name}
           renderItem={({ item }) => (

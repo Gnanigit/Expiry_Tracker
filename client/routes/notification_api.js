@@ -16,7 +16,7 @@ export const storeNotification = async (
   productImage
 ) => {
   try {
-    console.log(productId, productName, leftDays);
+    // console.log(productId, productName, leftDays);
     const token = await getAuthToken();
     const response = await axios.post(
       `${baseURL}/notify/add`,
@@ -32,7 +32,7 @@ export const storeNotification = async (
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
     console.error(

@@ -19,12 +19,22 @@ const productsSlice = createSlice({
     removeProduct: (state, action) => {
       state.items = state.items.filter((item) => item._id !== action.payload);
     },
+    removeMultipleProducts: (state, action) => {
+      state.items = state.items.filter(
+        (item) => !action.payload.includes(item._id)
+      );
+    },
     addProduct: (state, action) => {
       state.items.push(action.payload);
     },
   },
 });
 
-export const { clearProducts, removeProduct, addProduct, setProducts } =
-  productsSlice.actions;
+export const {
+  clearProducts,
+  removeProduct,
+  removeMultipleProducts,
+  addProduct,
+  setProducts,
+} = productsSlice.actions;
 export default productsSlice.reducer;

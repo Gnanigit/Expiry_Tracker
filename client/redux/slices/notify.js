@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  notifications: [], // Stores all notifications
-  loading: false, // Loading state for fetching notifications
+  notifications: [],
+  loading: false,
 };
 
 const notificationSlice = createSlice({
@@ -10,7 +10,7 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     setNotifications: (state, action) => {
-      state.notifications = action.payload; // Set all notifications from backend
+      state.notifications = action.payload;
     },
     addNotification: (state, action) => {
       state.notifications.unshift(action.payload);
@@ -23,7 +23,7 @@ const notificationSlice = createSlice({
       );
     },
     clearNotifications: (state) => {
-      state.notifications = []; // Remove all notifications
+      state.notifications = [];
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
@@ -31,6 +31,11 @@ const notificationSlice = createSlice({
     removeNotification: (state, action) => {
       state.notifications = state.notifications.filter(
         (notification) => notification.productId !== action.payload
+      );
+    },
+    removeMultipleNotifications: (state, action) => {
+      state.notifications = state.notifications.filter(
+        (notification) => !action.payload.includes(notification.productId)
       );
     },
   },
@@ -43,6 +48,7 @@ export const {
   clearNotifications,
   setLoading,
   removeNotification,
+  removeMultipleNotifications,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;
