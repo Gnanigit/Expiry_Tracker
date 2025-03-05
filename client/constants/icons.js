@@ -44,13 +44,14 @@ import play from "../assets/icons/play.png";
 import pause from "../assets/icons/pause.png";
 import speaker_off from "../assets/icons/speaker_off.png";
 import speaker_on from "../assets/icons/speaker_on.png";
+import create from "../assets/icons/create.png";
 
 export default {
   play,
   pause,
   speaker_off,
   speaker_on,
-
+  create,
   password,
   location,
   email_icon,

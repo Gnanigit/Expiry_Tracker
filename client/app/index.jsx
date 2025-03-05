@@ -99,7 +99,7 @@ const App = () => {
           <Image
             resizeMode="contain"
             className="w-[500px] h-[520px] my-5"
-            source={images.start}
+            source={theme === "dark" ? images.start_dark : images.start_light}
           />
 
           <CustomButton
@@ -118,11 +118,7 @@ const App = () => {
             type="google"
             title="Continue with Google"
             fontStyles="font-pmedium text-lg"
-            handlePress={() =>
-              onGoogleButtonPress().then(() =>
-                console.log("Continue with Google")
-              )
-            }
+            handlePress={() => onGoogleButtonPress()}
             containerStyles="w-full rounded-xl min-h-[55px] bg-secondary-200"
           />
         </View>

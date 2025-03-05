@@ -20,9 +20,6 @@ const Notify = () => {
   const notifications = useSelector(
     (state) => state.notifications.notifications
   );
-  useEffect(() => {
-    console.log("fetched notifications");
-  }, [notifications]);
 
   const [permissionsGranted, setPermissionsGranted] = useState(false);
 

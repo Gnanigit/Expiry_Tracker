@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
+  Image,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
@@ -12,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Navbar from "../../components/Navbar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { icons } from "../../constants";
 
 const todo = () => {
   const { theme } = useSelector((state) => state.theme);
@@ -44,10 +46,14 @@ const todo = () => {
       )}
 
       <TouchableOpacity
-        className="absolute bottom-5 right-5 bg-territory w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+        className="absolute bottom-5 right-5 bg-territory w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
         onPress={() => router.push("/create")}
       >
-        <FontAwesome name="plus" size={30} color="white" />
+        <Image
+          source={icons.create}
+          className="w-8 h-8"
+          style={{ tintColor: "#ffffff" }}
+        />
       </TouchableOpacity>
     </SafeAreaView>
   );

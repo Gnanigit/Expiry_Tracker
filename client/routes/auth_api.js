@@ -109,11 +109,8 @@ export const loginWithGoogle = async (
       password,
       google,
     });
-
     const { token, user, formattedProducts } = response.data;
-
     await AsyncStorage.setItem("authToken", token);
-
     return response.data;
   } catch (error) {
     throw error;
