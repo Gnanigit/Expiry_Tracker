@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const todoSlice = createSlice({
-  name: "todo", // This should match the state key
+  name: "todo",
   initialState,
   reducers: {
     addTodo: (state, action) => {
@@ -18,8 +18,13 @@ const todoSlice = createSlice({
     clearTodos: (state) => {
       state.todos = [];
     },
+    removeTodos: (state, action) => {
+      state.todos = state.todos.filter(
+        (todo) => !action.payload.includes(todo._id)
+      );
+    },
   },
 });
 
-export const { addTodo, setTodos, clearTodos } = todoSlice.actions;
-export default todoSlice.reducer; // This should match store.js
+export const { addTodo, setTodos, clearTodos, removeTodos } = todoSlice.actions;
+export default todoSlice.reducer;

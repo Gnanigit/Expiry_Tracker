@@ -34,3 +34,26 @@ export const getAllTodos = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const deleteTodos = async (req, res) => {
+  try {
+    if (!todoIds || !Array.isArray(todoIds) || todoIds.length === 0) {
+      return res.status(400).json({ message: "Invalid todo IDs" });
+    }
+
+    // Delete todos with matching IDs
+    const result = await Todo.deleteMany({ _id: { $in: todoIds } });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No todos found to delete" });
+    }
+
+    return res.status(200).json({
+      message: "Todos deleted successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.error("Error deleting todos:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

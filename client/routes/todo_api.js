@@ -46,3 +46,21 @@ export const getAllTodos = async (token) => {
     throw error;
   }
 };
+
+export const deleteTodo = async (todoIds) => {
+  try {
+    const token = await getAuthToken();
+    const response = await axios.delete(`${baseURL}/todos/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: { todoIds },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting todos:", error);
+    throw error;
+  }
+};
