@@ -8,7 +8,10 @@ import {
   TouchableOpacity,
   Animated,
   ScrollView,
+  BackHandler,
 } from "react-native";
+import { X } from "lucide-react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { setUser, setIsLogged } from "../redux/slices/auth";
 import { addNotification } from "../redux/slices/notify";
 import { BlurView } from "expo-blur";
@@ -90,6 +93,18 @@ const GetBarcode = () => {
           .catch((error) => console.error("Error unloading sound:", error));
       }
     };
+
+    const backAction = () => {
+      setCameraOpen(false);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   useEffect(() => {
@@ -323,6 +338,7 @@ const GetBarcode = () => {
     setExpPhotoPicker(true);
     setProcessing(false);
   };
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -461,6 +477,12 @@ const GetBarcode = () => {
 
             <Modal visible={productCameraVisible} animationType="slide">
               <CameraView ref={cameraRef} className="flex-1" />
+              <TouchableOpacity
+                onPress={() => setProductCameraVisible(false)}
+                className="absolute top-5 right-5 z-10 bg-black/20 p-2 rounded-full"
+              >
+                <X size={32} color="white" strokeWidth={3} />
+              </TouchableOpacity>
               <View className="absolute bottom-10 w-full flex-row justify-center">
                 <TouchableOpacity
                   onPress={() => takePicture("prod-image")}
@@ -535,6 +557,12 @@ const GetBarcode = () => {
           ))}
         <Modal visible={expiryCameraVisible} animationType="slide">
           <CameraView ref={cameraRef} className="flex-1" />
+          <TouchableOpacity
+            onPress={() => setExpiryCameraVisible(false)}
+            className="absolute top-5 right-5 z-10 bg-black/20 p-2 rounded-full"
+          >
+            <X size={32} color="white" strokeWidth={3} />
+          </TouchableOpacity>
           <View className="absolute bottom-10 w-full flex-row justify-center">
             <TouchableOpacity
               onPress={() => takePicture("exp-date")}
