@@ -115,8 +115,10 @@ const FakeOrNot = () => {
       setIsFakeProductScannedOnce(false);
     } catch (error) {
       setProduct(null);
+      console.log(isFakeProductScannedOnce);
       if (!isFakeProductScannedOnce) {
         setIsFakeProductScannedOnce(true);
+
         Alert.alert(
           "Fake Product",
           "The product you selected is fake. Try scanning again to confirm."
