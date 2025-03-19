@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -16,18 +16,42 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { icons } from "../../constants";
 import { removeTodos } from "../../redux/slices/todo";
 import { deleteTodo } from "../../routes/todo_api";
+import { captureRef } from "react-native-view-shot";
+import * as Sharing from "expo-sharing";
 
-const todo = () => {
+const TodoScreen = () => {
   const { theme } = useSelector((state) => state.theme);
   const { todos } = useSelector((state) => state.todo);
   const [selectedTodos, setSelectedTodos] = useState([]);
   const [selectionMode, setSelectionMode] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false); // NEW state for hiding header
   const dispatch = useDispatch();
+  const listRef = useRef(null);
 
   const handleLongPress = (id) => {
     if (!selectionMode) {
       setSelectionMode(true);
       setSelectedTodos([id]);
+    }
+  };
+
+  const shareTodos = async () => {
+    try {
+      setIsCapturing(true); // Show heading before capturing
+
+      setTimeout(async () => {
+        const uri = await captureRef(listRef, {
+          format: "png",
+          quality: 1,
+        });
+
+        setIsCapturing(false); // Hide heading after capturing
+        await Sharing.shareAsync(uri);
+      }, 500);
+    } catch (error) {
+      setIsCapturing(false);
+      Alert.alert("Error", "Failed to share the list. Please try again.");
+      console.error(error);
     }
   };
 
@@ -52,7 +76,6 @@ const todo = () => {
         onPress: async () => {
           try {
             await deleteTodo(selectedTodos);
-
             dispatch(removeTodos(selectedTodos));
             setSelectedTodos([]);
             setSelectionMode(false);
@@ -76,7 +99,7 @@ const todo = () => {
         <TouchableOpacity
           onPress={handleDelete}
           disabled={selectedTodos.length === 0}
-          className={`rounded-lg flex-row items-center justify-center  py-1 `}
+          className={`rounded-lg flex-row items-center justify-center py-1`}
         >
           <FontAwesome
             name="trash"
@@ -95,28 +118,57 @@ const todo = () => {
         </TouchableOpacity>
       </View>
 
-      {todos.length === 0 ? (
-        <Text className="text-center mt-5">
-          No todos available. Long-press to select.
-        </Text>
-      ) : (
-        <FlatList
-          className="px-3"
-          data={todos}
-          keyExtractor={(item) => item._id || item.name}
-          renderItem={({ item }) => (
-            <TodoCard
-              key={item._id || item.name}
-              name={item.name}
-              weight={item.weight}
-              date={new Date(item.expiryDate).toDateString()}
-              isSelected={selectedTodos.includes(item._id)}
-              onLongPress={() => handleLongPress(item._id)}
-              onPress={() => handleTap(item._id)}
-            />
-          )}
-        />
-      )}
+      {/* List with hidden heading when sharing */}
+      <View
+        ref={listRef}
+        collapsable={false}
+        className={`px-3 ${
+          theme === "dark" ? "bg-primary-dark" : "bg-primary"
+        }`}
+      >
+        {/* Conditionally Render Heading Only While Sharing */}
+        {isCapturing && (
+          <Text
+            className={`text-shadow-md text-2xl text-center font-pextrabold mb-2 ${
+              theme === "dark"
+                ? "text-secondary-darkText"
+                : "text-secondary-100"
+            }`}
+          >
+            My Grocery List
+          </Text>
+        )}
+
+        {todos.length === 0 ? (
+          <Text className="text-center mt-5">
+            No todos available. Long-press to select.
+          </Text>
+        ) : (
+          <FlatList
+            data={todos}
+            keyExtractor={(item) => item._id || item.name}
+            renderItem={({ item }) => (
+              <TodoCard
+                key={item._id || item.name}
+                name={item.name}
+                weight={item.weight}
+                date={new Date(item.expiryDate).toDateString()}
+                isSelected={selectedTodos.includes(item._id)}
+                onLongPress={() => handleLongPress(item._id)}
+                onPress={() => handleTap(item._id)}
+              />
+            )}
+          />
+        )}
+      </View>
+
+      {/* Share Button */}
+      <TouchableOpacity
+        className="absolute bottom-5 right-20 bg-blue-500 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+        onPress={shareTodos}
+      >
+        <FontAwesome name="share-alt" size={24} color="white" />
+      </TouchableOpacity>
 
       {/* Floating Add Button */}
       <TouchableOpacity
@@ -133,4 +185,4 @@ const todo = () => {
   );
 };
 
-export default todo;
+export default TodoScreen;

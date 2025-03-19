@@ -27,5 +27,20 @@ second SHA2 : 9B:EC:83:0F:46:A1:B3:AD:AC:58:D4:07:C7:8B:B1:61:3D:FA:58:91
 eas build --clear-cache --profile development --platform android
 
 
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
 
+      "intentFilters": [
+        {
+          "action": "android.intent.action.SEND",
+          "data": {
+            "mimeType": "image/*"
+          },
+          "category": ["android.intent.category.DEFAULT"]
+        }
+      ],
 

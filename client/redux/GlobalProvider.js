@@ -44,6 +44,7 @@ const GlobalProvider = ({ children }) => {
           notificationsPromise,
           todosPromise,
         ]);
+        // console.log(todos);
 
         if (!user) {
           dispatch(setIsLogged(false));

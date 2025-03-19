@@ -9,7 +9,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-// Function to request notification permissions
 export const requestNotificationPermissions = async () => {
   if (!Device.isDevice) {
     console.log("Must use a physical device for notifications");
