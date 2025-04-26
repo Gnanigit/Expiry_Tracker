@@ -17,7 +17,7 @@ const writeFile = util.promisify(fs.writeFile);
 const unlinkFile = util.promisify(fs.unlink);
 
 export const speechToText = async (req, res) => {
-  const { audioUrl, format } = req.body; // Format can be "mp3", "mp4", etc.
+  const { audioUrl, format } = req.body;
 
   if (!audioUrl) {
     return res.status(422).json({ error: "No audio data provided." });
@@ -45,6 +45,7 @@ export const speechToText = async (req, res) => {
     let finalFilePath = inputFilePath;
 
     if (format !== "wav" || format === "wav") {
+      console.log("getting here_1");
       finalFilePath = path.join(uploadsDir, "converted_audio.wav");
       await new Promise((resolve, reject) => {
         ffmpeg(inputFilePath)
@@ -56,34 +57,40 @@ export const speechToText = async (req, res) => {
       });
       await unlinkFile(inputFilePath); // Remove original file
     }
-
+    console.log("getting here_2");
     // Configure Azure Speech SDK
     const speechConfig = sdk.SpeechConfig.fromSubscription(
       process.env.AZURE_SPEECH_TO_TEXT_API_KEY_1,
       process.env.AZURE_REGION
     );
-
+    console.log("getting here_2.5");
     speechConfig.speechRecognitionLanguage = "en-US";
     const audioConfig = sdk.AudioConfig.fromWavFileInput(
       fs.readFileSync(finalFilePath)
     );
-
+    console.log("getting here_3");
     const speechRecognizer = new sdk.SpeechRecognizer(
       speechConfig,
       audioConfig
     );
+    console.log("getting here_4");
 
     // Perform speech recognition
     speechRecognizer.recognizeOnceAsync((result) => {
+      console.log("inside_1");
       if (result.reason === sdk.ResultReason.RecognizedSpeech) {
+        console.log("inside_1");
         res.json({ text: result.text });
       } else if (result.reason === sdk.ResultReason.NoMatch) {
+        console.log("inside_2");
         res.status(400).json({ error: "No speech recognized." });
       } else if (result.reason === sdk.ResultReason.Canceled) {
+        console.log("inside_3");
         res.status(400).json({ error: "Speech recognition canceled." });
       }
       speechRecognizer.close();
-      unlinkFile(finalFilePath); // Clean up
+      console.log("getting here_5");
+      unlinkFile(finalFilePath);
     });
   } catch (error) {
     console.error("Error processing speech to text:", error);

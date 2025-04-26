@@ -39,7 +39,7 @@ export const extractExpiryDateAzure = async (req, res) => {
 
     // Send the image to Azure for processing
     const imageBuffer = fs.readFileSync(imagePath);
-    // console.log("Image buffer:", imageBuffer);
+    console.log("Image buffer:", imageBuffer);
     const response = await axios.post(
       `${endpoint}/vision/v3.2/read/analyze`,
       imageBuffer,
@@ -55,13 +55,14 @@ export const extractExpiryDateAzure = async (req, res) => {
       }
     );
 
+    console.log("returned");
     // Step 2: Get the operation location URL
     const operationUrl = response.headers["operation-location"];
     if (!operationUrl) {
       throw new Error("Operation URL not found in response");
     }
 
-    // console.log("Processing image, waiting for results...");
+    console.log("Processing image, waiting for results...");
 
     // Step 3: Poll for the result (Azure takes time to process)
     let extractedText = "";
@@ -84,11 +85,11 @@ export const extractExpiryDateAzure = async (req, res) => {
       }
     }
 
-    // console.log("Extracted Text:\n", extractedText);
+    console.log("Extracted Text:\n", extractedText);
 
     // Step 4: Extract expiry dates from text
     const expiryDate = extractExpiryDateFromText(extractedText);
-    // console.log("Formatted Expiry Date:", expiryDate);
+    console.log("Formatted Expiry Date:", expiryDate);
 
     res.json({ expiryDate });
   } catch (error) {
