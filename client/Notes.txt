@@ -11,6 +11,8 @@
 Expo App opening
 ipconfig
 setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.0.109
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.175.103
+setx /M REACT_NATIVE_PACKAGER_HOSTNAME 192.168.175.103
 
 start expo app with command -> {first it get's the current connected ipv4 address and sets it to environment variables and the updates the .env file}
 
